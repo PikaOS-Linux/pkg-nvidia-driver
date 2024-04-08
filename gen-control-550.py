@@ -646,4 +646,43 @@ Description: NVIDIA driver support binaries
     The NVIDIA binary driver provides optimized hardware acceleration of OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server for graphics cards using NVIDIA chip sets.
     This package contains supporting binaries for the driver.
 
+Package: nvidia-driver-libs-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Depends:
+    libgl1-nvidia-glvnd-glx (= ${binary:Version}),
+    nvidia-egl-icd (= ${binary:Version}),
+    ${misc:Depends}
+Recommends:
+    nvidia-driver-libs-{DRIVER_VERSION_MAJOR}:i386 (= ${binary:Version}) [amd64],
+    libopengl0 | libopengl0-glvnd-nvidia-{DRIVER_VERSION_MAJOR},
+    libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libgles-nvidia1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libgles-nvidia2-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-encode1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-allocator1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Provides:
+    nvidia-driver-libs (= ${binary:Version}),
+    nvidia-driver-libs-any,
+Conflicts:
+    nvidia-driver-libs,
+    libglvnd0-nvidia,
+    libopengl0-glvnd-nvidia,
+    libglx0-glvnd-nvidia,
+    libgl1-glvnd-nvidia-glx,
+    libegl1-glvnd-nvidia,
+    libgles1-glvnd-nvidia,
+    libgles2-glvnd-nvidia,
+Breaks:
+    nvidia-driver-libs-nonglvnd,
+    libgl1-nvidia-glx,
+    libegl1-nvidia,
+    nvidia-nonglvnd-vulkan-icd,
+Description: NVIDIA metapackage (OpenGL/GLX/EGL/GLES libraries)
+    This metapackage depends on the NVIDIA binary libraries
+    that provide optimized hardware acceleration of
+    OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server.
+
 """
