@@ -731,6 +731,30 @@ Description: NVIDIA EGL installable client driver (ICD)
     This metapackage provides the NVIDIA installable client driver (ICD) for
     EGL via GLVND which supports NVIDIA GPUs.
 
+Package: nvidia-kernel-dkms-{DRIVER_VERSION_MAJOR}
+Section: non-free/kernel
+Architecture: amd64 arm64 ppc64el
+Depends:
+    firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${binary:Version}),
+    nvidia-kernel-support-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    dkms,
+    ${misc:Depends}
+Recommends:
+    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Provides:
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-kernel-dkms (= ${binary:Version}),
+    nvidia-kernel-dkms-any (= ${binary:Version}),
+Conflicts:
+    nvidia-kernel-dkms,
+    nvidia-kernel-pikaos-module-{DRIVER_VERSION_MAJOR},
+    nvidia-kernel-pikaos-module,
+Description: NVIDIA binary kernel DKMS module
+    This package provides the DKMS build configuration for the source for the NVIDIA binary kernel modules
+    needed by nvidia-driver.
+
 Package: nvidia-kernel-source-{DRIVER_VERSION_MAJOR}
 Section: non-free/kernel
 Architecture: amd64 arm64 ppc64el
@@ -829,7 +853,7 @@ Provides:
 Conflicts:
     nvidia-opencl-common
 Suggests:
- nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version})
+    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version})
 Description: NVIDIA OpenCL driver - common files
     OpenCL (Open Computing Language) is a multivendor open standard for
     general-purpose parallel programming of heterogeneous systems that include
@@ -837,4 +861,89 @@ Description: NVIDIA OpenCL driver - common files
     .
     This package provides the common files for the NVIDIA installable client
     driver (ICD) for OpenCL.
+
+Package: nvidia-opencl-icd-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    nvidia-opencl-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ocl-icd-libopencl1 | nvidia-libopencl1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}) | libopencl1,
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-nvvm4-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Enhances:
+    libopencl1,
+Provides:
+    opencl-icd,
+    nvidia-opencl-icd (= ${binary:Version})
+Conflicts:
+    nvidia-opencl-icd
+Description: NVIDIA OpenCL installable client driver (ICD)${nvidia:VariantDesc}
+    OpenCL (Open Computing Language) is a multivendor open standard for
+    general-purpose parallel programming of heterogeneous systems that include
+    CPUs, GPUs and other processors.
+    .
+    This package provides the NVIDIA installable client driver (ICD) for OpenCL
+    which supports NVIDIA GPUs.
+
+Package: nvidia-powerd-{DRIVER_VERSION_MAJOR}
+Section: non-free/utils
+Architecture: amd64
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    nvidia-powerd (= ${binary:Version}),
+Conflicts:
+    nvidia-powerd
+Description: NVIDIA Dynamic Boost (daemon)
+    The 'nvidia-powerd' daemon provides support for the NVIDIA Dynamic Boost
+    feature on Linux platforms. Dynamic Boost is a system-wide power controller
+    which manages GPU and CPU power, according to the workload on the system. By
+    shifting power between the GPU and the CPU, Dynamic Boost can deliver more
+    power to the component that would benefit most from it, without impacting the
+    system's total thermal and electrical budgets. This optimizes overall system
+    performance per watt.
+
+Package: nvidia-smi-{DRIVER_VERSION_MAJOR}
+Section: non-free/utils
+Architecture: amd64 arm64 ppc64el
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-ml1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Recommends:
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR}
+Provides:
+    nvidia-smi (= ${binary:Version}),
+Conflicts:
+    nvidia-smi
+Suggests:
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR}
+Description: NVIDIA System Management Interface${nvidia:VariantDesc}
+    The NVIDIA Management Library (NVML) provides a monitoring and management API.
+    The application "nvidia-smi" is the NVIDIA System Management Interface (NVSMI)
+    and provides a command line interface to this functionality.
+    .
+    See the output from the --help command line option for supported models and
+    further information.
+
+Package: nvidia-suspend-common-{DRIVER_VERSION_MAJOR}
+Section: non-free/x11
+Architecture: amd64 arm64 ppc64el
+Multi-Arch: foreign
+Depends:
+    kbd,
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${misc:Depends}
+Provides:
+    nvidia-suspend-common (= ${binary:Version}),
+Conflicts:
+    nvidia-suspend-common
+Description: NVIDIA driver - systemd power management scripts
+    This package provides the common files for the NVIDIA power management
+    integration with systemd.
 """
