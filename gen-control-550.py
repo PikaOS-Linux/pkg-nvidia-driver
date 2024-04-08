@@ -1,5 +1,10 @@
 #! python3
 
+
+### Notice
+# All versioned packages must depend on nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version})
+# nvidia-alternative-{DRIVER_VERSION_MAJOR} must conflict with all older nvidia-alternative flavours
+
 ### Important for future Updates
 # Debian nvidia comes with 49 Packages in 550
 # Pika takes out nvidia-driver-full and nvidia-detect
@@ -561,6 +566,69 @@ Description: allows the selection of NVIDIA as GLX provider
     In setups with several NVIDIA driver versions installed (e.g. current and legacy) this metapackage registers an alternative to allow easy switching between the different versions.
     Use 'update-glx --config nvidia' to select a version.
     This package does not depend on the corresponding NVIDIA libraries. In order to install the NVIDIA driver and libraries, install the nvidia-driver package instead.
+
+Package: nvidia-cuda-mps-{DRIVER_VERSION_MAJOR}
+Section: non-free/utils
+Architecture: amd64 arm64 ppc64el
+Depends:
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Provides:
+    nvidia-cuda-mps (= ${binary:Version}),
+Conflicts:
+    nvidia-cuda-mps
+Description: NVIDIA CUDA Multi Process Service (MPS)
+    The Compute Unified Device Architecture (CUDA) enables NVIDIA graphics processing units (GPUs) to be used for massively parallel general purpose computation.
+    CUDA MPS is a feature that allows multiple CUDA processes to share a single GPU context. CUDA MPS should be transparent to CUDA programs.
+    CUDA MPS requires a device that supports Unified Virtual Address (UVA) and has compute capability SM 3.5 or higher. Pre-CUDA 4.0 APIs are not supported under CUDA MPS.
+
+Package: nvidia-driver-{DRIVER_VERSION_MAJOR}
+Section: non-free/x11
+Architecture: amd64 arm64 ppc64el
+Pre-Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Depends:
+    nvidia-driver-libs-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-driver-bin-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    xserver-xorg-video-nvidia-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libgles-nvidia1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libgles-nvidia2-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-encode1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-allocator1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-rtcore-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-smi-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libcudadebugger1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-fbc1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvoptix1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-opticalflow1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libnvidia-ngx1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}), [amd64],
+    libnvidia-api1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-powerd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}), [amd64],
+    nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-settings,
+    nvidia-persistenced,
+    nvidia-support,
+    ${misc:Depends}
+Recommends:
+    nvidia-vaapi-driver,
+Suggests:
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR},
+Provides:
+    nvidia-driver (= ${binary:Version}),
+    nvidia-driver-full (= ${binary:Version}),
+    nvidia-driver-any,
+    nvidia-glx-any,
+Description: NVIDIA {DRIVER_VERSION_FULL} metapackage
+    This metapackage depends on the NVIDIA binary driver and libraries
+    that provide optimized hardware acceleration of
+    OpenGL/GLX/EGL/GLES/Vulkan applications via a direct-rendering X Server.
 
 Package: nvidia-driver-bin-{DRIVER_VERSION_MAJOR}
 Section: non-free/x11
