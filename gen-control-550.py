@@ -7,7 +7,7 @@
 
 ### Important for future Updates
 # Debian nvidia comes with 49 Packages in 550
-# Pika takes out nvidia-driver-full and nvidia-detect
+# Pika takes out nvidia-driver-full, nvidia-detect, nvidia-legacy-check
 
 CONTROL_FILE_PREQ = """Source: nvidia-graphics-drivers-{DRIVER_VERSION_MAJOR}
 Section: non-free/libs
@@ -756,7 +756,85 @@ Description: NVIDIA binary kernel module source
     OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server
     for graphics cards using NVIDIA chip sets.
     .
-    PLEASE read /usr/share/doc/${nvidia-kernel}-source/README.Debian.gz
+    PLEASE read /usr/share/doc/nvidia-kernel-source/README.Debian.gz
     for building information. If you want the kernel module to be automatically
     installed via DKMS, install ${nvidia-kernel}-dkms instead.
+
+Package: nvidia-kernel-support-{DRIVER_VERSION_MAJOR}
+Section: non-free/kernel
+Architecture: amd64 arm64 ppc64el
+Multi-Arch: foreign
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-modprobe-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${misc:Depends}
+Provides:
+    nvidia-kernel-support-any,
+    nvidia-kernel-support--v1,
+    nvidia-kernel-support (= ${binary:Version}),
+Conflicts:
+    nvidia-kernel-support
+Description: NVIDIA binary kernel module support files${nvidia:VariantDesc}
+    The NVIDIA binary driver provides optimized hardware acceleration of
+    OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server
+    for graphics cards using NVIDIA chip sets.
+    .
+    This package provides supporting configuration for the kernel module.
+
+Package: nvidia-libopencl1-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Recommends:
+    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}) | opencl-icd,
+Provides:
+    libopencl1,
+    libopencl-1.1-1,
+    libopencl-1.2-1,
+    libopencl-2.0-1,
+    libopencl-2.1-1,
+    libopencl-2.2-1,
+    libopencl-3.0-1,
+    nvidia-libopencl1 (= ${binary:Version}),
+Conflicts:
+    libopencl1,
+    nvidia-libopencl1,
+Replaces:
+    libopencl1,
+Description: NVIDIA OpenCL ICD Loader library
+    OpenCL (Open Computing Language) is a multivendor open standard for
+    general-purpose parallel programming of heterogeneous systems that include
+    CPUs, GPUs and other processors.
+    .
+    The OpenCL installable client driver loader (ICD Loader) acts as a dispatcher
+    between an OpenCL application and one (or more) installable client drivers
+    (ICD) that can be from any vendor. At least one ICD (and the corresponding
+    hardware) is required to run OpenCL applications.
+    .
+    This package contains the ICD Loader library provided by NVIDIA.
+
+Package: nvidia-opencl-common-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: foreign
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${misc:Depends}
+Provides:
+    nvidia-opencl-common (= ${binary:Version}),
+Conflicts:
+    nvidia-opencl-common
+Suggests:
+ nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version})
+Description: NVIDIA OpenCL driver - common files
+    OpenCL (Open Computing Language) is a multivendor open standard for
+    general-purpose parallel programming of heterogeneous systems that include
+    CPUs, GPUs and other processors.
+    .
+    This package provides the common files for the NVIDIA installable client
+    driver (ICD) for OpenCL.
 """
