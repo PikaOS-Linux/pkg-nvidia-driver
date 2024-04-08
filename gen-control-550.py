@@ -49,8 +49,10 @@ Depends:
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     firmware-nvidia-gsp (= ${binary:Version}),
+    firmware-nvidia-gsp-{DRIVER_VERSION_FULL} (= ${binary:Version}),
 Conflicts:
-    firmware-nvidia-gsp
+    firmware-nvidia-gsp,
+    firmware-nvidia-gsp-{DRIVER_VERSION_FULL}
 Description: NVIDIA GSP firmware
     The GPU System Processor (GSP) was first introduced in the Turing architecture and supports accelerating tasks traditionally performed by the driver on the CPU.
     This package provides the firmware to drive the GSP.
@@ -652,6 +654,7 @@ Multi-Arch: same
 Depends:
     libgl1-nvidia-glvnd-glx (= ${binary:Version}),
     nvidia-egl-icd (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
     ${misc:Depends}
 Recommends:
     nvidia-driver-libs-{DRIVER_VERSION_MAJOR}:i386 (= ${binary:Version}) [amd64],
@@ -685,4 +688,75 @@ Description: NVIDIA metapackage (OpenGL/GLX/EGL/GLES libraries)
     that provide optimized hardware acceleration of
     OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server.
 
+Package: nvidia-egl-common-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el armhf
+Multi-Arch: foreign
+Depends:
+    ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Provides:
+    nvidia-egl-common (= ${binary:Version}),
+Conflicts:
+    nvidia-egl-common
+Suggests:
+    libegl-nvidia0
+Description: NVIDIA binary EGL driver - common files
+    EGL provides a platform-agnostic mechanism for creating rendering surfaces
+    for use with other graphics libraries, such as OpenGL|ES.
+    .
+    This package provides the common files for the NVIDIA installable client
+    driver (ICD) for EGL via GLVND.
+
+Package: nvidia-egl-icd-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Depends:
+    nvidia-egl-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libegl1 (>= 0.2.999) | libegl1-glvnd-nvidia,
+    libegl-nvidia0-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${misc:Depends}
+Enhances:
+    libegl1,
+Provides:
+    libegl-vendor,
+    egl-icd,
+    nvidia-egl-icd (= ${binary:Version}),
+Conflicts:
+    nvidia-egl-icd
+Description: NVIDIA EGL installable client driver (ICD)
+    EGL provides a platform-agnostic mechanism for creating rendering surfaces
+    for use with other graphics libraries, such as OpenGL|ES.
+    .
+    This metapackage provides the NVIDIA installable client driver (ICD) for
+    EGL via GLVND which supports NVIDIA GPUs.
+
+Package: nvidia-kernel-source-{DRIVER_VERSION_MAJOR}
+Section: non-free/kernel
+Architecture: amd64 arm64 ppc64el
+Depends:
+    debhelper-compat (= ${nvidia:debhelper-compat}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    module-assistant,
+    ${misc:Depends}
+Recommends:
+    firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Suggests:
+    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Provides:
+    nvidia-kernel-source (= ${binary:Version}),
+Conflicts:
+    nvidia-kernel-source
+Description: NVIDIA binary kernel module source
+    This package provides the source for the NVIDIA binary kernel modules
+    needed by nvidia-driver in a form suitable
+    for use by module-assistant.
+    .
+    The NVIDIA binary driver provides optimized hardware acceleration of
+    OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server
+    for graphics cards using NVIDIA chip sets.
+    .
+    PLEASE read /usr/share/doc/${nvidia-kernel}-source/README.Debian.gz
+    for building information. If you want the kernel module to be automatically
+    installed via DKMS, install ${nvidia-kernel}-dkms instead.
 """
