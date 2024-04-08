@@ -40,7 +40,8 @@ Section: non-free-firmware/kernel
 Architecture: amd64 arm64
 Multi-Arch: foreign
 Depends:
-    ${misc:Depends}
+    ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     firmware-nvidia-gsp (= ${binary:Version}),
 Conflicts:
@@ -147,6 +148,7 @@ Multi-Arch: same
 Depends:
     libgl1 (>= 0.2.999) | libgl1-glvnd-nvidia-glx-{DRIVER_VERSION_MAJOR},
     libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
     ${misc:Depends}
 Provides:
     libgl1-nvidia-glx-any,
@@ -224,6 +226,7 @@ Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
     libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
     ${shlibs:Depends}, ${misc:Depends}
 Provides:
     libnvcuvid1 (= ${binary:Version})
@@ -239,7 +242,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Recommends:
     libnvidia-egl-gbm1-{DRIVER_VERSION_MAJOR},
 Provides:
@@ -292,6 +296,7 @@ Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
     libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
     ${shlibs:Depends}, ${misc:Depends}
 Provides:
     libnvidia-eglcore (= ${binary:Version}),
@@ -308,7 +313,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     libnvidia-encode1 (= ${binary:Version})
 Conflicts:
@@ -324,6 +330,7 @@ Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
     libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
     ${shlibs:Depends}, ${misc:Depends}
 Provides:
     libnvidia-fbc1 (= ${binary:Version})
@@ -340,6 +347,7 @@ Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
     libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
     ${shlibs:Depends}, ${misc:Depends}
 Provides:
     libnvidia-glcore (= ${binary:Version}),
@@ -355,23 +363,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
-Provides:
-    libnvidia-glvkspirv (= ${binary:Version}),
-Conflicts:
-    libnvidia-glvkspirv,
-Description: NVIDIA binary Vulkan Spir-V compiler library
-    Vulkan is a multivendor open standard by the Khronos Group for 3D graphics.
-    This library provides a NVIDIA Vulkan Spir-V compiler which reduces shader compilation time and shader system memory consumption.
-    This package contains the private Spir-V compiler libraries used by the NVIDIA implementation of Vulkan.
-
-Package: libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR}
-Architecture: i386 amd64 arm64 ppc64el
-Multi-Arch: same
-Pre-Depends:
-    ${misc:Pre-Depends}
-Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     libnvidia-glvkspirv (= ${binary:Version}),
 Conflicts:
@@ -387,7 +380,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     libnvidia-gpucomp (= ${binary:Version}),
 Conflicts:
@@ -418,7 +412,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     libnvidia-ngx1 (= ${binary:Version}),
 Conflicts:
@@ -433,7 +428,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     libnvidia-nvvm4 (= ${binary:Version}),
 Conflicts:
@@ -448,7 +444,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     libnvidia-opticalflow1 (= ${binary:Version}),
 Conflicts:
@@ -479,7 +476,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     libnvidia-ptxjitcompiler1 (= ${binary:Version}),
 Conflicts:
@@ -494,7 +492,8 @@ Multi-Arch: same
 Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends}
+    ${shlibs:Depends}, ${misc:Depends},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
 Provides:
     libnvidia-rtcore (= ${binary:Version}),
 Conflicts:
@@ -511,6 +510,7 @@ Pre-Depends:
     ${misc:Pre-Depends}
 Depends:
     libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
     ${shlibs:Depends}, ${misc:Depends}
 Provides:
     libnvoptix1 (= ${binary:Version}),
