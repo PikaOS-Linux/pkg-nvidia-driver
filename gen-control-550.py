@@ -1,5 +1,8 @@
 #! python3
 
+### Important for future Updates
+# Debian nvidia comes with 49 Packages in 550
+
 CONTROL_FILE_PREQ = """Source: nvidia-graphics-drivers-{DRIVER_VERSION_MAJOR}
 Section: non-free/libs
 Priority: optional
@@ -280,5 +283,162 @@ Description: NVIDIA binary OpenGL/GLX configuration library
     The NVIDIA binary driver provides optimized hardware acceleration of OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server for graphics cards using NVIDIA chip sets.
     This package contains the private libnvidia-cfg runtime library which is used by other driver components.
 
+
+Package: libnvidia-eglcore-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-eglcore (= ${binary:Version}),
+Conflicts:
+    libnvidia-eglcore,
+Description: NVIDIA binary EGL core libraries
+    EGL provides a platform-agnostic mechanism for creating rendering surfaces for use with other graphics libraries, such as OpenGL|ES.
+    OpenGL|ES is a cross-platform API for full-function 2D and 3D graphics on embedded systems - including consoles, phones, appliances and vehicles. It contains a subset of OpenGL plus a number of extensions for the special needs of embedded systems.
+    This package contains the private core libraries used by the NVIDIA implementation of EGL and OpenGL|ES.
+
+Package: libnvidia-encode1-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-encode1 (= ${binary:Version})
+Conflicts:
+    libnvidia-encode1
+Description: NVENC Video Encoding runtime library
+    The NVENC Video Encoding library provides an interface to video encoder hardware on supported NVIDIA GPUs.
+    This package contains the nvidia-encode runtime library.
+
+Package: libnvidia-fbc1-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-fbc1 (= ${binary:Version})
+Conflicts:
+    libnvidia-fbc1
+Description: NVIDIA OpenGL-based Framebuffer Capture runtime library
+    The NVIDIA OpenGL-based Framebuffer Capture (NvFBCOpenGL) library provides a high performance, low latency interface to capture and optionally encode an OpenGL framebuffer. NvFBCOpenGL is a private API that is only available to approved partners for use in remote graphics scenarios.
+    This package contains the NvFBCOpenGL runtime library.
+
+Package: libnvidia-glcore-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-glcore (= ${binary:Version}),
+Conflicts:
+    libnvidia-glcore,
+Description: NVIDIA binary OpenGL/GLX core libraries
+    The NVIDIA binary driver provides optimized hardware acceleration of OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server for graphics cards using NVIDIA chip sets.
+    This package contains the private core libraries used by the NVIDIA implementation of OpenGL and GLX.
+
+Package: libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-glvkspirv (= ${binary:Version}),
+Conflicts:
+    libnvidia-glvkspirv,
+Description: NVIDIA binary Vulkan Spir-V compiler library
+    Vulkan is a multivendor open standard by the Khronos Group for 3D graphics.
+    This library provides a NVIDIA Vulkan Spir-V compiler which reduces shader compilation time and shader system memory consumption.
+    This package contains the private Spir-V compiler libraries used by the NVIDIA implementation of Vulkan.
+
+Package: libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-glvkspirv (= ${binary:Version}),
+Conflicts:
+    libnvidia-glvkspirv,
+Description: NVIDIA binary Vulkan Spir-V compiler library
+    Vulkan is a multivendor open standard by the Khronos Group for 3D graphics.
+    This library provides a NVIDIA Vulkan Spir-V compiler which reduces shader compilation time and shader system memory consumption.
+    This package contains the private Spir-V compiler libraries used by the NVIDIA implementation of Vulkan.
+
+Package: libnvidia-gpucomp-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-gpucomp (= ${binary:Version}),
+Conflicts:
+    libnvidia-gpucomp,
+Description: NVIDIA binary GPU compiler library
+
+Package: libnvidia-ml1-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-ml.so.1 (= {DRIVER_VERSION_MAJOR}),
+    libnvidia-ml1 (= ${binary:Version}),
+Conflicts:
+    libnvidia-ml1,
+Homepage: https://developer.nvidia.com/nvidia-management-library-NVML
+Description: NVIDIA Management Library (NVML) runtime library
+    The NVIDIA Management Library (NVML) provides a monitoring and management API. It provides a direct access to the queries and commands exposed via nvidia-smi.
+    This package contains the nvidia-ml runtime library.
+
+Package: libnvidia-ngx1-{DRIVER_VERSION_MAJOR}
+Architecture: amd64
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-ngx1 (= ${binary:Version}),
+Conflicts:
+    libnvidia-ngx1,
+Description: NVIDIA NGX runtime library
+    The NVIDIA binary driver provides optimized hardware acceleration of OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server for graphics cards using NVIDIA chip sets.
+    This package contains the NVIDIA NGX runtime library.
+
+Package: libnvidia-nvvm4-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-nvvm4 (= ${binary:Version}),
+Conflicts:
+    libnvidia-nvvm4,
+Description: NVIDIA NVVM Compiler library
+    The Compute Unified Device Architecture (CUDA) enables NVIDIA graphics processing units (GPUs) to be used for massively parallel general purpose computation.
+    This package contains the NVVM Compiler library.
 
 """
