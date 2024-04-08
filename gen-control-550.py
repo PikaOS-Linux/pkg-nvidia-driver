@@ -969,4 +969,79 @@ Provides:
 Conflicts:
     nvidia-vdpau-driver
 Description: Video Decode and Presentation API for Unix - NVIDIA driver
+
+Package: nvidia-vulkan-common-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: foreign
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${misc:Depends}
+Suggests:
+    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR}
+Provides:
+    nvidia-vulkan-common (= ${binary:Version}),
+Conflicts:
+    libgl1-nvidia-glx,
+    libgl1-nvidia-tesla-418-glx,
+    libgl1-nvidia-legacy-390xx-glx,
+    nvidia-nonglvnd-vulkan-common,
+    nvidia-vulkan-common
+Description: NVIDIA Vulkan driver - common files
+    Vulkan is a multivendor open standard by the Khronos Group for 3D graphics.
+    .
+    This package provides the common files for the NVIDIA installable client
+    driver (ICD) for Vulkan (GLVND variant).
+
+Package: nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Depends:
+    nvidia-vulkan-common-{DRIVER_VERSION_MAJOR},
+    libvulkan1 (>= 1.0.42),
+    libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${misc:Depends}
+Recommends:
+    libnvidia-rtcore-{DRIVER_VERSION_MAJOR} (= ${binary:Version}) [!i386 !ppc64el],
+Suggests:
+    vulkan-tools,
+Enhances:
+    libvulkan1,
+Provides:
+    vulkan-icd,
+    nvidia-vulkan-icd-any,
+    nvidia-vulkan-icd (= ${binary:Version}),
+Conflicts:
+    nvidia-nonglvnd-vulkan-icd,
+    nvidia-vulkan-icd
+Description: NVIDIA Vulkan installable client driver (ICD)${nvidia:VariantDesc}
+    Vulkan is a multivendor open standard by the Khronos Group for 3D graphics.
+    .
+    This metapackage provides the NVIDIA installable client driver (ICD) for
+    Vulkan (GLVND variant) which supports NVIDIA GPUs.
+
+Package: xserver-xorg-video-nvidia
+Section: non-free/x11
+Architecture: amd64 arm64 ppc64el
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-support,
+    xserver-xorg-core,
+    ${shlibs:Depends}, ${misc:Depends}
+Recommends:
+    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-settings,
+Suggests:
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Provides:
+    xserver-xorg-video-nvidia-any,
+    xserver-xorg-video-nvidia (= ${binary:Version}),
+Confilicts:
+    xserver-xorg-video-nvidia
+Description: NVIDIA binary Xorg driver
 """
