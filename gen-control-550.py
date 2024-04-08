@@ -946,4 +946,27 @@ Conflicts:
 Description: NVIDIA driver - systemd power management scripts
     This package provides the common files for the NVIDIA power management
     integration with systemd.
+
+Package: nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR}
+Section: non-free/video
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    libvdpau1 (>= 0.9),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Recommends:
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Suggests:
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+Enhances:
+    libvdpau1,
+Provides:
+    vdpau-driver,
+    nvidia-vdpau-driver (= ${binary:Version}),
+Conflicts:
+    nvidia-vdpau-driver
+Description: Video Decode and Presentation API for Unix - NVIDIA driver
 """
