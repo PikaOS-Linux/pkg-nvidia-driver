@@ -759,7 +759,7 @@ Package: nvidia-kernel-source-{DRIVER_VERSION_MAJOR}
 Section: non-free/kernel
 Architecture: amd64 arm64 ppc64el
 Depends:
-    debhelper-compat (= ${nvidia:debhelper-compat}),
+    debhelper-compat (= 13),
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
     module-assistant,
     ${misc:Depends}
@@ -782,7 +782,7 @@ Description: NVIDIA binary kernel module source
     .
     PLEASE read /usr/share/doc/nvidia-kernel-source/README.Debian.gz
     for building information. If you want the kernel module to be automatically
-    installed via DKMS, install ${nvidia-kernel}-dkms instead.
+    installed via DKMS, install nvidia-kernel-dkms-{DRIVER_VERSION_MAJOR} instead.
 
 Package: nvidia-kernel-support-{DRIVER_VERSION_MAJOR}
 Section: non-free/kernel
@@ -799,7 +799,7 @@ Provides:
     nvidia-kernel-support (= ${binary:Version}),
 Conflicts:
     nvidia-kernel-support
-Description: NVIDIA binary kernel module support files${nvidia:VariantDesc}
+Description: NVIDIA binary kernel module support files
     The NVIDIA binary driver provides optimized hardware acceleration of
     OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server
     for graphics cards using NVIDIA chip sets.
@@ -881,7 +881,7 @@ Provides:
     nvidia-opencl-icd (= ${binary:Version})
 Conflicts:
     nvidia-opencl-icd
-Description: NVIDIA OpenCL installable client driver (ICD)${nvidia:VariantDesc}
+Description: NVIDIA OpenCL installable client driver (ICD)
     OpenCL (Open Computing Language) is a multivendor open standard for
     general-purpose parallel programming of heterogeneous systems that include
     CPUs, GPUs and other processors.
@@ -923,7 +923,7 @@ Conflicts:
     nvidia-smi
 Suggests:
     nvidia-kernel-source-{DRIVER_VERSION_MAJOR}
-Description: NVIDIA System Management Interface${nvidia:VariantDesc}
+Description: NVIDIA System Management Interface
     The NVIDIA Management Library (NVML) provides a monitoring and management API.
     The application "nvidia-smi" is the NVIDIA System Management Interface (NVSMI)
     and provides a command line interface to this functionality.
@@ -1013,7 +1013,7 @@ Provides:
 Conflicts:
     nvidia-nonglvnd-vulkan-icd,
     nvidia-vulkan-icd
-Description: NVIDIA Vulkan installable client driver (ICD)${nvidia:VariantDesc}
+Description: NVIDIA Vulkan installable client driver (ICD)
     Vulkan is a multivendor open standard by the Khronos Group for 3D graphics.
     .
     This metapackage provides the NVIDIA installable client driver (ICD) for
