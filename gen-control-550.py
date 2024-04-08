@@ -1,13 +1,26 @@
-#! python3
+#! /usr/bin/python3
+
+### Basic configuration
+DRIVER_VERSION_MAJOR = "550"
+DRIVER_VERSION_FULL = "550.67"
+DRIVER_VERSION_DPKG = "550.67-101pika1"
+### End of Basic configuration
 
 
 ### Notice
-# All versioned packages must depend on nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version})
+# All versioned packages must depend on nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}})
 # nvidia-alternative-{DRIVER_VERSION_MAJOR} must conflict with all older nvidia-alternative flavours
+### End of Notice
 
-### Important for future Updates
-# Debian nvidia comes with 49 Packages in 550
-# Pika takes out nvidia-driver-full, nvidia-detect, nvidia-legacy-check
+### Important for future Updates (Make sure to update)
+# Incase debian adds or removes a packages to the nvidia-graphics-drivers dpkg source make sure to replicate with pika flavour and kernek module adaptations.
+# Debian nvidia comes with 49 Packages in 550.
+# Pika takes out nvidia-driver-full, nvidia-detect, nvidia-legacy-check.
+# So...
+# Pika nvidia comes with 46 Packages in 550.
+### End of Important Notes
+
+### Text Preq
 
 CONTROL_FILE_PREQ = """Source: nvidia-graphics-drivers-{DRIVER_VERSION_MAJOR}
 Section: non-free/libs
@@ -17,7 +30,7 @@ Uploaders:
  Andreas Beckmann <anbe@debian.org>,
  Luca Boccassi <bluca@debian.org>,
 Vcs-Browser: https://salsa.debian.org/nvidia-team/nvidia-graphics-drivers
-Vcs-Git: https://salsa.debian.org/nvidia-team/nvidia-graphics-drivers.git -b 545
+Vcs-Git: https://salsa.debian.org/nvidia-team/nvidia-graphics-drivers.git -b 550
 Build-Depends:
  debhelper-compat (= 13),
 Build-Depends-Arch:
@@ -45,11 +58,11 @@ Section: non-free-firmware/kernel
 Architecture: amd64 arm64
 Multi-Arch: foreign
 Depends:
-    ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    firmware-nvidia-gsp (= ${binary:Version}),
-    firmware-nvidia-gsp-{DRIVER_VERSION_FULL} (= ${binary:Version}),
+    firmware-nvidia-gsp (= ${{binary:Version}}),
+    firmware-nvidia-gsp-{DRIVER_VERSION_FULL} (= ${{binary:Version}}),
 Conflicts:
     firmware-nvidia-gsp,
     firmware-nvidia-gsp-{DRIVER_VERSION_FULL}
@@ -61,22 +74,22 @@ Package: libcuda1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
     nvidia-support-{DRIVER_VERSION_MAJOR},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-ptxjitcompiler1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-pkcs11-openssl3-{DRIVER_VERSION_MAJOR} (= ${binary:Version}) [amd64],
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-ptxjitcompiler1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-pkcs11-openssl3-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) [amd64],
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Recommends:
-    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-smi-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libcuda1-{DRIVER_VERSION_MAJOR}:i386 (= ${binary:Version}) [amd64],
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-smi-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libcuda1-{DRIVER_VERSION_MAJOR}:i386 (= ${{binary:Version}}) [amd64],
 Suggests:
-    nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-kernel-source-{DRIVER_VERSION_MAJOR} (= ${binary:Version})
+    nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}})
 Provides:
     libcuda.so.1 (= {DRIVER_VERSION_MAJOR}),
     libcuda1-any,
@@ -110,7 +123,7 @@ Provides:
     libcuda-12.1-1,
     libcuda-12.2-1,
     libcuda-12.3-1,
-    libcuda1 (= ${binary:Version})
+    libcuda1 (= ${{binary:Version}})
 Confilicts:
     libcuda1
 Homepage: https://www.nvidia.com/CUDA
@@ -120,11 +133,11 @@ Package: libcudadebugger1-{DRIVER_VERSION_MAJOR}
 Architecture: amd64 arm64 ppc64el
 Multi-Arch: same
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libcuda1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libcudadebugger1 (= ${binary:Version})
+    libcudadebugger1 (= ${{binary:Version}})
 Conflicts:
     libcudadebugger1
 Homepage: https://www.nvidia.com/CUDA
@@ -136,12 +149,12 @@ Package: libegl-nvidia0-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libegl-nvidia0 (= ${binary:Version})
+    libegl-nvidia0 (= ${{binary:Version}})
 Conflicts:
     libegl-nvidia0
 Description: NVIDIA binary EGL library
@@ -154,12 +167,12 @@ Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Depends:
     libgl1 (>= 0.2.999) | libgl1-glvnd-nvidia-glx-{DRIVER_VERSION_MAJOR},
-    libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${misc:Depends}
+    libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
 Provides:
     libgl1-nvidia-glx-any,
-    libgl1-nvidia-glvnd-glx (= ${binary:Version})
+    libgl1-nvidia-glvnd-glx (= ${{binary:Version}})
 Conflicts:
     libgl1-nvidia-glvnd-glx
 Description: NVIDIA binary OpenGL/GLX library (GLVND variant)
@@ -171,14 +184,14 @@ Package: libgles-nvidia1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libgles1 (>= 0.2.999) | libgles1-glvnd-nvidia-{DRIVER_VERSION_MAJOR},
-    libnvidia-eglcore-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    libnvidia-eglcore-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libgles-nvidia1 (= ${binary:Version})
+    libgles-nvidia1 (= ${{binary:Version}})
 Conflicts:
     libgles-nvidia1
 Description: NVIDIA binary OpenGL|ES 1.x library
@@ -191,14 +204,14 @@ Package: libgles-nvidia2-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libgles2 (>= 0.2.999) | libgles2-glvnd-nvidia-{DRIVER_VERSION_MAJOR},
-    libnvidia-eglcore-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    libnvidia-eglcore-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libgles-nvidia2 (= ${binary:Version})
+    libgles-nvidia2 (= ${{binary:Version}})
 Conflicts:
     libgles-nvidia2
 Description: NVIDIA binary OpenGL|ES 2.x library
@@ -211,14 +224,14 @@ Package: libglx-nvidia0-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libglx0 | libglx0-glvnd-nvidia-{DRIVER_VERSION_MAJOR},
-    ${shlibs:Depends}, ${misc:Depends}
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
     libglx-vendor,
-    libglx-nvidia0 (= ${binary:Version})
+    libglx-nvidia0 (= ${{binary:Version}})
 Conflicts:
     libglx-nvidia0
 Description: NVIDIA binary GLX library
@@ -230,13 +243,13 @@ Package: libnvcuvid1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    libcuda1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libnvcuvid1 (= ${binary:Version})
+    libnvcuvid1 (= ${{binary:Version}})
 Conflicts:
     libnvcuvid1
 Description: NVIDIA CUDA Video Decoder runtime library
@@ -247,14 +260,14 @@ Package: libnvidia-allocator1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Recommends:
     libnvidia-egl-gbm1-{DRIVER_VERSION_MAJOR},
 Provides:
-    libnvidia-allocator1 (= ${binary:Version})
+    libnvidia-allocator1 (= ${{binary:Version}})
 Conflicts:
     libnvidia-allocator1
 Description: NVIDIA allocator runtime library
@@ -265,12 +278,12 @@ Package: libnvidia-api1-{DRIVER_VERSION_MAJOR}
 Architecture: amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libnvidia-api1 (= ${binary:Version})
+    libnvidia-api1 (= ${{binary:Version}})
 Conflicts:
     libnvidia-api1
 Description: NVAPI runtime library
@@ -281,14 +294,14 @@ Package: libnvidia-cfg1-{DRIVER_VERSION_MAJOR}
 Architecture: amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
     libnvidia-cfg.so.1 (= {DRIVER_VERSION_MAJOR}),
     libnvidia-cfg1-any,
-    libnvidia-cfg1 (= ${binary:Version})
+    libnvidia-cfg1 (= ${{binary:Version}})
 Conflicts:
     libnvidia-cfg1
 Description: NVIDIA binary OpenGL/GLX configuration library
@@ -300,13 +313,13 @@ Package: libnvidia-eglcore-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libnvidia-eglcore (= ${binary:Version}),
+    libnvidia-eglcore (= ${{binary:Version}}),
 Conflicts:
     libnvidia-eglcore,
 Description: NVIDIA binary EGL core libraries
@@ -318,12 +331,12 @@ Package: libnvidia-encode1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    libnvidia-encode1 (= ${binary:Version})
+    libnvidia-encode1 (= ${{binary:Version}})
 Conflicts:
     libnvidia-encode1
 Description: NVENC Video Encoding runtime library
@@ -334,13 +347,13 @@ Package: libnvidia-fbc1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    libcuda1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libnvidia-fbc1 (= ${binary:Version})
+    libnvidia-fbc1 (= ${{binary:Version}})
 Conflicts:
     libnvidia-fbc1
 Description: NVIDIA OpenGL-based Framebuffer Capture runtime library
@@ -351,13 +364,13 @@ Package: libnvidia-glcore-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libnvidia-glcore (= ${binary:Version}),
+    libnvidia-glcore (= ${{binary:Version}}),
 Conflicts:
     libnvidia-glcore,
 Description: NVIDIA binary OpenGL/GLX core libraries
@@ -368,12 +381,12 @@ Package: libnvidia-glvkspirv-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    libnvidia-glvkspirv (= ${binary:Version}),
+    libnvidia-glvkspirv (= ${{binary:Version}}),
 Conflicts:
     libnvidia-glvkspirv,
 Description: NVIDIA binary Vulkan Spir-V compiler library
@@ -385,12 +398,12 @@ Package: libnvidia-gpucomp-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    libnvidia-gpucomp (= ${binary:Version}),
+    libnvidia-gpucomp (= ${{binary:Version}}),
 Conflicts:
     libnvidia-gpucomp,
 Description: NVIDIA binary GPU compiler library
@@ -399,13 +412,13 @@ Package: libnvidia-ml1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
     libnvidia-ml.so.1 (= {DRIVER_VERSION_MAJOR}),
-    libnvidia-ml1 (= ${binary:Version}),
+    libnvidia-ml1 (= ${{binary:Version}}),
 Conflicts:
     libnvidia-ml1,
 Homepage: https://developer.nvidia.com/nvidia-management-library-NVML
@@ -417,12 +430,12 @@ Package: libnvidia-ngx1-{DRIVER_VERSION_MAJOR}
 Architecture: amd64
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    libnvidia-ngx1 (= ${binary:Version}),
+    libnvidia-ngx1 (= ${{binary:Version}}),
 Conflicts:
     libnvidia-ngx1,
 Description: NVIDIA NGX runtime library
@@ -433,12 +446,12 @@ Package: libnvidia-nvvm4-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    libnvidia-nvvm4 (= ${binary:Version}),
+    libnvidia-nvvm4 (= ${{binary:Version}}),
 Conflicts:
     libnvidia-nvvm4,
 Description: NVIDIA NVVM Compiler library
@@ -449,12 +462,12 @@ Package: libnvidia-opticalflow1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    libnvidia-opticalflow1 (= ${binary:Version}),
+    libnvidia-opticalflow1 (= ${{binary:Version}}),
 Conflicts:
     libnvidia-opticalflow1,
 Homepage: https://developer.nvidia.com/opticalflow-sdk
@@ -466,10 +479,10 @@ Package: libnvidia-pkcs11-openssl3-{DRIVER_VERSION_MAJOR}
 Architecture: amd64
 Multi-Arch: same
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libnvidia-pkcs11-openssl3 (= ${binary:Version}),
+    libnvidia-pkcs11-openssl3 (= ${{binary:Version}}),
 Conflicts:
     libnvidia-pkcs11-openssl3,
 Homepage: https://www.nvidia.com/CUDA
@@ -481,12 +494,12 @@ Package: libnvidia-ptxjitcompiler1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    libnvidia-ptxjitcompiler1 (= ${binary:Version}),
+    libnvidia-ptxjitcompiler1 (= ${{binary:Version}}),
 Conflicts:
     libnvidia-ptxjitcompiler1,
 Description: NVIDIA PTX JIT Compiler library
@@ -497,12 +510,12 @@ Package: libnvidia-rtcore-{DRIVER_VERSION_MAJOR}
 Architecture: amd64 arm64
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    libnvidia-rtcore (= ${binary:Version}),
+    libnvidia-rtcore (= ${{binary:Version}}),
 Conflicts:
     libnvidia-rtcore
 Description: NVIDIA binary Vulkan ray tracing (rtcore) library
@@ -514,13 +527,13 @@ Package: libnvoptix1-{DRIVER_VERSION_MAJOR}
 Architecture: amd64 arm64
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    libcuda1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    libnvoptix1 (= ${binary:Version}),
+    libnvoptix1 (= ${{binary:Version}}),
 Conflicts:
     libnvoptix1
 Description: NVIDIA implementation of the OptiX ray tracing engine
@@ -532,12 +545,12 @@ Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: foreign
 Pre-Depends:
     dpkg (>= 1.17.21),
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
     glx-alternative-nvidia (>= 1.2),
-    ${misc:Depends}
+    ${{misc:Depends}}
 Provides:
-    nvidia-alternative (= ${binary:Version}),
+    nvidia-alternative (= ${{binary:Version}}),
     nvidia-alternative-any,
     nvidia-alternative-kmod-alias,
     nvidia-alternative--kmod-alias,
@@ -573,10 +586,10 @@ Package: nvidia-cuda-mps-{DRIVER_VERSION_MAJOR}
 Section: non-free/utils
 Architecture: amd64 arm64 ppc64el
 Depends:
-    ${shlibs:Depends}, ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    nvidia-cuda-mps (= ${binary:Version}),
+    nvidia-cuda-mps (= ${{binary:Version}}),
 Conflicts:
     nvidia-cuda-mps
 Description: NVIDIA CUDA Multi Process Service (MPS)
@@ -588,43 +601,43 @@ Package: nvidia-driver-{DRIVER_VERSION_MAJOR}
 Section: non-free/x11
 Architecture: amd64 arm64 ppc64el
 Pre-Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Depends:
-    nvidia-driver-libs-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-driver-bin-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    xserver-xorg-video-nvidia-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libgles-nvidia1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libgles-nvidia2-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-encode1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-allocator1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-rtcore-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-smi-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libcudadebugger1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-fbc1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvoptix1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-opticalflow1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-ngx1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}), [amd64],
-    libnvidia-api1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-powerd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}), [amd64],
-    nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-driver-libs-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-driver-bin-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    xserver-xorg-video-nvidia-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libgles-nvidia1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libgles-nvidia2-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-encode1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-allocator1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-rtcore-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-smi-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libcudadebugger1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-fbc1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvoptix1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-opticalflow1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-ngx1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}), [amd64],
+    libnvidia-api1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-powerd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}), [amd64],
+    nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-settings,
     nvidia-persistenced,
     nvidia-support,
-    ${misc:Depends}
+    ${{misc:Depends}}
 Recommends:
     nvidia-vaapi-driver,
 Suggests:
     nvidia-kernel-source-{DRIVER_VERSION_MAJOR},
 Provides:
-    nvidia-driver (= ${binary:Version}),
-    nvidia-driver-full (= ${binary:Version}),
+    nvidia-driver (= ${{binary:Version}}),
+    nvidia-driver-full (= ${{binary:Version}}),
     nvidia-driver-any,
     nvidia-glx-any,
 Description: NVIDIA {DRIVER_VERSION_FULL} metapackage
@@ -636,12 +649,12 @@ Package: nvidia-driver-bin-{DRIVER_VERSION_MAJOR}
 Section: non-free/x11
 Architecture: amd64 arm64 ppc64el
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Recommends:
     nvidia-driver-{DRIVER_VERSION_MAJOR},
 Provides:
-    nvidia-driver-bin (= ${binary:Version}),
+    nvidia-driver-bin (= ${{binary:Version}}),
 Conflicts:
     nvidia-driver-bin ,
 Description: NVIDIA driver support binaries
@@ -652,22 +665,22 @@ Package: nvidia-driver-libs-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Depends:
-    libgl1-nvidia-glvnd-glx (= ${binary:Version}),
-    nvidia-egl-icd (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${misc:Depends}
+    libgl1-nvidia-glvnd-glx (= ${{binary:Version}}),
+    nvidia-egl-icd (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
 Recommends:
-    nvidia-driver-libs-{DRIVER_VERSION_MAJOR}:i386 (= ${binary:Version}) [amd64],
+    nvidia-driver-libs-{DRIVER_VERSION_MAJOR}:i386 (= ${{binary:Version}}) [amd64],
     libopengl0 | libopengl0-glvnd-nvidia-{DRIVER_VERSION_MAJOR},
-    libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libgles-nvidia1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libgles-nvidia2-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-encode1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-allocator1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libgles-nvidia1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libgles-nvidia2-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-encode1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-allocator1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    nvidia-driver-libs (= ${binary:Version}),
+    nvidia-driver-libs (= ${{binary:Version}}),
     nvidia-driver-libs-any,
 Conflicts:
     nvidia-driver-libs,
@@ -692,10 +705,10 @@ Package: nvidia-egl-common-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el armhf
 Multi-Arch: foreign
 Depends:
-    ${misc:Depends},
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${{misc:Depends}}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    nvidia-egl-common (= ${binary:Version}),
+    nvidia-egl-common (= ${{binary:Version}}),
 Conflicts:
     nvidia-egl-common
 Suggests:
@@ -711,17 +724,17 @@ Package: nvidia-egl-icd-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Depends:
-    nvidia-egl-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-egl-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libegl1 (>= 0.2.999) | libegl1-glvnd-nvidia,
-    libegl-nvidia0-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${misc:Depends}
+    libegl-nvidia0-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
 Enhances:
     libegl1,
 Provides:
     libegl-vendor,
     egl-icd,
-    nvidia-egl-icd (= ${binary:Version}),
+    nvidia-egl-icd (= ${{binary:Version}}),
 Conflicts:
     nvidia-egl-icd
 Description: NVIDIA EGL installable client driver (ICD)
@@ -735,18 +748,18 @@ Package: nvidia-kernel-dkms-{DRIVER_VERSION_MAJOR}
 Section: non-free/kernel
 Architecture: amd64 arm64 ppc64el
 Depends:
-    firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${binary:Version}),
-    nvidia-kernel-support-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${{binary:Version}}),
+    nvidia-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     dkms,
-    ${misc:Depends}
+    ${{misc:Depends}}
 Recommends:
-    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-kernel-dkms (= ${binary:Version}),
-    nvidia-kernel-dkms-any (= ${binary:Version}),
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-dkms (= ${{binary:Version}}),
+    nvidia-kernel-dkms-any (= ${{binary:Version}}),
 Conflicts:
     nvidia-kernel-dkms,
     nvidia-kernel-pikaos-module-{DRIVER_VERSION_MAJOR},
@@ -760,15 +773,15 @@ Section: non-free/kernel
 Architecture: amd64 arm64 ppc64el
 Depends:
     debhelper-compat (= 13),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     module-assistant,
-    ${misc:Depends}
+    ${{misc:Depends}}
 Recommends:
-    firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Suggests:
-    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
-    nvidia-kernel-source (= ${binary:Version}),
+    nvidia-kernel-source (= ${{binary:Version}}),
 Conflicts:
     nvidia-kernel-source
 Description: NVIDIA binary kernel module source
@@ -789,14 +802,14 @@ Section: non-free/kernel
 Architecture: amd64 arm64 ppc64el
 Multi-Arch: foreign
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-modprobe-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-modprobe-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
 Provides:
     nvidia-kernel-support-any,
     nvidia-kernel-support--v1,
-    nvidia-kernel-support (= ${binary:Version}),
+    nvidia-kernel-support (= ${{binary:Version}}),
 Conflicts:
     nvidia-kernel-support
 Description: NVIDIA binary kernel module support files
@@ -810,12 +823,12 @@ Package: nvidia-libopencl1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Recommends:
-    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}) | opencl-icd,
+    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) | opencl-icd,
 Provides:
     libopencl1,
     libopencl-1.1-1,
@@ -824,7 +837,7 @@ Provides:
     libopencl-2.1-1,
     libopencl-2.2-1,
     libopencl-3.0-1,
-    nvidia-libopencl1 (= ${binary:Version}),
+    nvidia-libopencl1 (= ${{binary:Version}}),
 Conflicts:
     libopencl1,
     nvidia-libopencl1,
@@ -846,14 +859,14 @@ Package: nvidia-opencl-common-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: foreign
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
 Provides:
-    nvidia-opencl-common (= ${binary:Version}),
+    nvidia-opencl-common (= ${{binary:Version}}),
 Conflicts:
     nvidia-opencl-common
 Suggests:
-    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version})
+    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}})
 Description: NVIDIA OpenCL driver - common files
     OpenCL (Open Computing Language) is a multivendor open standard for
     general-purpose parallel programming of heterogeneous systems that include
@@ -866,19 +879,19 @@ Package: nvidia-opencl-icd-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-opencl-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ocl-icd-libopencl1 | nvidia-libopencl1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}) | libopencl1,
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-nvvm4-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-opencl-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ocl-icd-libopencl1 | nvidia-libopencl1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) | libopencl1,
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libcuda1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-nvvm4-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Enhances:
     libopencl1,
 Provides:
     opencl-icd,
-    nvidia-opencl-icd (= ${binary:Version})
+    nvidia-opencl-icd (= ${{binary:Version}})
 Conflicts:
     nvidia-opencl-icd
 Description: NVIDIA OpenCL installable client driver (ICD)
@@ -893,10 +906,10 @@ Package: nvidia-powerd-{DRIVER_VERSION_MAJOR}
 Section: non-free/utils
 Architecture: amd64
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Provides:
-    nvidia-powerd (= ${binary:Version}),
+    nvidia-powerd (= ${{binary:Version}}),
 Conflicts:
     nvidia-powerd
 Description: NVIDIA Dynamic Boost (daemon)
@@ -912,13 +925,13 @@ Package: nvidia-smi-{DRIVER_VERSION_MAJOR}
 Section: non-free/utils
 Architecture: amd64 arm64 ppc64el
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    libnvidia-ml1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-ml1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Recommends:
     nvidia-kernel-module-{DRIVER_VERSION_MAJOR}
 Provides:
-    nvidia-smi (= ${binary:Version}),
+    nvidia-smi (= ${{binary:Version}}),
 Conflicts:
     nvidia-smi
 Suggests:
@@ -937,10 +950,10 @@ Architecture: amd64 arm64 ppc64el
 Multi-Arch: foreign
 Depends:
     kbd,
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
 Provides:
-    nvidia-suspend-common (= ${binary:Version}),
+    nvidia-suspend-common (= ${{binary:Version}}),
 Conflicts:
     nvidia-suspend-common
 Description: NVIDIA driver - systemd power management scripts
@@ -952,20 +965,20 @@ Section: non-free/video
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
     libvdpau1 (>= 0.9),
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${shlibs:Depends}, ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Recommends:
-    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Suggests:
-    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Enhances:
     libvdpau1,
 Provides:
     vdpau-driver,
-    nvidia-vdpau-driver (= ${binary:Version}),
+    nvidia-vdpau-driver (= ${{binary:Version}}),
 Conflicts:
     nvidia-vdpau-driver
 Description: Video Decode and Presentation API for Unix - NVIDIA driver
@@ -974,12 +987,12 @@ Package: nvidia-vulkan-common-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: foreign
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${misc:Depends}
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
 Suggests:
     nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR}
 Provides:
-    nvidia-vulkan-common (= ${binary:Version}),
+    nvidia-vulkan-common (= ${{binary:Version}}),
 Conflicts:
     libgl1-nvidia-glx,
     libgl1-nvidia-tesla-418-glx,
@@ -998,10 +1011,10 @@ Multi-Arch: same
 Depends:
     nvidia-vulkan-common-{DRIVER_VERSION_MAJOR},
     libvulkan1 (>= 1.0.42),
-    libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    ${misc:Depends}
+    libglx-nvidia0-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
 Recommends:
-    libnvidia-rtcore-{DRIVER_VERSION_MAJOR} (= ${binary:Version}) [!i386 !ppc64el],
+    libnvidia-rtcore-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) [!i386 !ppc64el],
 Suggests:
     vulkan-tools,
 Enhances:
@@ -1009,7 +1022,7 @@ Enhances:
 Provides:
     vulkan-icd,
     nvidia-vulkan-icd-any,
-    nvidia-vulkan-icd (= ${binary:Version}),
+    nvidia-vulkan-icd (= ${{binary:Version}}),
 Conflicts:
     nvidia-nonglvnd-vulkan-icd,
     nvidia-vulkan-icd
@@ -1023,25 +1036,37 @@ Package: xserver-xorg-video-nvidia
 Section: non-free/x11
 Architecture: amd64 arm64 ppc64el
 Pre-Depends:
-    ${misc:Pre-Depends}
+    ${{misc:Pre-Depends}}
 Depends:
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-support,
     xserver-xorg-core,
-    ${shlibs:Depends}, ${misc:Depends}
+    ${{shlibs:Depends}}, ${{misc:Depends}}
 Recommends:
-    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
-    nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-settings,
 Suggests:
-    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
     xserver-xorg-video-nvidia-any,
-    xserver-xorg-video-nvidia (= ${binary:Version}),
+    xserver-xorg-video-nvidia (= ${{binary:Version}}),
 Confilicts:
     xserver-xorg-video-nvidia
 Description: NVIDIA binary Xorg driver
 """
+
+### End of Text Preq
+
+
+### Write files
+CONTROL_FILE_PATH = 'control'
+with open(CONTROL_FILE_PATH, "w") as CONTROL_FILE:
+    control_file_content = CONTROL_FILE_PREQ.format(
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    CONTROL_FILE.write(control_file_content)
