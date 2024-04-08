@@ -2,6 +2,7 @@
 
 ### Important for future Updates
 # Debian nvidia comes with 49 Packages in 550
+# Pika takes out nvidia-driver-full and nvidia-detect
 
 CONTROL_FILE_PREQ = """Source: nvidia-graphics-drivers-{DRIVER_VERSION_MAJOR}
 Section: non-free/libs
@@ -440,5 +441,141 @@ Conflicts:
 Description: NVIDIA NVVM Compiler library
     The Compute Unified Device Architecture (CUDA) enables NVIDIA graphics processing units (GPUs) to be used for massively parallel general purpose computation.
     This package contains the NVVM Compiler library.
+
+Package: libnvidia-opticalflow1-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-opticalflow1 (= ${binary:Version}),
+Conflicts:
+    libnvidia-opticalflow1,
+Homepage: https://developer.nvidia.com/opticalflow-sdk
+Description: NVIDIA Optical Flow runtime library
+    The NVIDIA Optical Flow SDK exposes the latest hardware capability of Turing GPUs dedicated to computing the relative motion of pixels between images.
+    This package contains the Optical Flow runtime library.
+
+Package: libnvidia-pkcs11-openssl3-{DRIVER_VERSION_MAJOR}
+Architecture: amd64
+Multi-Arch: same
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-pkcs11-openssl3 (= ${binary:Version}),
+Conflicts:
+    libnvidia-pkcs11-openssl3,
+Homepage: https://www.nvidia.com/CUDA
+Description: NVIDIA PKCS #11 Library (OpenSSL 3)
+    The Compute Unified Device Architecture (CUDA) enables NVIDIA graphics processing units (GPUs) to be used for massively parallel general purpose computation.
+    This package contains the NVIDIA PKCS #11 library with OpenSSL 3 backend.
+
+Package: libnvidia-ptxjitcompiler1-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-ptxjitcompiler1 (= ${binary:Version}),
+Conflicts:
+    libnvidia-ptxjitcompiler1,
+Description: NVIDIA PTX JIT Compiler library
+        The Compute Unified Device Architecture (CUDA) enables NVIDIA graphics processing units (GPUs) to be used for massively parallel general purpose computation.
+        This package contains the runtime PTX JIT Compiler library.
+
+Package: libnvidia-rtcore-{DRIVER_VERSION_MAJOR}
+Architecture: amd64 arm64
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvidia-rtcore (= ${binary:Version}),
+Conflicts:
+    libnvidia-rtcore
+Description: NVIDIA binary Vulkan ray tracing (rtcore) library
+    Vulkan is a multivendor open standard by the Khronos Group for 3D graphics.
+    This library is part of the Vulkan real-time ray tracing extensions (VK_NV_raytracing) implementation by NVIDIA.
+    This package contains the private rtcore library used by the NVIDIA implementation of Vulkan.
+
+Package: libnvoptix1-{DRIVER_VERSION_MAJOR}
+Architecture: amd64 arm64
+Multi-Arch: same
+Pre-Depends:
+    ${misc:Pre-Depends}
+Depends:
+    libcuda1-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Provides:
+    libnvoptix1 (= ${binary:Version}),
+Conflicts:
+    libnvoptix1
+Description: NVIDIA implementation of the OptiX ray tracing engine
+    The OptiX API is an application framework for achieving optimal ray tracing performance on the GPU.
+    This package contains runtime library of the OptiX ray tracing engine implementation for NVIDIA CUDA. It is used by liboptix.so.* coming with applications using the OptiX API.
+
+Package: nvidia-alternative-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 arm64 ppc64el
+Multi-Arch: foreign
+Pre-Depends:
+    dpkg (>= 1.17.21),
+    ${misc:Pre-Depends}
+Depends:
+    glx-alternative-nvidia (>= 1.2),
+    ${misc:Depends}
+Provides:
+    nvidia-alternative (= ${binary:Version}),
+    nvidia-alternative-any,
+    nvidia-alternative-kmod-alias,
+    nvidia-alternative--kmod-alias,
+    nvidia-alternative-{DRIVER_VERSION_FULL},
+    nvidia-alternative-{DRIVER_VERSION_MAJOR}-kmod-alias,
+    nvidia-alternative-{DRIVER_VERSION_FULL}-kmod-alias,
+Conflicts:
+    libglvnd0-nvidia,
+    libopengl0-glvnd-nvidia,
+    libglx0-glvnd-nvidia,
+    libgl1-glvnd-nvidia-glx,
+    libegl1-glvnd-nvidia,
+    libgles1-glvnd-nvidia,
+    libgles2-glvnd-nvidia,
+    nvidia-legacy-304xx-alternative,
+    nvidia-legacy-340xx-alternative,
+    nvidia-legacy-390xx-alternative,
+    nvidia-tesla-418-alternative,
+    nvidia-tesla-450-alternative,
+    nvidia-tesla-460-alternative,
+    nvidia-tesla-510-alternative,
+    nvidia-tesla-alternative,
+    nvidia-alternative-525
+    nvidia-alternative-530
+    nvidia-alternative-535
+    nvidia-alternative-545
+Description: allows the selection of NVIDIA as GLX provider
+    In setups with several NVIDIA driver versions installed (e.g. current and legacy) this metapackage registers an alternative to allow easy switching between the different versions.
+    Use 'update-glx --config nvidia' to select a version.
+    This package does not depend on the corresponding NVIDIA libraries. In order to install the NVIDIA driver and libraries, install the nvidia-driver package instead.
+
+Package: nvidia-driver-bin-{DRIVER_VERSION_MAJOR}
+Section: non-free/x11
+Architecture: amd64 arm64 ppc64el
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${binary:Version}),
+    ${shlibs:Depends}, ${misc:Depends}
+Recommends:
+    nvidia-driver-{DRIVER_VERSION_MAJOR},
+Provides:
+    nvidia-driver-bin (= ${binary:Version}),
+Conflicts:
+    nvidia-driver-bin ,
+Description: NVIDIA driver support binaries
+    The NVIDIA binary driver provides optimized hardware acceleration of OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server for graphics cards using NVIDIA chip sets.
+    This package contains supporting binaries for the driver.
 
 """
