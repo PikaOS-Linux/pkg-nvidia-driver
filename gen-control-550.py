@@ -1139,6 +1139,24 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcudadebugger.so.{DRIVER_VERSIO
 
 # libegl-nvidia0
 
+LIBEGL_NVIDIA0_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
+libEGL_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBEGL_NVIDIA0_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# There is no .so link.
+symbols-file-missing-build-depends-package-field"""
+
+LIBEGL_NVIDIA0_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libEGL_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libEGL_nvidia.so.0"""
+
 # end of libegl-nvidia0
 
 ### End of Text Preq
@@ -1231,5 +1249,26 @@ with open(LIBCUDADEBUGGER1_LINKS_FILE_PATH, "w") as LIBCUDADEBUGGER1_LINKS_FILE:
 # end of libcudadebugger1
 
 # libegl-nvidia0
+
+LIBEGL_NVIDIA0_INSTALL_FILE_PATH = 'libegl-nvidia0-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBEGL_NVIDIA0_INSTALL_FILE_PATH, "w") as LIBEGL_NVIDIA0_INSTALL_FILE:
+    LIBEGL_NVIDIA0_INSTALL_FILECONTENT = LIBEGL_NVIDIA0_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBEGL_NVIDIA0_INSTALL_FILE.write(LIBEGL_NVIDIA0_INSTALL_FILECONTENT)
+
+LIBEGL_NVIDIA0_LINTIAN_FILE_PATH = 'libegl-nvidia0-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBEGL_NVIDIA0_LINTIAN_FILE_PATH, "w") as LIBEGL_NVIDIA0_LINTIAN_FILE:
+    LIBEGL_NVIDIA0_LINTIAN_FILECONTENT = LIBEGL_NVIDIA0_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBEGL_NVIDIA0_LINTIAN_FILE.write(LIBEGL_NVIDIA0_LINTIAN_FILECONTENT)
+
+LIBEGL_NVIDIA0_LINKS_FILE_PATH = 'libegl-nvidia0-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBEGL_NVIDIA0_LINKS_FILE_PATH, "w") as LIBEGL_NVIDIA0_LINKS_FILE:
+    LIBEGL_NVIDIA0_LINKS_FILECONTENT = LIBEGL_NVIDIA0_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBEGL_NVIDIA0_LINKS_FILE.write(LIBEGL_NVIDIA0_LINKS_FILECONTENT)
 
 # end of libegl-nvidia0
