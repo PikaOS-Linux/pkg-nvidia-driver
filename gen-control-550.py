@@ -1080,7 +1080,7 @@ unstripped-binary-or-object [lib/firmware/nvidia/{DRIVER_VERSION_FULL}/gsp*.bin]
 # libcuda1
 
 LIBCUDA1_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
-libcuda.so.{DRIVER_VERSION_FULL}	/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libcuda.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
 
 LIBCUDA1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1111,10 +1111,31 @@ fi
 #DEBHELPER#"""
 
 LIBCUDA1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current//libcuda.so.{DRIVER_VERSION_FULL}	/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so.1
-/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current//libcuda.so.1		/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so.1		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so"""
 
 # end of libcuda1
+
+# libcudadebugger1
+
+LIBCUDADEBUGGER1_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
+libcudadebugger.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBCUDADEBUGGER1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+binary-has-unneeded-section
+[i386]: specific-address-in-shared-library
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger"""
+
+LIBCUDADEBUGGER1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcudadebugger.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcudadebugger.so.1"""
+
+# end of libcudadebugger1
 
 ### End of Text Preq
 
@@ -1148,6 +1169,8 @@ with open(FIRMWARE_NVIDIA_GSP_LINTIAN_FILE_PATH, "w") as FIRMWARE_NVIDIA_GSP_LIN
 
 # end of firmware-nvidia-gsp
 
+# libcuda1
+
 LIBCUDA1_INSTALL_FILE_PATH = 'libcuda1-' + DRIVER_VERSION_MAJOR + '.install'
 with open(LIBCUDA1_INSTALL_FILE_PATH, "w") as LIBCUDA1_INSTALL_FILE:
     LIBCUDA1_INSTALL_FILECONTENT = LIBCUDA1_INSTALL_FILE_PREQ.format(
@@ -1176,6 +1199,29 @@ with open(LIBCUDA1_POSTINST_FILE_PATH, "w") as LIBCUDA1_POSTINST_FILE:
     )
     LIBCUDA1_POSTINST_FILE.write(LIBCUDA1_POSTINST_FILECONTENT)
 
-# libcuda1
-
 # end of libcuda1
+
+LIBCUDADEBUGGER1_INSTALL_FILE_PATH = 'libcudadebugger1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBCUDADEBUGGER1_INSTALL_FILE_PATH, "w") as LIBCUDADEBUGGER1_INSTALL_FILE:
+    LIBCUDADEBUGGER1_INSTALL_FILECONTENT = LIBCUDADEBUGGER1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBCUDADEBUGGER1_INSTALL_FILE.write(LIBCUDADEBUGGER1_INSTALL_FILECONTENT)
+
+LIBCUDADEBUGGER1_LINTIAN_FILE_PATH = 'libcudadebugger1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBCUDADEBUGGER1_LINTIAN_FILE_PATH, "w") as LIBCUDADEBUGGER1_LINTIAN_FILE:
+    LIBCUDADEBUGGER1_LINTIAN_FILECONTENT = LIBCUDADEBUGGER1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBCUDADEBUGGER1_LINTIAN_FILE.write(LIBCUDADEBUGGER1_LINTIAN_FILECONTENT)
+
+LIBCUDADEBUGGER1_LINKS_FILE_PATH = 'libcudadebugger1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBCUDADEBUGGER1_LINKS_FILE_PATH, "w") as LIBCUDADEBUGGER1_LINKS_FILE:
+    LIBCUDADEBUGGER1_LINKS_FILECONTENT = LIBCUDADEBUGGER1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBCUDADEBUGGER1_LINKS_FILE.write(LIBCUDADEBUGGER1_LINKS_FILECONTENT)
+
+# libcudadebugger1
+
+# end of libcudadebugger1
