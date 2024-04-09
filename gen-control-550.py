@@ -1353,6 +1353,23 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-allocator.so.{DRIVER_VE
 
 # end of libnvidia-allocator1
 
+# libnvidia-api1
+
+LIBNVIDIA_API1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-api.so.1	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBNVIDIA_API1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# There is no .so link.
+symbols-file-missing-build-depends-package-field"""
+
+# end of libnvidia-api1
+
 ### End of Text Preq
 
 
@@ -1603,3 +1620,21 @@ with open(LIBNVIDIA_ALLOCATOR1_LINKS_FILE_PATH, "w") as LIBNVIDIA_ALLOCATOR1_LIN
     LIBNVIDIA_ALLOCATOR1_LINKS_FILE.write(LIBNVIDIA_ALLOCATOR1_LINKS_FILECONTENT)
 
 # end of libnvidia-allocator1
+
+# libnvidia-api1
+
+LIBNVIDIA_API1_INSTALL_FILE_PATH = 'libnvidia-api1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_API1_INSTALL_FILE_PATH, "w") as LIBNVIDIA_API1_INSTALL_FILE:
+    LIBNVIDIA_API1_INSTALL_FILECONTENT = LIBNVIDIA_API1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_API1_INSTALL_FILE.write(LIBNVIDIA_API1_INSTALL_FILECONTENT)
+
+LIBNVIDIA_API1_LINTIAN_FILE_PATH = 'libnvidia-api1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_API1_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_API1_LINTIAN_FILE:
+    LIBNVIDIA_API1_LINTIAN_FILECONTENT = LIBNVIDIA_API1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_API1_LINTIAN_FILE.write(LIBNVIDIA_API1_LINTIAN_FILECONTENT)
+
+# end of libnvidia-api1
