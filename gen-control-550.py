@@ -22,6 +22,8 @@ DRIVER_VERSION_DPKG = "550.67-101pika1"
 
 ### Text Preq
 
+# control
+
 CONTROL_FILE_PREQ = """Source: nvidia-graphics-drivers-{DRIVER_VERSION_MAJOR}
 Section: non-free/libs
 Priority: optional
@@ -1075,7 +1077,44 @@ unstripped-binary-or-object [lib/firmware/nvidia/{DRIVER_VERSION_FULL}/gsp*.bin]
 
 # end of firmware-nvidia-gsp
 
-#
+# libcuda1
+
+LIBCUDA1_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
+libcuda.so.{DRIVER_VERSION_FULL}	/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBCUDA1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+[i386]: specific-address-in-shared-library
+spelling-error-in-binary
+hardening-no-bindnow
+[!arm64]: hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger"""
+
+LIBCUDA1_POSTINST_FILE_PREQ = """#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+if [ "$1" = "configure" ]
+then
+
+	if [ -x /usr/lib/nvidia/check-for-mismatching-nvidia-module ]
+	then
+		/usr/lib/nvidia/check-for-mismatching-nvidia-module {DRIVER_VERSION_FULL}
+	fi
+
+fi
+
+
+#DEBHELPER#"""
+
+LIBCUDA1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current//libcuda.so.{DRIVER_VERSION_FULL}	/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so.1
+/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current//libcuda.so.1		/usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so"""
+
+# end of libcuda1
 
 ### End of Text Preq
 
@@ -1085,11 +1124,11 @@ unstripped-binary-or-object [lib/firmware/nvidia/{DRIVER_VERSION_FULL}/gsp*.bin]
 # control
 CONTROL_FILE_PATH = 'control'
 with open(CONTROL_FILE_PATH, "w") as CONTROL_FILE:
-    CONTROL_FILE_CONTENT = CONTROL_FILE_PREQ.format(
+    CONTROL_FILECONTENT = CONTROL_FILE_PREQ.format(
         DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
         DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
     )
-    CONTROL_FILE.write(CONTROL_FILE_CONTENT)
+    CONTROL_FILE.write(CONTROL_FILECONTENT)
 # end of control
 
 # firmware-nvidia-gsp
@@ -1106,4 +1145,37 @@ with open(FIRMWARE_NVIDIA_GSP_LINTIAN_FILE_PATH, "w") as FIRMWARE_NVIDIA_GSP_LIN
         DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
     )
     FIRMWARE_NVIDIA_GSP_LINTIAN_FILE.write(FIRMWARE_NVIDIA_GSP_LINTIAN_FILECONTENT)
+
 # end of firmware-nvidia-gsp
+
+LIBCUDA1_INSTALL_FILE_PATH = 'libcuda1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBCUDA1_INSTALL_FILE_PATH, "w") as LIBCUDA1_INSTALL_FILE:
+    LIBCUDA1_INSTALL_FILECONTENT = LIBCUDA1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBCUDA1_INSTALL_FILE.write(LIBCUDA1_INSTALL_FILECONTENT)
+
+LIBCUDA1_LINTIAN_FILE_PATH = 'libcuda1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBCUDA1_LINTIAN_FILE_PATH, "w") as LIBCUDA1_LINTIAN_FILE:
+    LIBCUDA1_LINTIAN_FILECONTENT = LIBCUDA1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBCUDA1_LINTIAN_FILE.write(LIBCUDA1_LINTIAN_FILECONTENT)
+
+LIBCUDA1_LINKS_FILE_PATH = 'libcuda1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBCUDA1_LINKS_FILE_PATH, "w") as LIBCUDA1_LINKS_FILE:
+    LIBCUDA1_LINKS_FILECONTENT = LIBCUDA1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBCUDA1_LINKS_FILE.write(LIBCUDA1_LINKS_FILECONTENT)
+
+LIBCUDA1_POSTINST_FILE_PATH = 'libcuda1-' + DRIVER_VERSION_MAJOR + '.postinst'
+with open(LIBCUDA1_POSTINST_FILE_PATH, "w") as LIBCUDA1_POSTINST_FILE:
+    LIBCUDA1_POSTINST_FILECONTENT = LIBCUDA1_POSTINST_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBCUDA1_POSTINST_FILE.write(LIBCUDA1_POSTINST_FILECONTENT)
+
+# libcuda1
+
+# end of libcuda1
