@@ -1185,7 +1185,28 @@ symbols-file-missing-build-depends-package-field"""
 LIBGLES_NVIDIA1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
 usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv1_CM_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv1_CM_nvidia.so.1"""
 
-# end libgles-nvidia1
+# end of libgles-nvidia1
+
+# libgles-nvidia2
+
+LIBGLES_NVIDIA2_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
+libGLESv2_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBGLES_NVIDIA2_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# There is no .so link.
+symbols-file-missing-build-depends-package-field"""
+
+LIBGLES_NVIDIA2_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv2_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv2_nvidia.so.2"""
+
+# end of libgles-nvidia2
 
 ### End of Text Preq
 
@@ -1336,3 +1357,28 @@ with open(LIBGLES_NVIDIA1_LINKS_FILE_PATH, "w") as LIBGLES_NVIDIA1_LINKS_FILE:
     LIBGLES_NVIDIA1_LINKS_FILE.write(LIBGLES_NVIDIA1_LINKS_FILECONTENT)
 
 # end libgles-nvidia1
+
+# libgles-nvidia2
+
+LIBGLES_NVIDIA2_INSTALL_FILE_PATH = 'libgles-nvidia2-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBGLES_NVIDIA2_INSTALL_FILE_PATH, "w") as LIBGLES_NVIDIA2_INSTALL_FILE:
+    LIBGLES_NVIDIA2_INSTALL_FILECONTENT = LIBGLES_NVIDIA2_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBGLES_NVIDIA2_INSTALL_FILE.write(LIBGLES_NVIDIA2_INSTALL_FILECONTENT)
+
+LIBGLES_NVIDIA2_LINTIAN_FILE_PATH = 'libgles-nvidia2-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBGLES_NVIDIA2_LINTIAN_FILE_PATH, "w") as LIBGLES_NVIDIA2_LINTIAN_FILE:
+    LIBGLES_NVIDIA2_LINTIAN_FILECONTENT = LIBGLES_NVIDIA2_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBGLES_NVIDIA2_LINTIAN_FILE.write(LIBGLES_NVIDIA2_LINTIAN_FILECONTENT)
+
+LIBGLES_NVIDIA2_LINKS_FILE_PATH = 'libgles-nvidia2-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBGLES_NVIDIA2_LINKS_FILE_PATH, "w") as LIBGLES_NVIDIA2_LINKS_FILE:
+    LIBGLES_NVIDIA2_LINKS_FILECONTENT = LIBGLES_NVIDIA2_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBGLES_NVIDIA2_LINKS_FILE.write(LIBGLES_NVIDIA2_LINKS_FILECONTENT)
+
+# end libgles-nvidia2
