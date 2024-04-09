@@ -1159,6 +1159,13 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libEGL_nvidia.so.{DRIVER_VERSION_
 
 # end of libegl-nvidia0
 
+# libgl1-nvidia-glvnd-glx
+
+LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PREQ = """debian/README.alternatives
+NVIDIA-Linux-amd64/README.txt"""
+
+# end of libgl1-nvidia-glvnd-glx
+
 ### End of Text Preq
 
 
@@ -1272,3 +1279,14 @@ with open(LIBEGL_NVIDIA0_LINKS_FILE_PATH, "w") as LIBEGL_NVIDIA0_LINKS_FILE:
     LIBEGL_NVIDIA0_LINKS_FILE.write(LIBEGL_NVIDIA0_LINKS_FILECONTENT)
 
 # end of libegl-nvidia0
+
+LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PATH = 'libgl1-nvidia-glvnd-glx-' + DRIVER_VERSION_MAJOR + '.docs'
+with open(LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PATH, "w") as LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE:
+    LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILECONTENT = LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE.write(LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILECONTENT)
+
+# libgl1-nvidia-glvnd-glx
+
+# end of libgl1-nvidia-glvnd-glx
