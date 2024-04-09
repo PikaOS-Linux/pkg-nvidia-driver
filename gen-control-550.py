@@ -1166,6 +1166,10 @@ NVIDIA-Linux-amd64/README.txt"""
 
 # end of libgl1-nvidia-glvnd-glx
 
+# libgles-nvidia1
+
+# end libgles-nvidia1
+
 ### End of Text Preq
 
 
@@ -1280,6 +1284,8 @@ with open(LIBEGL_NVIDIA0_LINKS_FILE_PATH, "w") as LIBEGL_NVIDIA0_LINKS_FILE:
 
 # end of libegl-nvidia0
 
+# libgl1-nvidia-glvnd-glx
+
 LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PATH = 'libgl1-nvidia-glvnd-glx-' + DRIVER_VERSION_MAJOR + '.docs'
 with open(LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PATH, "w") as LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE:
     LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILECONTENT = LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PREQ.format(
@@ -1287,6 +1293,8 @@ with open(LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PATH, "w") as LIBGL1_NVIDIA_GLVND_GL
     )
     LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE.write(LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILECONTENT)
 
-# libgl1-nvidia-glvnd-glx
-
 # end of libgl1-nvidia-glvnd-glx
+
+# libgles-nvidia1
+
+# end libgles-nvidia1
