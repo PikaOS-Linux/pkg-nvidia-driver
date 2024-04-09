@@ -1333,6 +1333,25 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvcuvid.so.1		usr/lib/${{DEB_H
 
 # end of libnvcuvid1
 
+# libnvidia-allocator1
+
+LIBNVIDIA_ALLOCATOR1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-allocator.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBNVIDIA_ALLOCATOR1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger"""
+
+LIBNVIDIA_ALLOCATOR1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-allocator.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-allocator.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-allocator.so.{DRIVER_VERSION_FULL}		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia-drm_gbm.so"""
+
+# end of libnvidia-allocator1
 
 ### End of Text Preq
 
@@ -1559,3 +1578,28 @@ with open(LIBNVCUVID1_LINKS_FILE_PATH, "w") as LIBNVCUVID1_LINKS_FILE:
     LIBNVCUVID1_LINKS_FILE.write(LIBNVCUVID1_LINKS_FILECONTENT)
     
 # end of libnvcuvid1
+
+# libnvidia-allocator1
+
+LIBNVIDIA_ALLOCATOR1_INSTALL_FILE_PATH = 'libnvidia-allocator1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_ALLOCATOR1_INSTALL_FILE_PATH, "w") as LIBNVIDIA_ALLOCATOR1_INSTALL_FILE:
+    LIBNVIDIA_ALLOCATOR1_INSTALL_FILECONTENT = LIBNVIDIA_ALLOCATOR1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_ALLOCATOR1_INSTALL_FILE.write(LIBNVIDIA_ALLOCATOR1_INSTALL_FILECONTENT)
+
+LIBNVIDIA_ALLOCATOR1_LINTIAN_FILE_PATH = 'libnvidia-allocator1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_ALLOCATOR1_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_ALLOCATOR1_LINTIAN_FILE:
+    LIBNVIDIA_ALLOCATOR1_LINTIAN_FILECONTENT = LIBNVIDIA_ALLOCATOR1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_ALLOCATOR1_LINTIAN_FILE.write(LIBNVIDIA_ALLOCATOR1_LINTIAN_FILECONTENT)
+
+LIBNVIDIA_ALLOCATOR1_LINKS_FILE_PATH = 'libnvidia-allocator1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBNVIDIA_ALLOCATOR1_LINKS_FILE_PATH, "w") as LIBNVIDIA_ALLOCATOR1_LINKS_FILE:
+    LIBNVIDIA_ALLOCATOR1_LINKS_FILECONTENT = LIBNVIDIA_ALLOCATOR1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_ALLOCATOR1_LINKS_FILE.write(LIBNVIDIA_ALLOCATOR1_LINKS_FILECONTENT)
+
+# end of libnvidia-allocator1
