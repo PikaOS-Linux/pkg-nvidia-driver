@@ -1059,14 +1059,51 @@ Confilicts:
 Description: NVIDIA binary Xorg driver
 """
 
+# end of control
+
+# firmware-nvidia-gsp
+
+FIRMWARE_NVIDIA_GSP_INSTALL_FILE_PREQ = """firmware/gsp*.bin	lib/firmware/nvidia/{DRIVER_VERSION_FULL}/
+RIM_GH100PROD.swidtag	usr/share/nvidia/rim/{DRIVER_VERSION_FULL}/
+"""
+
+FIRMWARE_NVIDIA_GSP_LINTIAN_FILE_PREQ = """# Firmware blob.
+binary-from-other-architecture [lib/firmware/nvidia/{DRIVER_VERSION_FULL}/gsp*.bin]
+spelling-error-in-binary * [lib/firmware/nvidia/{DRIVER_VERSION_FULL}/gsp*.bin]
+unstripped-binary-or-object [lib/firmware/nvidia/{DRIVER_VERSION_FULL}/gsp*.bin]
+"""
+
+# end of firmware-nvidia-gsp
+
+#
+
 ### End of Text Preq
 
 
 ### Write files
+
+# control
 CONTROL_FILE_PATH = 'control'
 with open(CONTROL_FILE_PATH, "w") as CONTROL_FILE:
-    control_file_content = CONTROL_FILE_PREQ.format(
+    CONTROL_FILE_CONTENT = CONTROL_FILE_PREQ.format(
         DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
         DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
     )
-    CONTROL_FILE.write(control_file_content)
+    CONTROL_FILE.write(CONTROL_FILE_CONTENT)
+# end of control
+
+# firmware-nvidia-gsp
+FIRMWARE_NVIDIA_GSP_INSTALL_FILE_PATH = 'firmware-nvidia-gsp-' + DRIVER_VERSION_MAJOR + '.install'
+with open(FIRMWARE_NVIDIA_GSP_INSTALL_FILE_PATH, "w") as FIRMWARE_NVIDIA_GSP_INSTALL_FILE:
+    FIRMWARE_NVIDIA_GSP_INSTALL_FILECONTENT = FIRMWARE_NVIDIA_GSP_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    FIRMWARE_NVIDIA_GSP_INSTALL_FILE.write(FIRMWARE_NVIDIA_GSP_INSTALL_FILECONTENT)
+    
+FIRMWARE_NVIDIA_GSP_LINTIAN_FILE_PATH = 'firmware-nvidia-gsp-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(FIRMWARE_NVIDIA_GSP_LINTIAN_FILE_PATH, "w") as FIRMWARE_NVIDIA_GSP_LINTIAN_FILE:
+    FIRMWARE_NVIDIA_GSP_LINTIAN_FILECONTENT = FIRMWARE_NVIDIA_GSP_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    FIRMWARE_NVIDIA_GSP_LINTIAN_FILE.write(FIRMWARE_NVIDIA_GSP_LINTIAN_FILECONTENT)
+# end of firmware-nvidia-gsp
