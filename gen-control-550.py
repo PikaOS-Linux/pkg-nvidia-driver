@@ -630,8 +630,8 @@ Depends:
     nvidia-powerd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}), [amd64],
     nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
-    vidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
-    vidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-settings-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     ${{misc:Depends}}
 Recommends:
@@ -1130,7 +1130,8 @@ Recommends:
     nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
-    vidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-settings-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Suggests:
     nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
