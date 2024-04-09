@@ -16,8 +16,9 @@ DRIVER_VERSION_DPKG = "550.67-101pika1"
 # Incase debian adds or removes a packages to the nvidia-graphics-drivers dpkg source make sure to replicate with pika flavour and kernek module adaptations.
 # Debian nvidia comes with 49 Packages in 550.
 # Pika takes out nvidia-driver-full, nvidia-detect, nvidia-legacy-check.
+# Pika add nvidia-kernel-common, nvidia-modprobe, nvidia-persistenced, nvidia-settings, nvidia-support
 # So...
-# Pika nvidia comes with 46 Packages in 550.
+# Pika nvidia comes with 51 Packages in 550.
 ### End of Important Notes
 
 ### Text Preq
@@ -629,9 +630,9 @@ Depends:
     nvidia-powerd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}), [amd64],
     nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
-    nvidia-settings,
-    nvidia-persistenced,
-    nvidia-support,
+    vidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    vidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     ${{misc:Depends}}
 Recommends:
     nvidia-vaapi-driver,
@@ -746,6 +747,23 @@ Description: NVIDIA EGL installable client driver (ICD)
     This metapackage provides the NVIDIA installable client driver (ICD) for
     EGL via GLVND which supports NVIDIA GPUs.
 
+Package: nvidia-kernel-common-{DRIVER_VERSION_MAJOR}
+Section: contrib/kernel
+Architecture: amd64 i386 armhf arm64 ppc64el
+Pre-Depends: ${{misc:Pre-Depends}}
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
+Provides:
+    nvidia-kernel-common (= ${{binary:Version}}),
+Conflicts:
+    nvidia-kernel-common
+Description: NVIDIA binary kernel module support files
+    This package contains support files used for any version of the NVIDIA
+    kernel module. It sets up udev and ConsoleKit rules, ensures the NVIDIA
+    control device is created, and performs any other tasks required for the
+    module to work properly.
+
 Package: nvidia-kernel-dkms-{DRIVER_VERSION_MAJOR}
 Section: non-free/kernel
 Architecture: amd64 arm64 ppc64el
@@ -857,6 +875,19 @@ Description: NVIDIA OpenCL ICD Loader library
     .
     This package contains the ICD Loader library provided by NVIDIA.
 
+Package: nvidia-modprobe-{DRIVER_VERSION_MAJOR}
+Architecture: i386 amd64 armhf arm64 ppc64el
+Multi-Arch: foreign
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+Provides: nvidia-modprobe = ${{binary:Version}})
+Conflicts: nvidia-modprobe
+Description: utility to load NVIDIA kernel modules and create device nodes
+     This setuid program is used to create NVIDIA Linux device files and load the
+     NVIDIA kernel module, on behalf of NVIDIA Linux driver components which may
+     not have sufficient privileges to perform these actions on their own.
+
 Package: nvidia-opencl-common-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: foreign
@@ -903,6 +934,22 @@ Description: NVIDIA OpenCL installable client driver (ICD)
     .
     This package provides the NVIDIA installable client driver (ICD) for OpenCL
     which supports NVIDIA GPUs.
+
+Package: nvidia-persistenced-{DRIVER_VERSION_MAJOR}
+Architecture: amd64 arm64 ppc64el
+Multi-Arch: foreign
+Pre-Depends:
+     ${{misc:Pre-Depends}}
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) [!i386 !armhf],
+    adduser,
+    ${{shlibs:Depends}},
+    ${{misc:Depends}}
+Description: daemon to maintain persistent software state in the NVIDIA driver
+     When persistence mode is enabled, the daemon prevents the driver from
+     releasing device state when the device is not in use.
+     This can improve the startup time of new clients in this scenario.
 
 Package: nvidia-powerd-{DRIVER_VERSION_MAJOR}
 Section: non-free/utils
@@ -961,6 +1008,39 @@ Conflicts:
 Description: NVIDIA driver - systemd power management scripts
     This package provides the common files for the NVIDIA power management
     integration with systemd.
+
+Package: nvidia-settings-{DRIVER_VERSION_MAJOR}
+Architecture: amd64 arm64 ppc64el
+Depends:    
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+Recommends: 
+    libgl1-nvidia-glvnd-glx-{DRIVER_VERSION_MAJOR},
+    nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR},
+    libnvidia-ml1-{DRIVER_VERSION_MAJOR}
+Conflicts: nvidia-settings-gtk-{DRIVER_VERSION_FULL}, nvidia-settings (= ${{binary:Version}}),
+Provides: nvidia-settings-gtk-{DRIVER_VERSION_FULL}, nvidia-settings
+Description: tool for configuring the NVIDIA graphics driver
+     The nvidia-settings utility is a tool for configuring the NVIDIA
+     Linux graphics driver.  It operates by communicating with the NVIDIA
+     X driver, querying and updating state as appropriate.  This
+     communication is done with the NV-CONTROL X extension.
+     .
+     Values such as brightness and gamma, XVideo attributes, temperature,
+     and OpenGL settings can be queried and configured via nvidia-settings.
+
+Package: nvidia-support-{DRIVER_VERSION_MAJOR}
+Architecture: amd64 i386 armhf arm64 ppc64el
+Multi-Arch: foreign
+Depends: 
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
+Provides: nvidia-support (= ${{binary:Version}}),
+Conflicts: nvidia-support
+Description: NVIDIA binary graphics driver support files
+    This package contains support files needed for all current and legacy
+    versions of the non-free NVIDIA graphics drivers. These include scripts
+    used for warning about a mismatching version of the kernel module.
 
 Package: nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR}
 Section: non-free/video
@@ -1041,7 +1121,7 @@ Pre-Depends:
     ${{misc:Pre-Depends}}
 Depends:
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
-    nvidia-support,
+    nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     xserver-xorg-core,
     ${{shlibs:Depends}}, ${{misc:Depends}}
 Recommends:
@@ -1050,7 +1130,7 @@ Recommends:
     nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
-    nvidia-settings,
+    vidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Suggests:
     nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
