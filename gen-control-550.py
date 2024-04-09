@@ -1137,6 +1137,10 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcudadebugger.so.{DRIVER_VERSIO
 
 # end of libcudadebugger1
 
+# libegl-nvidia0
+
+# end of libegl-nvidia0
+
 ### End of Text Preq
 
 
@@ -1201,6 +1205,8 @@ with open(LIBCUDA1_POSTINST_FILE_PATH, "w") as LIBCUDA1_POSTINST_FILE:
 
 # end of libcuda1
 
+# libcudadebugger1
+
 LIBCUDADEBUGGER1_INSTALL_FILE_PATH = 'libcudadebugger1-' + DRIVER_VERSION_MAJOR + '.install'
 with open(LIBCUDADEBUGGER1_INSTALL_FILE_PATH, "w") as LIBCUDADEBUGGER1_INSTALL_FILE:
     LIBCUDADEBUGGER1_INSTALL_FILECONTENT = LIBCUDADEBUGGER1_INSTALL_FILE_PREQ.format(
@@ -1222,6 +1228,8 @@ with open(LIBCUDADEBUGGER1_LINKS_FILE_PATH, "w") as LIBCUDADEBUGGER1_LINKS_FILE:
     )
     LIBCUDADEBUGGER1_LINKS_FILE.write(LIBCUDADEBUGGER1_LINKS_FILECONTENT)
 
-# libcudadebugger1
-
 # end of libcudadebugger1
+
+# libegl-nvidia0
+
+# end of libegl-nvidia0
