@@ -1391,6 +1391,31 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-cfg.so.{DRIVER_VERSION_
 
 # end of libnvidia-cfg1
 
+# libnvidia-eglcore
+
+LIBNVIDIA_EGLCORE_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-eglcore.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/
+libnvidia-glsi.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
+
+LIBNVIDIA_EGLCORE_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+embedded-library libzstd [usr/lib/*/libnvidia-eglcore.so.{DRIVER_VERSION_FULL}]
+[i386]: specific-address-in-shared-library
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# The libnvidia-{{eglcore,glsi}}.so.* SONAME changes with every upstream
+# release.
+# These private libraries are only used (and usable) as plugins
+# loaded by other NVIDIA libraries with the same upstream version
+# (and a stable SONAME).
+# Therefore we do not include the SONAME in this package name to
+# avoid going through NEW for every new upstream release.
+package-name-doesnt-match-sonames libnvidia-eglcore{DRIVER_VERSION_FULL} libnvidia-glsi{DRIVER_VERSION_FULL}
+symbols-file-missing-build-depends-package-field"""
+
+# end of libnvidia-eglcore
 
 ### End of Text Preq
 
@@ -1685,3 +1710,21 @@ with open(LIBNVIDIA_CFG1_LINKS_FILE_PATH, "w") as LIBNVIDIA_CFG1_LINKS_FILE:
     LIBNVIDIA_CFG1_LINKS_FILE.write(LIBNVIDIA_CFG1_LINKS_FILECONTENT)
 
 # end of libnvidia-cfg1
+
+# libnvidia-eglcore
+
+LIBNVIDIA_EGLCORE_INSTALL_FILE_PATH = 'libnvidia-eglcore-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_EGLCORE_INSTALL_FILE_PATH, "w") as LIBNVIDIA_EGLCORE_INSTALL_FILE:
+    LIBNVIDIA_EGLCORE_INSTALL_FILECONTENT = LIBNVIDIA_EGLCORE_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_EGLCORE_INSTALL_FILE.write(LIBNVIDIA_EGLCORE_INSTALL_FILECONTENT)
+
+LIBNVIDIA_EGLCORE_LINTIAN_FILE_PATH = 'libnvidia-eglcore-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_EGLCORE_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_EGLCORE_LINTIAN_FILE:
+    LIBNVIDIA_EGLCORE_LINTIAN_FILECONTENT = LIBNVIDIA_EGLCORE_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_EGLCORE_LINTIAN_FILE.write(LIBNVIDIA_EGLCORE_LINTIAN_FILECONTENT)
+
+# end of libnvidia-eglcore
