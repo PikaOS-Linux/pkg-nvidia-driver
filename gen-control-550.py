@@ -1208,6 +1208,29 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv2_nvidia.so.{DRIVER_VERSI
 
 # end of libgles-nvidia2
 
+# libglx-nvidia0
+
+LIBGLX_NVIDIA0_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libGLX_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBGLX_NVIDIA0_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+exit-in-shared-library
+[i386]: specific-address-in-shared-library
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# There is no .so link.
+symbols-file-missing-build-depends-package-field"""
+
+LIBGLX_NVIDIA0_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLX_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLX_nvidia.so.0"""
+
+# end of libglx-nvidia0
+
 ### End of Text Preq
 
 
@@ -1382,3 +1405,29 @@ with open(LIBGLES_NVIDIA2_LINKS_FILE_PATH, "w") as LIBGLES_NVIDIA2_LINKS_FILE:
     LIBGLES_NVIDIA2_LINKS_FILE.write(LIBGLES_NVIDIA2_LINKS_FILECONTENT)
 
 # end libgles-nvidia2
+
+# libglx-nvidia0
+
+LIBGLX_NVIDIA0_INSTALL_FILE_PATH = 'libglx-nvidia0-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBGLX_NVIDIA0_INSTALL_FILE_PATH, "w") as LIBGLX_NVIDIA0_INSTALL_FILE:
+    LIBGLX_NVIDIA0_INSTALL_FILECONTENT = LIBGLX_NVIDIA0_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBGLX_NVIDIA0_INSTALL_FILE.write(LIBGLX_NVIDIA0_INSTALL_FILECONTENT)
+
+LIBGLX_NVIDIA0_LINTIAN_FILE_PATH = 'libglx-nvidia0-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBGLX_NVIDIA0_LINTIAN_FILE_PATH, "w") as LIBGLX_NVIDIA0_LINTIAN_FILE:
+    LIBGLX_NVIDIA0_LINTIAN_FILECONTENT = LIBGLX_NVIDIA0_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBGLX_NVIDIA0_LINTIAN_FILE.write(LIBGLX_NVIDIA0_LINTIAN_FILECONTENT)
+
+LIBGLX_NVIDIA0_LINKS_FILE_PATH = 'libglx-nvidia0-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBGLX_NVIDIA0_LINKS_FILE_PATH, "w") as LIBGLX_NVIDIA0_LINKS_FILE:
+    LIBGLX_NVIDIA0_LINKS_FILECONTENT = LIBGLX_NVIDIA0_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBGLX_NVIDIA0_LINKS_FILE.write(LIBGLX_NVIDIA0_LINKS_FILECONTENT)
+
+
+# end of libglx-nvidia0
