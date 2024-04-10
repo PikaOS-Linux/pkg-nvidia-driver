@@ -77,6 +77,7 @@ Package: libcuda1-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
 Pre-Depends:
+    nvidia-support-{DRIVER_VERSION_MAJOR},
     ${{misc:Pre-Depends}}
 Depends:
     nvidia-support-{DRIVER_VERSION_MAJOR},
@@ -1483,6 +1484,29 @@ symbols-file-missing-build-depends-package-field"""
 
 # end of libnvidia-glcore
 
+# libnvidia-glvkspirv
+
+LIBNVIDIA_GLVKSPIRV_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-glvkspirv.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
+
+LIBNVIDIA_GLVKSPIRV_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# The libnvidia-glvkspirv.so.* SONAME changes with every upstream
+# release.
+# These private libraries are only used (and usable) as plugins
+# loaded by other NVIDIA libraries with the same upstream version
+# (and a stable SONAME).
+# Therefore we do not include the SONAME in this package name to
+# avoid going through NEW for every new upstream release.
+package-name-doesnt-match-sonames libnvidia-glvkspirv{DRIVER_VERSION_FULL}
+symbols-file-missing-build-depends-package-field"""
+
+# end of libnvidia-glvkspirv
+
 ### End of Text Preq
 
 
@@ -1862,3 +1886,21 @@ with open(LIBNVIDIA_GLCORE_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_GLCORE_LINTIAN_F
     LIBNVIDIA_GLCORE_LINTIAN_FILE.write(LIBNVIDIA_GLCORE_LINTIAN_FILECONTENT)
     
 # end of libnvidia-glcore
+
+# libnvidia-glvkspirv
+
+LIBNVIDIA_GLVKSPIRV_INSTALL_FILE_PATH = 'libnvidia-glvkspirv-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_GLVKSPIRV_INSTALL_FILE_PATH, "w") as LIBNVIDIA_GLVKSPIRV_INSTALL_FILE:
+    LIBNVIDIA_GLVKSPIRV_INSTALL_FILECONTENT = LIBNVIDIA_GLVKSPIRV_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_GLVKSPIRV_INSTALL_FILE.write(LIBNVIDIA_GLVKSPIRV_INSTALL_FILECONTENT)
+
+LIBNVIDIA_GLVKSPIRV_LINTIAN_FILE_PATH = 'libnvidia-glvkspirv-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_GLVKSPIRV_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_GLVKSPIRV_LINTIAN_FILE:
+    LIBNVIDIA_GLVKSPIRV_LINTIAN_FILECONTENT = LIBNVIDIA_GLVKSPIRV_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_GLVKSPIRV_LINTIAN_FILE.write(LIBNVIDIA_GLVKSPIRV_LINTIAN_FILECONTENT)
+    
+# end of libnvidia-glvkspirv
