@@ -1534,6 +1534,26 @@ symbols-file-missing-build-depends-package-field"""
 
 # end of libnvidia-gpucomp
 
+# libnvidia-ml1
+
+LIBNVIDIA_ML1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-ml.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBNVIDIA_ML1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger"""
+
+LIBNVIDIA_ML1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so"""
+
+# end of libnvidia-ml1
+
 ### End of Text Preq
 
 
@@ -1949,3 +1969,28 @@ with open(LIBNVIDIA_GPUCOMP_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_GPUCOMP_LINTIAN
     LIBNVIDIA_GPUCOMP_LINTIAN_FILE.write(LIBNVIDIA_GPUCOMP_LINTIAN_FILECONTENT)
     
 # end of libnvidia-gpucomp
+
+# libnvidia-ml1
+
+LIBNVIDIA_ML1_INSTALL_FILE_PATH = 'libnvidia-ml1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_ML1_INSTALL_FILE_PATH, "w") as LIBNVIDIA_ML1_INSTALL_FILE:
+    LIBNVIDIA_ML1_INSTALL_FILECONTENT = LIBNVIDIA_ML1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_ML1_INSTALL_FILE.write(LIBNVIDIA_ML1_INSTALL_FILECONTENT)
+
+LIBNVIDIA_ML1_LINTIAN_FILE_PATH = 'libnvidia-ml1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_ML1_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_ML1_LINTIAN_FILE:
+    LIBNVIDIA_ML1_LINTIAN_FILECONTENT = LIBNVIDIA_ML1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_ML1_LINTIAN_FILE.write(LIBNVIDIA_ML1_LINTIAN_FILECONTENT)
+
+LIBNVIDIA_ML1_LINKS_FILE_PATH = 'libnvidia-ml1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBNVIDIA_ML1_LINKS_FILE_PATH, "w") as LIBNVIDIA_ML1_LINKS_FILE:
+    LIBNVIDIA_ML1_LINKS_FILECONTENT = LIBNVIDIA_ML1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_ML1_LINKS_FILE.write(LIBNVIDIA_ML1_LINKS_FILECONTENT)
+    
+# end of libnvidia-ml1
