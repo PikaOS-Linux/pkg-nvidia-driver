@@ -1638,6 +1638,32 @@ symbols-file-missing-build-depends-package-field"""
 
 # end of libnvidia-pkcs11-openssl3
 
+# libnvidia-ptxjitcompiler1
+
+LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-ptxjitcompiler.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+spelling-error-in-binary
+[!arm64]: hardening-no-bindnow
+[!arm64]: hardening-no-fortify-functions
+
+# Use wildcard instead of exact path substitution, this is a M-A: same package.
+embedded-library
+embedded-library zlib [usr/lib*/libnvidia-ptxjitcompiler.so.{DRIVER_VERSION_FULL}]
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# There is no .so link.
+symbols-file-missing-build-depends-package-field"""
+
+LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ptxjitcompiler.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ptxjitcompiler.so.1"""
+
+# end of libnvidia-ptxjitcompiler1
+
 ### End of Text Preq
 
 
@@ -2171,3 +2197,28 @@ with open(LIBNVIDIA_PKCS11_OPENSSL3_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_PKCS11_
     LIBNVIDIA_PKCS11_OPENSSL3_LINTIAN_FILE.write(LIBNVIDIA_PKCS11_OPENSSL3_LINTIAN_FILECONTENT)
     
 # end of libnvidia-pkcs11-openssl3
+
+# libnvidia-ptxjitcompiler1
+
+LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILE_PATH = 'libnvidia-ptxjitcompiler1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILE_PATH, "w") as LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILE:
+    LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILECONTENT = LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILE.write(LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILECONTENT)
+
+LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILE_PATH = 'libnvidia-ptxjitcompiler1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILE:
+    LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILECONTENT = LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILE.write(LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILECONTENT)
+
+LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE_PATH = 'libnvidia-ptxjitcompiler1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE_PATH, "w") as LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE:
+    LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILECONTENT = LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE.write(LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILECONTENT)
+    
+# end of libnvidia-ptxjitcompiler1
