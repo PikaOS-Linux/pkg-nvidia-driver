@@ -4,6 +4,7 @@
 DRIVER_VERSION_MAJOR = "550"
 DRIVER_VERSION_FULL = "550.67"
 DRIVER_VERSION_DPKG = "550.67-101pika1"
+DEB_HOST_MULTIARCH = "x86_64-linux-gnu"
 ### End of Basic configuration
 
 
@@ -1708,6 +1709,207 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvoptix.so.{DRIVER_VERSION_FUL
 
 # end of libnvoptix1
 
+# nvidia-alternative
+
+NVIDIA_ALTERNATIVE_DIRS_FILE_PREQ = """#! /usr/bin/dh-exec
+etc/modprobe.d
+etc/nvidia
+usr/lib/nvidia/{DRIVER_VERSION_FULL}
+usr/lib/nvidia/{DRIVER_VERSION_FULL}-open
+usr/lib/${{DEB_HOST_MULTIARCH}}/gbm
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia
+usr/lib/${{DEB_HOST_MULTIARCH}}/vdpau
+usr/share/applications
+usr/share/man/man1
+usr/share/nvidia"""
+
+NVIDIA_ALTERNATIVE_LINTIAN_FILE_PREQ = """# This directory is used as a master alternative.
+package-contains-empty-directory [usr/lib/nvidia/{DRIVER_VERSION_FULL}/]
+package-contains-empty-directory [usr/lib/nvidia/{DRIVER_VERSION_FULL}-open/]
+
+# Slave alternatives may be installed there.
+package-contains-empty-directory [usr/lib/{DEB_HOST_MULTIARCH}/gbm/]
+package-contains-empty-directory [usr/lib/{DEB_HOST_MULTIARCH}/nvidia/]
+package-contains-empty-directory [usr/lib/{DEB_HOST_MULTIARCH}/vdpau/]
+package-contains-empty-directory [usr/share/applications/]
+package-contains-empty-directory [usr/share/man/man1/]
+package-contains-empty-directory [usr/share/nvidia/]"""
+
+NVIDIA_ALTERNATIVE_PRERM_FILE_PREQ = """#!/bin/sh
+set -e
+
+
+if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ]; then
+
+	update-alternatives --remove nvidia /usr/lib/nvidia/{DRIVER_VERSION_FULL}-open
+	update-alternatives --remove nvidia /usr/lib/nvidia/{DRIVER_VERSION_FULL}
+	dpkg-trigger --no-await register-glx-alternative-nvidia
+
+fi
+
+
+#DEBHELPER#"""
+
+NVIDIA_ALTERNATIVE_POSTINST_FILE_PREQ = """#!/bin/sh
+set -e
+
+
+TRIPLETS="/ /i386-linux-gnu/ /x86_64-linux-gnu/ /aarch64-linux-gnu/ /powerpc64le-linux-gnu/"
+
+add_slave()
+{{
+	local target_link name source_path prefix
+	target_link="$1"
+	name="$2"
+	source_path="$3"
+	prefix="nvidia--"
+
+	if [ -f "${{source_path}}" ] && [ -d "$(dirname "${{target_link}}")" ]; then
+		echo --slave "${{target_link}}" "${{prefix}}${{name}}" "${{source_path}}"
+	fi
+}}
+
+add_multiarch_slave()
+{{
+	local target_dir target_sub_dir file source_dir source_sub_dir prefix suffix triplet
+	target_dir="$1"
+	target_sub_dir="$2"
+	file="$3"
+	source_dir="$4"
+	source_sub_dir="$5"
+	prefix="$6"
+
+	for triplet in $TRIPLETS ; do
+		# s|/$||; s|^/|-|;
+		suffix="${{triplet%/}}"
+		suffix="${{suffix:+-${{suffix#/}}}}"
+		add_slave \
+			"${{target_dir}}${{triplet}}${{target_sub_dir}}${{file}}" \
+			"${{prefix}}${{file}}${{suffix}}" \
+			"${{source_dir}}${{triplet}}${{source_sub_dir}}${{file}}"
+	done
+}}
+
+# A trigger that handles the alternatives for /usr/lib[/<triplet>]/nvidia/*.*
+if [ "$1" = "triggered" ]; then
+
+	slaves="
+		$(add_slave /usr/lib/nvidia/libglxserver_nvidia.so libglxserver_nvidia.so /usr/lib/nvidia/current/libglxserver_nvidia.so)
+		$(add_slave /usr/lib/nvidia/nvidia_drv.so nvidia_drv.so /usr/lib/nvidia/current/nvidia_drv.so)
+		$(add_multiarch_slave /usr/lib vdpau/ libvdpau_nvidia.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libGLX_nvidia.so.0 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libEGL_nvidia.so.0 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libGLESv1_CM_nvidia.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libGLESv2_nvidia.so.2 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libcuda.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libcuda.so /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libcudadebugger.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvcuvid.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvcuvid.so /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-allocator.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-api.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-encode.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-fbc.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-ml.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-ngx.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-nvvm.so.4 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-nvvm.so.{DRIVER_VERSION_FULL} /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-opencl.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-opticalflow.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvidia-ptxjitcompiler.so.1 /usr/lib nvidia/current/)
+		$(add_multiarch_slave /usr/lib "" libnvoptix.so.1 /usr/lib nvidia/current/)
+		$(add_slave /usr/share/nvidia/nvoptix.bin nvoptix.bin /usr/lib/{DEB_HOST_MULTIARCH}/nvidia/current/nvoptix.bin)
+		$(add_multiarch_slave /usr/lib gbm/ nvidia-drm_gbm.so /usr/lib nvidia/current/)
+		$(add_slave /usr/bin/nvidia-smi nvidia-smi /usr/lib/nvidia/current/nvidia-smi)
+		$(add_slave /usr/share/man/man1/nvidia-smi.1.gz nvidia-smi.1.gz /usr/lib/nvidia/current/nvidia-smi.1.gz)
+		$(add_slave /usr/lib/nvidia/nvidia-bug-report.sh nvidia-bug-report.sh /usr/lib/nvidia/current/nvidia-bug-report.sh)
+		$(add_slave /usr/bin/nvidia-debugdump nvidia-debugdump /usr/lib/nvidia/current/nvidia-debugdump)
+		$(add_slave /usr/share/nvidia/nvidia-application-profiles-key-documentation nvidia-application-profiles-key-documentation /usr/share/nvidia/nvidia-application-profiles-{DRIVER_VERSION_FULL}-key-documentation)
+		$(add_slave /usr/bin/nvidia-settings nvidia-settings /usr/lib/nvidia/current/nvidia-settings)
+		$(add_slave /usr/bin/nv-control-dpy nv-control-dpy /usr/lib/nvidia/current/nv-control-dpy)
+		$(add_slave /usr/share/applications/nvidia-settings.desktop nvidia-settings.desktop /usr/lib/nvidia/current/nvidia-settings.desktop)
+		$(add_slave /usr/share/man/man1/nvidia-settings.1.gz nvidia-settings.1.gz /usr/lib/nvidia/current/nvidia-settings.1.gz)
+"
+	conf_slaves="
+		$(add_multiarch_slave /usr/lib nvidia/ libnvidia-cfg.so.1 /usr/lib nvidia/current/)
+		$(add_slave /etc/nvidia/nvidia-drm-outputclass.conf nvidia-drm-outputclass.conf /etc/nvidia/current/nvidia-drm-outputclass.conf)
+"
+	kmod_slaves="
+		$(add_slave /etc/nvidia/nvidia-blacklists-nouveau.conf nvidia-blacklists-nouveau.conf /etc/nvidia/nvidia-{DRIVER_VERSION_FULL}/nvidia-blacklists-nouveau.conf)
+		$(add_slave /etc/nvidia/nvidia-modprobe.conf nvidia-modprobe.conf /etc/nvidia/nvidia-{DRIVER_VERSION_FULL}/nvidia-modprobe.conf)
+		$(add_slave /etc/modprobe.d/nvidia-options.conf nvidia-options.conf /etc/nvidia/nvidia-{DRIVER_VERSION_FULL}/nvidia-options.conf)
+		$(add_slave /etc/nvidia/nvidia-load.conf nvidia-load.conf /etc/nvidia/nvidia-{DRIVER_VERSION_FULL}/nvidia-load.conf)
+"
+	kmod_open_slaves="
+		$(add_slave /etc/nvidia/nvidia-blacklists-nouveau.conf nvidia-blacklists-nouveau.conf /etc/nvidia/{DRIVER_VERSION_FULL}-open/nvidia-blacklists-nouveau.conf)
+		$(add_slave /etc/nvidia/nvidia-modprobe.conf nvidia-modprobe.conf /etc/nvidia/{DRIVER_VERSION_FULL}-open/nvidia-modprobe.conf)
+		$(add_slave /etc/modprobe.d/nvidia-options.conf nvidia-options.conf /etc/nvidia/{DRIVER_VERSION_FULL}-open/nvidia-options.conf)
+		$(add_slave /etc/nvidia/nvidia-load.conf nvidia-load.conf /etc/nvidia/{DRIVER_VERSION_FULL}-open/nvidia-load.conf)
+"
+	libnvidia_ml_so_slave=
+	if [ -f /usr/include/nvml.h ]; then
+		libnvidia_ml_so_slave="$(add_multiarch_slave /usr/lib "" libnvidia-ml.so /usr/lib nvidia/current/)"
+	fi
+	normal_alternative=0
+	open_alternative=0
+	if echo "$slaves" | grep -q "slave" ; then
+		if echo "${{kmod_slaves}}" | grep -q "slave" ; then
+			normal_alternative=1
+		fi
+		if echo "${{kmod_open_slaves}}" | grep -q "slave" ; then
+			open_alternative=1
+		else
+			# fallback: normal alternative w/o kernel module
+			normal_alternative=1
+		fi
+	fi
+	if [ "$normal_alternative" = 1 ]; then
+		update-alternatives --install /usr/lib/nvidia/nvidia nvidia /usr/lib/nvidia/current# {DRIVER_VERSION_MAJOR} $slaves $conf_slaves $kmod_slaves $libnvidia_ml_so_slave
+	else
+		update-alternatives --remove nvidia /usr/lib/nvidia/current#
+	fi
+	if [ "$open_alternative" = 1 ]; then
+		update-alternatives --install /usr/lib/nvidia/nvidia nvidia /usr/lib/nvidia/current#-open $(({DRIVER_VERSION_MAJOR} - 1)) $slaves $conf_slaves $kmod_open_slaves $libnvidia_ml_so_slave
+	else
+		update-alternatives --remove nvidia /usr/lib/nvidia/current#-open
+	fi
+
+	# activate the trigger selecting NVIDIA as GLX provider
+	dpkg-trigger --no-await register-glx-alternative-nvidia
+
+	# let glx-alternative-mesa take over handling libGLX_indirect.so.0
+	dpkg-trigger --no-await register-glx-alternative-mesa
+
+fi
+
+
+if [ "$1" = "configure" ]; then
+
+	# activate our trigger
+	dpkg-trigger register-nvidia-alternative
+
+fi
+
+
+#DEBHELPER#"""
+
+NVIDIA_ALTERNATIVE_TRIGGERS_FILE_PREQ = """interest-await register-nvidia-alternative
+
+interest-await /etc/nvidia/current
+interest-await /etc/nvidia/current-open
+interest-await /etc/nvidia/nvidia-{DRIVER_VERSION_FULL}
+interest-await /etc/nvidia/{DRIVER_VERSION_FULL}-open
+
+interest-await /usr/lib/nvidia/current
+interest-await /usr/lib/i386-linux-gnu/nvidia/current
+interest-await /usr/lib/x86_64-linux-gnu/nvidia/current
+interest-await /usr/lib/aarch64-linux-gnu/nvidia/current
+interest-await /usr/lib/powerpc64le-linux-gnu/nvidia/current
+
+interest-await /usr/include/nvml.h"""
+
+# end of nvidia-alternative
+
 ### End of Text Preq
 
 
@@ -2309,3 +2511,45 @@ with open(LIBNVOPTIX1_LINKS_FILE_PATH, "w") as LIBNVOPTIX1_LINKS_FILE:
     LIBNVOPTIX1_LINKS_FILE.write(LIBNVOPTIX1_LINKS_FILECONTENT)
     
 # end of libnvoptix1
+
+# nvidia-alternative
+
+NVIDIA_ALTERNATIVE_DIRS_FILE_PATH = 'nvidia-alternative-' + DRIVER_VERSION_MAJOR + '.dirs'
+with open(NVIDIA_ALTERNATIVE_DIRS_FILE_PATH, "w") as NVIDIA_ALTERNATIVE_DIRS_FILE:
+    NVIDIA_ALTERNATIVE_DIRS_FILECONTENT = NVIDIA_ALTERNATIVE_DIRS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_ALTERNATIVE_DIRS_FILE.write(NVIDIA_ALTERNATIVE_DIRS_FILECONTENT)
+
+NVIDIA_ALTERNATIVE_LINTIAN_FILE_PATH = 'nvidia-alternative-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_ALTERNATIVE_LINTIAN_FILE_PATH, "w") as NVIDIA_ALTERNATIVE_LINTIAN_FILE:
+    NVIDIA_ALTERNATIVE_LINTIAN_FILECONTENT = NVIDIA_ALTERNATIVE_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DEB_HOST_MULTIARCH=DEB_HOST_MULTIARCH,
+    )
+    NVIDIA_ALTERNATIVE_LINTIAN_FILE.write(NVIDIA_ALTERNATIVE_LINTIAN_FILECONTENT)
+
+NVIDIA_ALTERNATIVE_PRERM_FILE_PATH = 'nvidia-alternative-' + DRIVER_VERSION_MAJOR + '.prerm'
+with open(NVIDIA_ALTERNATIVE_PRERM_FILE_PATH, "w") as NVIDIA_ALTERNATIVE_PRERM_FILE:
+    NVIDIA_ALTERNATIVE_PRERM_FILECONTENT = NVIDIA_ALTERNATIVE_PRERM_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_ALTERNATIVE_PRERM_FILE.write(NVIDIA_ALTERNATIVE_PRERM_FILECONTENT)
+
+NVIDIA_ALTERNATIVE_POSTINST_FILE_PATH = 'nvidia-alternative-' + DRIVER_VERSION_MAJOR + '.postinst'
+with open(NVIDIA_ALTERNATIVE_POSTINST_FILE_PATH, "w") as NVIDIA_ALTERNATIVE_POSTINST_FILE:
+    NVIDIA_ALTERNATIVE_POSTINST_FILECONTENT = NVIDIA_ALTERNATIVE_POSTINST_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+        DEB_HOST_MULTIARCH=DEB_HOST_MULTIARCH,
+    )
+    NVIDIA_ALTERNATIVE_POSTINST_FILE.write(NVIDIA_ALTERNATIVE_POSTINST_FILECONTENT)
+
+NVIDIA_ALTERNATIVE_TRIGGERS_FILE_PATH = 'nvidia-alternative-' + DRIVER_VERSION_MAJOR + '.triggers'
+with open(NVIDIA_ALTERNATIVE_TRIGGERS_FILE_PATH, "w") as NVIDIA_ALTERNATIVE_TRIGGERS_FILE:
+    NVIDIA_ALTERNATIVE_TRIGGERS_FILECONTENT = NVIDIA_ALTERNATIVE_TRIGGERS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_ALTERNATIVE_TRIGGERS_FILE.write(NVIDIA_ALTERNATIVE_TRIGGERS_FILECONTENT)
+
+# end of nvidia-alternative
