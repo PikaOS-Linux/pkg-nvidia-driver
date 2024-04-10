@@ -1577,6 +1577,25 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so.1    usr/lib/${{
 
 # end of libnvidia-ngx1
 
+LIBNVIDIA_NVVM4_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-nvvm.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBNVIDIA_NVVM4_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+spelling-error-in-binary
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger"""
+
+LIBNVIDIA_NVVM4_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.4
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.4    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so"""
+
+# libnvidia-nvvm4
+
+# end of libnvidia-nvvm4
+
 ### End of Text Preq
 
 
@@ -2042,3 +2061,28 @@ with open(LIBNVIDIA_NGX1_LINKS_FILE_PATH, "w") as LIBNVIDIA_NGX1_LINKS_FILE:
     LIBNVIDIA_NGX1_LINKS_FILE.write(LIBNVIDIA_NGX1_LINKS_FILECONTENT)
     
 # end of libnvidia-ngx1
+
+# libnvidia-nvvm4
+
+LIBNVIDIA_NVVM4_INSTALL_FILE_PATH = 'libnvidia-nvvm4-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_NVVM4_INSTALL_FILE_PATH, "w") as LIBNVIDIA_NVVM4_INSTALL_FILE:
+    LIBNVIDIA_NVVM4_INSTALL_FILECONTENT = LIBNVIDIA_NVVM4_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_NVVM4_INSTALL_FILE.write(LIBNVIDIA_NVVM4_INSTALL_FILECONTENT)
+
+LIBNVIDIA_NVVM4_LINTIAN_FILE_PATH = 'libnvidia-nvvm4-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_NVVM4_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_NVVM4_LINTIAN_FILE:
+    LIBNVIDIA_NVVM4_LINTIAN_FILECONTENT = LIBNVIDIA_NVVM4_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_NVVM4_LINTIAN_FILE.write(LIBNVIDIA_NVVM4_LINTIAN_FILECONTENT)
+
+LIBNVIDIA_NVVM4_LINKS_FILE_PATH = 'libnvidia-nvvm4-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBNVIDIA_NVVM4_LINKS_FILE_PATH, "w") as LIBNVIDIA_NVVM4_LINKS_FILE:
+    LIBNVIDIA_NVVM4_LINKS_FILECONTENT = LIBNVIDIA_NVVM4_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_NVVM4_LINKS_FILE.write(LIBNVIDIA_NVVM4_LINKS_FILECONTENT)
+    
+# end of libnvidia-nvvm4
