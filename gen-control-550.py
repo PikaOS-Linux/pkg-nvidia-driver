@@ -947,6 +947,10 @@ Depends:
     adduser,
     ${{shlibs:Depends}},
     ${{misc:Depends}}
+Provides:
+    nvidia-persistenced (= ${{binary:Version}}),
+Conflicts:
+    nvidia-persistenced
 Description: daemon to maintain persistent software state in the NVIDIA driver
      When persistence mode is enabled, the daemon prevents the driver from
      releasing device state when the device is not in use.
@@ -1019,8 +1023,8 @@ Recommends:
     libgl1-nvidia-glvnd-glx-{DRIVER_VERSION_MAJOR},
     nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR},
     libnvidia-ml1-{DRIVER_VERSION_MAJOR}
-Conflicts: nvidia-settings-gtk-{DRIVER_VERSION_FULL}, nvidia-settings (= ${{binary:Version}}),
-Provides: nvidia-settings-gtk-{DRIVER_VERSION_FULL}, nvidia-settings
+Provides: nvidia-settings-gtk-{DRIVER_VERSION_FULL}, nvidia-settings (= ${{binary:Version}}),
+Conflicts: nvidia-settings-gtk-{DRIVER_VERSION_FULL}, nvidia-settings 
 Description: tool for configuring the NVIDIA graphics driver
      The nvidia-settings utility is a tool for configuring the NVIDIA
      Linux graphics driver.  It operates by communicating with the NVIDIA
@@ -1507,6 +1511,29 @@ symbols-file-missing-build-depends-package-field"""
 
 # end of libnvidia-glvkspirv
 
+# libnvidia-gpucomp
+
+LIBNVIDIA_GPUCOMP_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-gpucomp.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
+
+LIBNVIDIA_GPUCOMP_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# The libnvidia-{{glcore,tls}}.so.* SONAME changes with every upstream
+# release.
+# These private libraries are only used (and usable) as plugins
+# loaded by other NVIDIA libraries with the same upstream version
+# (and a stable SONAME).
+# Therefore we do not include the SONAME in this package name to
+# avoid going through NEW for every new upstream release.
+package-name-doesnt-match-sonames libnvidia-gpucomp{DRIVER_VERSION_FULL}
+symbols-file-missing-build-depends-package-field"""
+
+# end of libnvidia-gpucomp
+
 ### End of Text Preq
 
 
@@ -1904,3 +1931,21 @@ with open(LIBNVIDIA_GLVKSPIRV_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_GLVKSPIRV_LIN
     LIBNVIDIA_GLVKSPIRV_LINTIAN_FILE.write(LIBNVIDIA_GLVKSPIRV_LINTIAN_FILECONTENT)
     
 # end of libnvidia-glvkspirv
+
+# libnvidia-gpucomp
+
+LIBNVIDIA_GPUCOMP_INSTALL_FILE_PATH = 'libnvidia-gpucomp-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_GPUCOMP_INSTALL_FILE_PATH, "w") as LIBNVIDIA_GPUCOMP_INSTALL_FILE:
+    LIBNVIDIA_GPUCOMP_INSTALL_FILECONTENT = LIBNVIDIA_GPUCOMP_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_GPUCOMP_INSTALL_FILE.write(LIBNVIDIA_GPUCOMP_INSTALL_FILECONTENT)
+
+LIBNVIDIA_GPUCOMP_LINTIAN_FILE_PATH = 'libnvidia-gpucomp-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_GPUCOMP_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_GPUCOMP_LINTIAN_FILE:
+    LIBNVIDIA_GPUCOMP_LINTIAN_FILECONTENT = LIBNVIDIA_GPUCOMP_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_GPUCOMP_LINTIAN_FILE.write(LIBNVIDIA_GPUCOMP_LINTIAN_FILECONTENT)
+    
+# end of libnvidia-gpucomp
