@@ -1437,6 +1437,25 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-encode.so.1    usr/lib/
 
 # end of libnvidia-encode1
 
+# libnvidia-fbc1
+
+LIBNVIDIA_FBC1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-fbc.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBNVIDIA_FBC1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger"""
+
+LIBNVIDIA_FBC1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so"""
+
+# end of libnvidia-fbc1
+
 ### End of Text Preq
 
 
@@ -1773,3 +1792,28 @@ with open(LIBNVIDIA_ENCODE1_LINKS_FILE_PATH, "w") as LIBNVIDIA_ENCODE1_LINKS_FIL
     LIBNVIDIA_ENCODE1_LINKS_FILE.write(LIBNVIDIA_ENCODE1_LINKS_FILECONTENT)
 
 # end of libnvidia-encode1
+
+# libnvidia-fbc1
+
+LIBNVIDIA_FBC1_INSTALL_FILE_PATH = 'libnvidia-fbc1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_FBC1_INSTALL_FILE_PATH, "w") as LIBNVIDIA_FBC1_INSTALL_FILE:
+    LIBNVIDIA_FBC1_INSTALL_FILECONTENT = LIBNVIDIA_FBC1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_FBC1_INSTALL_FILE.write(LIBNVIDIA_FBC1_INSTALL_FILECONTENT)
+
+LIBNVIDIA_FBC1_LINTIAN_FILE_PATH = 'libnvidia-fbc1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_FBC1_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_FBC1_LINTIAN_FILE:
+    LIBNVIDIA_FBC1_LINTIAN_FILECONTENT = LIBNVIDIA_FBC1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_FBC1_LINTIAN_FILE.write(LIBNVIDIA_FBC1_LINTIAN_FILECONTENT)
+
+LIBNVIDIA_FBC1_LINKS_FILE_PATH = 'libnvidia-fbc1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBNVIDIA_FBC1_LINKS_FILE_PATH, "w") as LIBNVIDIA_FBC1_LINKS_FILE:
+    LIBNVIDIA_FBC1_LINKS_FILECONTENT = LIBNVIDIA_FBC1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_FBC1_LINKS_FILE.write(LIBNVIDIA_FBC1_LINKS_FILECONTENT)
+    
+# end of libnvidia-fbc1
