@@ -1456,6 +1456,33 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so.1    usr/lib/${{
 
 # end of libnvidia-fbc1
 
+# libnvidia-glcore
+
+LIBNVIDIA_GLCORE_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-glcore.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/
+libnvidia-tls.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
+
+LIBNVIDIA_GLCORE_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+[arm64 ppc64el]: elf-warning
+embedded-library libzstd [usr/lib/*/libnvidia-glcore.so.{DRIVER_VERSION_FULL}]
+[i386]: specific-address-in-shared-library
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# The libnvidia-{{glcore,tls}}.so.* SONAME changes with every upstream
+# release.
+# These private libraries are only used (and usable) as plugins
+# loaded by other NVIDIA libraries with the same upstream version
+# (and a stable SONAME).
+# Therefore we do not include the SONAME in this package name to
+# avoid going through NEW for every new upstream release.
+package-name-doesnt-match-sonames libnvidia-glcore{DRIVER_VERSION_FULL} libnvidia-tls{DRIVER_VERSION_FULL}
+symbols-file-missing-build-depends-package-field"""
+
+# end of libnvidia-glcore
+
 ### End of Text Preq
 
 
@@ -1817,3 +1844,21 @@ with open(LIBNVIDIA_FBC1_LINKS_FILE_PATH, "w") as LIBNVIDIA_FBC1_LINKS_FILE:
     LIBNVIDIA_FBC1_LINKS_FILE.write(LIBNVIDIA_FBC1_LINKS_FILECONTENT)
     
 # end of libnvidia-fbc1
+
+# libnvidia-glcore
+
+LIBNVIDIA_GLCORE_INSTALL_FILE_PATH = 'libnvidia-glcore-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_GLCORE_INSTALL_FILE_PATH, "w") as LIBNVIDIA_GLCORE_INSTALL_FILE:
+    LIBNVIDIA_GLCORE_INSTALL_FILECONTENT = LIBNVIDIA_GLCORE_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_GLCORE_INSTALL_FILE.write(LIBNVIDIA_GLCORE_INSTALL_FILECONTENT)
+
+LIBNVIDIA_GLCORE_LINTIAN_FILE_PATH = 'libnvidia-glcore-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_GLCORE_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_GLCORE_LINTIAN_FILE:
+    LIBNVIDIA_GLCORE_LINTIAN_FILECONTENT = LIBNVIDIA_GLCORE_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_GLCORE_LINTIAN_FILE.write(LIBNVIDIA_GLCORE_LINTIAN_FILECONTENT)
+    
+# end of libnvidia-glcore
