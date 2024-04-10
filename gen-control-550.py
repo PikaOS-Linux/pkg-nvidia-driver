@@ -1664,6 +1664,28 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ptxjitcompiler.so.{DRIV
 
 # end of libnvidia-ptxjitcompiler1
 
+# libnvidia-rtcore
+
+LIBNVIDIA_RTCORE_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-rtcore.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
+
+LIBNVIDIA_RTCORE_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+spelling-error-in-binary
+hardening-no-bindnow
+[!arm64]: hardening-no-fortify-functions
+
+# The libnvidia-rtcore.so.* SONAME changes with every upstream
+# release.
+# These private libraries are only used (and usable) as plugins
+# loaded by other NVIDIA libraries with the same upstream version
+# (and a stable SONAME).
+# Therefore we do not include the SONAME in this package name to
+# avoid going through NEW for every new upstream release.
+package-name-doesnt-match-sonames libnvidia-rtcore{DRIVER_VERSION_FULL}
+symbols-file-missing-build-depends-package-field"""
+
+# end of libnvidia-rtcore
+
 ### End of Text Preq
 
 
@@ -2222,3 +2244,21 @@ with open(LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE_PATH, "w") as LIBNVIDIA_PTXJITCOM
     LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE.write(LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILECONTENT)
     
 # end of libnvidia-ptxjitcompiler1
+
+# libnvidia-rtcore
+
+LIBNVIDIA_RTCORE_INSTALL_FILE_PATH = 'libnvidia-rtcore-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_RTCORE_INSTALL_FILE_PATH, "w") as LIBNVIDIA_RTCORE_INSTALL_FILE:
+    LIBNVIDIA_RTCORE_INSTALL_FILECONTENT = LIBNVIDIA_RTCORE_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_RTCORE_INSTALL_FILE.write(LIBNVIDIA_RTCORE_INSTALL_FILECONTENT)
+
+LIBNVIDIA_RTCORE_LINTIAN_FILE_PATH = 'libnvidia-rtcore-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_RTCORE_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_RTCORE_LINTIAN_FILE:
+    LIBNVIDIA_RTCORE_LINTIAN_FILECONTENT = LIBNVIDIA_RTCORE_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_RTCORE_LINTIAN_FILE.write(LIBNVIDIA_RTCORE_LINTIAN_FILECONTENT)
+    
+# end of libnvidia-rtcore
