@@ -1686,6 +1686,28 @@ symbols-file-missing-build-depends-package-field"""
 
 # end of libnvidia-rtcore
 
+# libnvoptix1
+
+LIBNVOPTIX1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvoptix.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+nvoptix.bin	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBNVOPTIX1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# There is no .so link.
+symbols-file-missing-build-depends-package-field"""
+
+LIBNVOPTIX1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvoptix.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvoptix.so.1"""
+
+# end of libnvoptix1
+
 ### End of Text Preq
 
 
@@ -2262,3 +2284,28 @@ with open(LIBNVIDIA_RTCORE_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_RTCORE_LINTIAN_F
     LIBNVIDIA_RTCORE_LINTIAN_FILE.write(LIBNVIDIA_RTCORE_LINTIAN_FILECONTENT)
     
 # end of libnvidia-rtcore
+
+# libnvoptix1
+
+LIBNVOPTIX1_INSTALL_FILE_PATH = 'libnvoptix1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVOPTIX1_INSTALL_FILE_PATH, "w") as LIBNVOPTIX1_INSTALL_FILE:
+    LIBNVOPTIX1_INSTALL_FILECONTENT = LIBNVOPTIX1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVOPTIX1_INSTALL_FILE.write(LIBNVOPTIX1_INSTALL_FILECONTENT)
+
+LIBNVOPTIX1_LINTIAN_FILE_PATH = 'libnvoptix1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVOPTIX1_LINTIAN_FILE_PATH, "w") as LIBNVOPTIX1_LINTIAN_FILE:
+    LIBNVOPTIX1_LINTIAN_FILECONTENT = LIBNVOPTIX1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVOPTIX1_LINTIAN_FILE.write(LIBNVOPTIX1_LINTIAN_FILECONTENT)
+
+LIBNVOPTIX1_LINKS_FILE_PATH = 'libnvoptix1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBNVOPTIX1_LINKS_FILE_PATH, "w") as LIBNVOPTIX1_LINKS_FILE:
+    LIBNVOPTIX1_LINKS_FILECONTENT = LIBNVOPTIX1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVOPTIX1_LINKS_FILE.write(LIBNVOPTIX1_LINKS_FILECONTENT)
+    
+# end of libnvoptix1
