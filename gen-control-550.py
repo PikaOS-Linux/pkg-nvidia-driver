@@ -1577,6 +1577,8 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so.1    usr/lib/${{
 
 # end of libnvidia-ngx1
 
+# libnvidia-nvvm4
+
 LIBNVIDIA_NVVM4_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
 libnvidia-nvvm.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
 
@@ -1592,9 +1594,26 @@ LIBNVIDIA_NVVM4_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
 usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.4
 usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.4    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so"""
 
-# libnvidia-nvvm4
-
 # end of libnvidia-nvvm4
+
+# libnvidia-opticalflow1
+
+LIBNVIDIA_OPTICALFLOW1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-opticalflow.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386 ppc64el]: specific-address-in-shared-library
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger"""
+
+LIBNVIDIA_OPTICALFLOW1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opticalflow.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opticalflow.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opticalflow.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opticalflow.so"""
+
+# end of libnvidia-opticalflow1
 
 ### End of Text Preq
 
@@ -2086,3 +2105,28 @@ with open(LIBNVIDIA_NVVM4_LINKS_FILE_PATH, "w") as LIBNVIDIA_NVVM4_LINKS_FILE:
     LIBNVIDIA_NVVM4_LINKS_FILE.write(LIBNVIDIA_NVVM4_LINKS_FILECONTENT)
     
 # end of libnvidia-nvvm4
+
+# libnvidia-opticalflow1
+
+LIBNVIDIA_OPTICALFLOW1_INSTALL_FILE_PATH = 'libnvidia-opticalflow1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_OPTICALFLOW1_INSTALL_FILE_PATH, "w") as LIBNVIDIA_OPTICALFLOW1_INSTALL_FILE:
+    LIBNVIDIA_OPTICALFLOW1_INSTALL_FILECONTENT = LIBNVIDIA_OPTICALFLOW1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_OPTICALFLOW1_INSTALL_FILE.write(LIBNVIDIA_OPTICALFLOW1_INSTALL_FILECONTENT)
+
+LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILE_PATH = 'libnvidia-opticalflow1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILE:
+    LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILECONTENT = LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILE.write(LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILECONTENT)
+
+LIBNVIDIA_OPTICALFLOW1_LINKS_FILE_PATH = 'libnvidia-opticalflow1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBNVIDIA_OPTICALFLOW1_LINKS_FILE_PATH, "w") as LIBNVIDIA_OPTICALFLOW1_LINKS_FILE:
+    LIBNVIDIA_OPTICALFLOW1_LINKS_FILECONTENT = LIBNVIDIA_OPTICALFLOW1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_OPTICALFLOW1_LINKS_FILE.write(LIBNVIDIA_OPTICALFLOW1_LINKS_FILECONTENT)
+    
+# end of libnvidia-opticalflow1
