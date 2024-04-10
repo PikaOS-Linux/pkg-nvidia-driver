@@ -1554,6 +1554,29 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so.1    usr/lib/${{D
 
 # end of libnvidia-ml1
 
+# libnvidia-ngx1
+
+LIBNVIDIA_NGX1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-ngx.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+_nvngx.dll  usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia/wine
+nvngx.dll   usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia/wine"""
+
+LIBNVIDIA_NGX1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# Location expected by Proton.
+repeated-path-segment nvidia [usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia/]"""
+
+LIBNVIDIA_NGX1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so"""
+
+# end of libnvidia-ngx1
+
 ### End of Text Preq
 
 
@@ -1994,3 +2017,28 @@ with open(LIBNVIDIA_ML1_LINKS_FILE_PATH, "w") as LIBNVIDIA_ML1_LINKS_FILE:
     LIBNVIDIA_ML1_LINKS_FILE.write(LIBNVIDIA_ML1_LINKS_FILECONTENT)
     
 # end of libnvidia-ml1
+
+# libnvidia-ngx1
+
+LIBNVIDIA_NGX1_INSTALL_FILE_PATH = 'libnvidia-ngx1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_NGX1_INSTALL_FILE_PATH, "w") as LIBNVIDIA_NGX1_INSTALL_FILE:
+    LIBNVIDIA_NGX1_INSTALL_FILECONTENT = LIBNVIDIA_NGX1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_NGX1_INSTALL_FILE.write(LIBNVIDIA_NGX1_INSTALL_FILECONTENT)
+
+LIBNVIDIA_NGX1_LINTIAN_FILE_PATH = 'libnvidia-ngx1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_NGX1_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_NGX1_LINTIAN_FILE:
+    LIBNVIDIA_NGX1_LINTIAN_FILECONTENT = LIBNVIDIA_NGX1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_NGX1_LINTIAN_FILE.write(LIBNVIDIA_NGX1_LINTIAN_FILECONTENT)
+
+LIBNVIDIA_NGX1_LINKS_FILE_PATH = 'libnvidia-ngx1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(LIBNVIDIA_NGX1_LINKS_FILE_PATH, "w") as LIBNVIDIA_NGX1_LINKS_FILE:
+    LIBNVIDIA_NGX1_LINKS_FILECONTENT = LIBNVIDIA_NGX1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    LIBNVIDIA_NGX1_LINKS_FILE.write(LIBNVIDIA_NGX1_LINKS_FILECONTENT)
+    
+# end of libnvidia-ngx1
