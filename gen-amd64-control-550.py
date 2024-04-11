@@ -1149,7 +1149,7 @@ Description: NVIDIA binary Xorg driver
 # firmware-nvidia-gsp
 
 FIRMWARE_NVIDIA_GSP_INSTALL_FILE_PREQ = """firmware/gsp*.bin	lib/firmware/nvidia/{DRIVER_VERSION_FULL}/
-RIM_GH100PROD.swidtag	usr/share/nvidia/rim/{DRIVER_VERSION_FULL}/
+#RIM_GH100PROD.swidtag	usr/share/nvidia/rim/{DRIVER_VERSION_FULL}/
 """
 
 FIRMWARE_NVIDIA_GSP_LINTIAN_FILE_PREQ = """# Firmware blob.
