@@ -5,9 +5,11 @@
 export DH_VERBOSE = 1
 
 override_dh_prep:
-	ls -l ./
 	./nvidia-installer.run  --extract-only
+	mkdir -p debian/tmp
+	ls -l ./
 	cp -rvf ./NVIDIA-Linux-*/* debian/tmp
+	ls -l debian/tmp
 	
 %:
 	dh $@
