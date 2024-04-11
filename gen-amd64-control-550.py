@@ -2174,6 +2174,15 @@ NVIDIA_MODPROBE_LINTIAN_FILE_PREQ = """elevated-privileges 4755 root/root [usr/b
 
 # end of nvidia-modprobe
 
+# nvidia-opencl-common
+
+NVIDIA_OPENCL_COMMON_INSTALL_FILE_PREQ =  """nvidia.icd	etc/OpenCL/vendors/"""
+
+NVIDIA_OPENCL_COMMON_LINTIAN_FILE_PREQ = """# We do not build arch:all packages from the proprietary driver.
+package-contains-no-arch-dependent-files"""
+
+# end of nvidia-opencl-common
+
 ### End of Text Preq
 
 
@@ -3084,3 +3093,21 @@ with open(NVIDIA_MODPROBE_LINTIAN_FILE_PATH, "w") as NVIDIA_MODPROBE_LINTIAN_FIL
     NVIDIA_MODPROBE_LINTIAN_FILE.write(NVIDIA_MODPROBE_LINTIAN_FILECONTENT)
     
 # end of nvidia-modprobe
+
+# nvidia-opencl-common
+
+NVIDIA_OPENCL_COMMON_INSTALL_FILE_PATH = 'nvidia-opencl-common-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_OPENCL_COMMON_INSTALL_FILE_PATH, "w") as NVIDIA_OPENCL_COMMON_INSTALL_FILE:
+    NVIDIA_OPENCL_COMMON_INSTALL_FILECONTENT = NVIDIA_OPENCL_COMMON_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_OPENCL_COMMON_INSTALL_FILE.write(NVIDIA_OPENCL_COMMON_INSTALL_FILECONTENT)
+
+NVIDIA_OPENCL_COMMON_LINTIAN_FILE_PATH = 'nvidia-opencl-common-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_OPENCL_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_OPENCL_COMMON_LINTIAN_FILE:
+    NVIDIA_OPENCL_COMMON_LINTIAN_FILECONTENT = NVIDIA_OPENCL_COMMON_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_OPENCL_COMMON_LINTIAN_FILE.write(NVIDIA_OPENCL_COMMON_LINTIAN_FILECONTENT)
+    
+# end of nvidia-opencl-common
