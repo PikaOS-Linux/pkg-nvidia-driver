@@ -1986,6 +1986,16 @@ fi
 
 # end of nvidia-driver-libs
 
+# nvidia-egl-common
+
+NVIDIA_EGL_COMMON_INSTALL_FILE_PREQ = """10_nvidia.json		/usr/share/glvnd/egl_vendor.d/"""
+
+NVIDIA_EGL_COMMON_LINTIAN_FILE_PREQ = """# We do not build arch:all packages from the proprietary driver.
+package-contains-no-arch-dependent-files"""
+
+
+# end of nvidia-egl-common
+
 ### End of Text Preq
 
 
@@ -2716,3 +2726,20 @@ with open(NVIDIA_DRIVER_LIBS_POSTINST_FILE_PATH, "w") as NVIDIA_DRIVER_LIBS_POST
     
 # end of nvidia-driver-libs
 
+# nvidia-egl-common
+
+NVIDIA_EGL_COMMON_INSTALL_FILE_PATH = 'nvidia-egl-common-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_EGL_COMMON_INSTALL_FILE_PATH, "w") as NVIDIA_EGL_COMMON_INSTALL_FILE:
+    NVIDIA_EGL_COMMON_INSTALL_FILECONTENT = NVIDIA_EGL_COMMON_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_EGL_COMMON_INSTALL_FILE.write(NVIDIA_EGL_COMMON_INSTALL_FILECONTENT)
+
+NVIDIA_EGL_COMMON_LINTIAN_FILE_PATH = 'nvidia-egl-common-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_EGL_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_EGL_COMMON_LINTIAN_FILE:
+    NVIDIA_EGL_COMMON_LINTIAN_FILECONTENT = NVIDIA_EGL_COMMON_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_EGL_COMMON_LINTIAN_FILE.write(NVIDIA_EGL_COMMON_LINTIAN_FILECONTENT)
+    
+# end of nvidia-egl-common
