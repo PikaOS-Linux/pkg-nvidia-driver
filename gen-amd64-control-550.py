@@ -576,10 +576,10 @@ Conflicts:
     nvidia-tesla-460-alternative,
     nvidia-tesla-510-alternative,
     nvidia-tesla-alternative,
-    nvidia-alternative-525
-    nvidia-alternative-530
-    nvidia-alternative-535
-    nvidia-alternative-545
+    nvidia-alternative-525,
+    nvidia-alternative-530,
+    nvidia-alternative-535,
+    nvidia-alternative-545,
 Description: allows the selection of NVIDIA as GLX provider
     In setups with several NVIDIA driver versions installed (e.g. current and legacy) this metapackage registers an alternative to allow easy switching between the different versions.
     Use 'update-glx --config nvidia' to select a version.
@@ -624,10 +624,10 @@ Depends:
     libnvidia-fbc1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libnvoptix1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libnvidia-opticalflow1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
-    libnvidia-ngx1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}), [amd64],
+    libnvidia-ngx1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) [amd64],
     libnvidia-api1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
-    nvidia-powerd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}), [amd64],
+    nvidia-powerd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) [amd64],
     nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
