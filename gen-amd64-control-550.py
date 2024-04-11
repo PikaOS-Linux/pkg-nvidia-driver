@@ -1245,7 +1245,7 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libEGL_nvidia.so.{DRIVER_VERSION_
 # libgl1-nvidia-glvnd-glx
 
 LIBGL1_NVIDIA_GLVND_GLX_DOCS_FILE_PREQ = """debian/README.alternatives
-NVIDIA-Linux-amd64/README.txt"""
+README.txt"""
 
 # end of libgl1-nvidia-glvnd-glx
 
