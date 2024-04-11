@@ -1864,14 +1864,14 @@ if [ "$1" = "triggered" ]; then
 		fi
 	fi
 	if [ "$normal_alternative" = 1 ]; then
-		update-alternatives --install /usr/lib/nvidia/nvidia nvidia /usr/lib/nvidia/current# {DRIVER_VERSION_MAJOR} $slaves $conf_slaves $kmod_slaves $libnvidia_ml_so_slave
+		update-alternatives --install /usr/lib/nvidia/nvidia nvidia /usr/lib/nvidia/current {DRIVER_VERSION_MAJOR} $slaves $conf_slaves $kmod_slaves $libnvidia_ml_so_slave
 	else
-		update-alternatives --remove nvidia /usr/lib/nvidia/current#
+		update-alternatives --remove nvidia /usr/lib/nvidia/current
 	fi
 	if [ "$open_alternative" = 1 ]; then
-		update-alternatives --install /usr/lib/nvidia/nvidia nvidia /usr/lib/nvidia/current#-open $(({DRIVER_VERSION_MAJOR} - 1)) $slaves $conf_slaves $kmod_open_slaves $libnvidia_ml_so_slave
+		update-alternatives --install /usr/lib/nvidia/nvidia nvidia /usr/lib/nvidia/current-open $(({DRIVER_VERSION_MAJOR} - 1)) $slaves $conf_slaves $kmod_open_slaves $libnvidia_ml_so_slave
 	else
-		update-alternatives --remove nvidia /usr/lib/nvidia/current#-open
+		update-alternatives --remove nvidia /usr/lib/nvidia/current-open
 	fi
 
 	# activate the trigger selecting NVIDIA as GLX provider
