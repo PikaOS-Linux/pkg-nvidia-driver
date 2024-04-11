@@ -1957,6 +1957,35 @@ executable-in-usr-lib"""
 
 # end of nvidia-driver-bin
 
+# nvidia-driver-libs
+
+NVIDIA_DRIVER_LIBS_LINTIAN_FILE_PREQ = """breaks-without-version"""
+
+NVIDIA_DRIVER_LIBS_POSTINST_FILE_PREQ = """#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+if [ "$1" = "configure" ]
+then
+
+	if [ -x /usr/lib/nvidia/check-for-conflicting-opengl-libraries ]
+	then
+		/usr/lib/nvidia/check-for-conflicting-opengl-libraries
+	fi
+
+	if [ -x /usr/lib/nvidia/check-for-mismatching-nvidia-module ]
+	then
+		/usr/lib/nvidia/check-for-mismatching-nvidia-module {DRIVER_VERSION_FULL}
+	fi
+
+fi
+
+
+#DEBHELPER#"""
+
+# end of nvidia-driver-libs
+
 ### End of Text Preq
 
 
@@ -2668,3 +2697,22 @@ with open(NVIDIA_DRIVER_BIN_LINTIAN_FILE_PATH, "w") as NVIDIA_DRIVER_BIN_LINTIAN
     NVIDIA_DRIVER_BIN_LINTIAN_FILE.write(NVIDIA_DRIVER_BIN_LINTIAN_FILECONTENT)
     
 # end of nvidia-driver-bin
+
+# nvidia-driver-libs
+
+NVIDIA_DRIVER_LIBS_LINTIAN_FILE_PATH = 'nvidia-driver-libs-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_DRIVER_LIBS_LINTIAN_FILE_PATH, "w") as NVIDIA_DRIVER_LIBS_LINTIAN_FILE:
+    NVIDIA_DRIVER_LIBS_LINTIAN_FILECONTENT = NVIDIA_DRIVER_LIBS_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_DRIVER_LIBS_LINTIAN_FILE.write(NVIDIA_DRIVER_LIBS_LINTIAN_FILECONTENT)
+    
+NVIDIA_DRIVER_LIBS_POSTINST_FILE_PATH = 'nvidia-driver-libs-' + DRIVER_VERSION_MAJOR + '.postinst'
+with open(NVIDIA_DRIVER_LIBS_POSTINST_FILE_PATH, "w") as NVIDIA_DRIVER_LIBS_POSTINST_FILE:
+    NVIDIA_DRIVER_LIBS_POSTINST_FILECONTENT = NVIDIA_DRIVER_LIBS_POSTINST_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_DRIVER_LIBS_POSTINST_FILE.write(NVIDIA_DRIVER_LIBS_POSTINST_FILECONTENT)
+    
+# end of nvidia-driver-libs
+
