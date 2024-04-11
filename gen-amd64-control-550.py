@@ -2081,6 +2081,20 @@ NVIDIA_KERNEL_DKMS_DOCS_FILE_PREQ = """README.txt"""
 
 # end of nvidia-kernel-dkms
 
+# nvidia-kernel-source
+
+NVIDIA_KERNEL_SOURCE_INSTALL_FILE_PREQ = """kernel/*		usr/src/modules/nvidia-kernel/
+debian/bug-script	usr/src/modules/nvidia-kernel/debian/
+debian/changelog	usr/src/modules/nvidia-kernel/debian/
+debian/control.models	usr/src/modules/nvidia-kernel/debian/
+debian/copyright	usr/src/modules/nvidia-kernel/debian/
+debian/module/debian/*	usr/src/modules/nvidia-kernel/debian/"""
+
+NVIDIA_KERNEL_SOURCE_DOCS_FILE_PREQ = """README.txt
+debian/build-module-packages.sh"""
+
+# end of nvidia-kernel-source
+
 ### End of Text Preq
 
 
@@ -2891,3 +2905,21 @@ with open(NVIDIA_KERNEL_DKMS_DOCS_FILE_PATH, "w") as NVIDIA_KERNEL_DKMS_DOCS_FIL
     NVIDIA_KERNEL_DKMS_DOCS_FILE.write(NVIDIA_KERNEL_DKMS_DOCS_FILECONTENT)
     
 # end of nvidia-kernel-dkms
+
+# nvidia-kernel-source
+
+NVIDIA_KERNEL_SOURCE_INSTALL_FILE_PATH = 'nvidia-kernel-source-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_KERNEL_SOURCE_INSTALL_FILE_PATH, "w") as NVIDIA_KERNEL_SOURCE_INSTALL_FILE:
+    NVIDIA_KERNEL_SOURCE_INSTALL_FILECONTENT = NVIDIA_KERNEL_SOURCE_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_SOURCE_INSTALL_FILE.write(NVIDIA_KERNEL_SOURCE_INSTALL_FILECONTENT)
+
+NVIDIA_KERNEL_SOURCE_DOCS_FILE_PATH = 'nvidia-kernel-source-' + DRIVER_VERSION_MAJOR + '.docs'
+with open(NVIDIA_KERNEL_SOURCE_DOCS_FILE_PATH, "w") as NVIDIA_KERNEL_SOURCE_DOCS_FILE:
+    NVIDIA_KERNEL_SOURCE_DOCS_FILECONTENT = NVIDIA_KERNEL_SOURCE_DOCS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_SOURCE_DOCS_FILE.write(NVIDIA_KERNEL_SOURCE_DOCS_FILECONTENT)
+    
+# end of nvidia-kernel-source
