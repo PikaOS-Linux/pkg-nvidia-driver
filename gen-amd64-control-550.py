@@ -2315,6 +2315,153 @@ executable-in-usr-lib
 
 # end of nvidia-settings
 
+# nvidia-support
+
+NVIDIA_SUPPORT_INSTALL_FILE_PREQ = """{DRIVER_VERSION_FULL}/extra_files/check-for-mismatching-nvidia-module	usr/lib/nvidia/"""
+
+NVIDIA_SUPPORT_CONFIG_FILE_PREQ = """#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+if [ "$1" = "configure" ]
+then
+
+	if	false && \
+		[ -d /etc/X11 ] && \
+		[ ! -f /etc/X11/nvidia.conf ] && \
+		[ ! -f /etc/X11/xorg.conf ]
+	then
+		db_input high nvidia-support/create-nvidia-conf || true
+		db_go
+	fi
+
+fi
+
+#DEBHELPER#
+"""
+
+NVIDIA_SUPPORT_LINTIAN_FILE_PREQ = """# The check for mismatching nvidia kernel module version has been moved to a
+# script that is called from several postinst scripts only.
+debconf-is-not-a-registry [usr/lib/nvidia/check-for-mismatching-nvidia-module:6]
+executable-in-usr-lib [usr/lib/nvidia/check-for-mismatching-nvidia-module]
+unused-debconf-template nvidia-support/check-running-module-version [templates:*]
+unused-debconf-template nvidia-support/last-mismatching-module-version [templates:*]
+unused-debconf-template nvidia-support/warn-mismatching-module-version [templates:*]
+unused-debconf-template nvidia-support/warn-nouveau-module-loaded [templates:*]
+
+# The notes about needing a xorg.conf or leftover xorg.conf are displayed by
+# xserver-xorg-video-nvidia.
+unused-debconf-template nvidia-support/needs-xorg-conf-to-enable [templates:*]
+unused-debconf-template nvidia-support/check-xorg-conf-on-removal [templates:*]
+unused-debconf-template nvidia-support/removed-but-enabled-in-xorg-conf [templates:*]
+
+# The script is shipped by several driver packages depending on us.
+spare-manual-page [usr/share/man/man1/nvidia-bug-report.sh.1.gz]
+
+# We do not build arch:all packages for the proprietary driver.
+package-contains-no-arch-dependent-files
+
+"""
+
+NVIDIA_SUPPORT_MANPAGES_FILE_PREQ = """{DRIVER_VERSION_FULL}/extra_files/nvidia-bug-report.sh.1"""
+
+NVIDIA_SUPPORT_TEMPLATES_FILE_PREQ = """# These templates have been reviewed by the debian-l10n-english
+# team
+#
+# If modifications/additions/rewording are needed, please ask
+# debian-l10n-english@lists.debian.org for advice.
+#
+# Even minor modifications require translation updates and such
+# changes should be coordinated with translators and reviewers.
+
+Template: nvidia-support/check-running-module-version
+Type: boolean
+Default: true
+Description: for internal use
+ Can be preseeded.  If set to false, disables the nouveau module check
+ and nvidia module version check entirely.
+
+Template: nvidia-support/last-mismatching-module-version
+Type: string
+Default: none
+Description: for internal use
+ Remembers the last version for which we displayed the warning, so that we
+ warn only once for each version.
+
+Template: nvidia-support/warn-mismatching-module-version
+Type: error
+_Description: Mismatching nvidia kernel module loaded
+ The NVIDIA driver that is being installed (version ${{new-version}})
+ does not match the nvidia kernel module currently loaded
+ (version ${{running-version}}).
+ .
+ The X server, OpenGL, and GPGPU applications may not work properly.
+ .
+ The easiest way to fix this is to reboot the machine once the
+ installation has finished. You can also stop the X server (usually by
+ stopping the login manager, e.g. gdm3, sddm, or xdm), manually unload the
+ module ("modprobe -r nvidia"), and restart the X server.
+
+Template: nvidia-support/warn-nouveau-module-loaded
+Type: error
+_Description: Conflicting nouveau kernel module loaded
+ The free nouveau kernel module is currently loaded and conflicts with the
+ non-free nvidia kernel module.
+ .
+ The easiest way to fix this is to reboot the machine once the
+ installation has finished.
+
+Template: nvidia-support/needs-xorg-conf-to-enable
+Type: note
+_Description: Manual configuration required to enable NVIDIA driver
+ The NVIDIA driver is not yet configured; it needs to be enabled in
+ xorg.conf before it can be used.
+ .
+ Please see the package documentation for instructions.
+
+Template: nvidia-support/check-xorg-conf-on-removal
+Type: boolean
+Default: true
+Description: for internal use
+ Can be preseeded.  If set to false, does not warn about fglrx still being
+ enabled in xorg.conf(.d/) when removing the package.
+
+Template: nvidia-support/removed-but-enabled-in-xorg-conf
+Type: error
+#flag:translate!:3
+_Description: NVIDIA driver is still enabled in xorg.conf
+ The NVIDIA driver was just removed, but it is still enabled in the
+ Xorg configuration. X cannot be (re-)started successfully until NVIDIA
+ is disabled in the following config file(s):
+ .
+ ${{config-files}}
+"""
+
+NVIDIA_SUPPORT_POSTRM_FILE_PREQ = """#!/bin/sh
+set -e
+
+if [ "$1" = "purge" ]
+then
+
+	rm -f /etc/X11/nvidia.conf
+
+fi
+
+#DEBHELPER#
+"""
+
+NVIDIA_SUPPORT_POSTINST_FILE_PREQ = """#!/bin/sh
+set -e
+
+# dummy postinst to ensure that the templates get imported and the config script is executed
+. /usr/share/debconf/confmodule
+
+#DEBHELPER#
+"""
+
+# end of nvidia-support
+
 ### End of Text Preq
 
 
@@ -3372,3 +3519,56 @@ with open(NVIDIA_SETTINGS_LINTIAN_FILE_PATH, "w") as NVIDIA_SETTINGS_LINTIAN_FIL
     NVIDIA_SETTINGS_LINTIAN_FILE.write(NVIDIA_SETTINGS_LINTIAN_FILECONTENT)
 
 # end of nvidia-settings
+
+# nvidia-support
+
+NVIDIA_SUPPORT_INSTALL_FILE_PATH = 'nvidia-support-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_SUPPORT_INSTALL_FILE_PATH, "w") as NVIDIA_SUPPORT_INSTALL_FILE:
+    NVIDIA_SUPPORT_INSTALL_FILECONTENT = NVIDIA_SUPPORT_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUPPORT_INSTALL_FILE.write(NVIDIA_SUPPORT_INSTALL_FILECONTENT)
+
+NVIDIA_SUPPORT_LINTIAN_FILE_PATH = 'nvidia-support-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_SUPPORT_LINTIAN_FILE_PATH, "w") as NVIDIA_SUPPORT_LINTIAN_FILE:
+    NVIDIA_SUPPORT_LINTIAN_FILECONTENT = NVIDIA_SUPPORT_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUPPORT_LINTIAN_FILE.write(NVIDIA_SUPPORT_LINTIAN_FILECONTENT)
+    
+NVIDIA_SUPPORT_MANPAGES_FILE_PATH = 'nvidia-support-' + DRIVER_VERSION_MAJOR + '.manpages'
+with open(NVIDIA_SUPPORT_MANPAGES_FILE_PATH, "w") as NVIDIA_SUPPORT_MANPAGES_FILE:
+    NVIDIA_SUPPORT_MANPAGES_FILECONTENT = NVIDIA_SUPPORT_MANPAGES_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUPPORT_MANPAGES_FILE.write(NVIDIA_SUPPORT_MANPAGES_FILECONTENT)
+    
+NVIDIA_SUPPORT_TEMPLATES_FILE_PATH = 'nvidia-support-' + DRIVER_VERSION_MAJOR + '.templates'
+with open(NVIDIA_SUPPORT_TEMPLATES_FILE_PATH, "w") as NVIDIA_SUPPORT_TEMPLATES_FILE:
+    NVIDIA_SUPPORT_TEMPLATES_FILECONTENT = NVIDIA_SUPPORT_TEMPLATES_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUPPORT_TEMPLATES_FILE.write(NVIDIA_SUPPORT_TEMPLATES_FILECONTENT)
+    
+NVIDIA_SUPPORT_POSTRM_FILE_PATH = 'nvidia-support-' + DRIVER_VERSION_MAJOR + '.postrm'
+with open(NVIDIA_SUPPORT_POSTRM_FILE_PATH, "w") as NVIDIA_SUPPORT_POSTRM_FILE:
+    NVIDIA_SUPPORT_POSTRM_FILECONTENT = NVIDIA_SUPPORT_POSTRM_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUPPORT_POSTRM_FILE.write(NVIDIA_SUPPORT_POSTRM_FILECONTENT)
+    
+NVIDIA_SUPPORT_POSTINST_FILE_PATH = 'nvidia-support-' + DRIVER_VERSION_MAJOR + '.postinst'
+with open(NVIDIA_SUPPORT_POSTINST_FILE_PATH, "w") as NVIDIA_SUPPORT_POSTINST_FILE:
+    NVIDIA_SUPPORT_POSTINST_FILECONTENT = NVIDIA_SUPPORT_POSTINST_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUPPORT_POSTINST_FILE.write(NVIDIA_SUPPORT_POSTINST_FILECONTENT)
+    
+NVIDIA_SUPPORT_CONFIG_FILE_PATH = 'nvidia-support-' + DRIVER_VERSION_MAJOR + '.config'
+with open(NVIDIA_SUPPORT_CONFIG_FILE_PATH, "w") as NVIDIA_SUPPORT_CONFIG_FILE:
+    NVIDIA_SUPPORT_CONFIG_FILECONTENT = NVIDIA_SUPPORT_CONFIG_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUPPORT_CONFIG_FILE.write(NVIDIA_SUPPORT_CONFIG_FILECONTENT)
+    
+# end of nvidia-support
