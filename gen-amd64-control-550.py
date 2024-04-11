@@ -2235,6 +2235,21 @@ fi
 
 # end of nvidia-persistenced
 
+# nvidia-powerd
+
+NVIDIA_POWERD_INSTALL_FILE_PREQ = """#nvidia-dbus.conf	usr/share/dbus-1/system.d/
+nvidia-powerd		usr/sbin/"""
+
+NVIDIA_POWERD_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+hardening-no-bindnow
+hardening-no-fortify-functions
+hardening-no-pie"""
+
+NVIDIA_POWERD_EXAMPLES_FILE_PREQ = """nvidia-dbus.conf
+systemd/system/nvidia-powerd.service"""
+
+# end of nvidia-powerd
+
 ### End of Text Preq
 
 
@@ -3213,3 +3228,28 @@ with open(NVIDIA_PERSISTENCED_POSTINST_FILE_PATH, "w") as NVIDIA_PERSISTENCED_PO
     NVIDIA_PERSISTENCED_POSTINST_FILE.write(NVIDIA_PERSISTENCED_POSTINST_FILECONTENT)
     
 # end of nvidia-persistenced
+
+# nvidia-powerd
+
+NVIDIA_POWERD_INSTALL_FILE_PATH = 'nvidia-powerd-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_POWERD_INSTALL_FILE_PATH, "w") as NVIDIA_POWERD_INSTALL_FILE:
+    NVIDIA_POWERD_INSTALL_FILECONTENT = NVIDIA_POWERD_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_POWERD_INSTALL_FILE.write(NVIDIA_POWERD_INSTALL_FILECONTENT)
+
+NVIDIA_POWERD_LINTIAN_FILE_PATH = 'nvidia-powerd-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_POWERD_LINTIAN_FILE_PATH, "w") as NVIDIA_POWERD_LINTIAN_FILE:
+    NVIDIA_POWERD_LINTIAN_FILECONTENT = NVIDIA_POWERD_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_POWERD_LINTIAN_FILE.write(NVIDIA_POWERD_LINTIAN_FILECONTENT)
+
+NVIDIA_POWERD_EXAMPLES_FILE_PATH = 'nvidia-powerd-' + DRIVER_VERSION_MAJOR + '.examples'
+with open(NVIDIA_POWERD_EXAMPLES_FILE_PATH, "w") as NVIDIA_POWERD_EXAMPLES_FILE:
+    NVIDIA_POWERD_EXAMPLES_FILECONTENT = NVIDIA_POWERD_EXAMPLES_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_POWERD_EXAMPLES_FILE.write(NVIDIA_POWERD_EXAMPLES_FILECONTENT)
+    
+# end of nvidia-powerd
