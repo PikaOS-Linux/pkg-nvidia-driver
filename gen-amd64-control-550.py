@@ -2208,8 +2208,8 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.{DRIVER_VERSI
 
 # nvidia-persistenced
 
-NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """nvidia-persistenced-init-deb/sysv/nvidia-persistenced-init   /etc/init.d/
-nvidia-persistenced-init-deb/systemd/nvidia-persistenced.service /usr/lib/systemd/system/
+NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """{DRIVER_VERSION_FULL}/extra_files/nvidia-persistenced-init/sysv/nvidia-persistenced-init   /etc/init.d/
+{DRIVER_VERSION_FULL}/extra_files/nvidia-persistenced-init/systemd/nvidia-persistenced.service /usr/lib/systemd/system/
 nvidia-persistenced     /usr/bin/"""
 
 NVIDIA_PERSISTENCED_LINTIAN_FILE_PREQ = """# Upstream uses /var/run/nvidia-persistenced in various locations.
@@ -2292,6 +2292,28 @@ systemd-service-file-missing-documentation-key [usr/lib/systemd/system/nvidia-su
 package-contains-no-arch-dependent-files"""
 
 # end of nvidia-suspend-common
+
+# nvidia-settings
+
+NVIDIA_SETTINGS_INSTALL_FILE_PREQ = """nvidia-settings				    usr/lib/nvidia/current/
+{DRIVER_VERSION_FULL}/extra_files/nvidia-settings.desktop			    usr/lib/nvidia/current/
+nvidia-settings.1.gz		usr/lib/nvidia/current/
+libnvidia-gtk2.so.{DRIVER_VERSION_FULL}                 usr/lib/nvidia/current/
+libnvidia-gtk3.so.{DRIVER_VERSION_FULL}                 usr/lib/nvidia/current/
+libnvidia-wayland-client.so.{DRIVER_VERSION_FULL}       usr/lib/nvidia/current/
+nvidia-settings.png                         usr/share/icons/hicolor/128x128/apps/"""
+
+NVIDIA_SETTINGS_LINTIAN_FILE_PREQ = """# The shared libraries are actually version-specific plugins.
+package-name-doesnt-match-sonames
+exit-in-shared-library
+no-symbols-control-file
+
+# The current setup involving multiple chained alternatives would be very
+# hard to migrate to /usr/libexec.
+executable-in-usr-lib
+"""
+
+# end of nvidia-settings
 
 ### End of Text Preq
 
@@ -3332,3 +3354,21 @@ with open(NVIDIA_SUSPEND_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_SUSPEND_COMMON
     NVIDIA_SUSPEND_COMMON_LINTIAN_FILE.write(NVIDIA_SUSPEND_COMMON_LINTIAN_FILECONTENT)
     
 # end of nvidia-suspend-common
+
+# nvidia-settings
+
+NVIDIA_SETTINGS_INSTALL_FILE_PATH = 'nvidia-settings-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_SETTINGS_INSTALL_FILE_PATH, "w") as NVIDIA_SETTINGS_INSTALL_FILE:
+    NVIDIA_SETTINGS_INSTALL_FILECONTENT = NVIDIA_SETTINGS_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SETTINGS_INSTALL_FILE.write(NVIDIA_SETTINGS_INSTALL_FILECONTENT)
+
+NVIDIA_SETTINGS_LINTIAN_FILE_PATH = 'nvidia-settings-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_SETTINGS_LINTIAN_FILE_PATH, "w") as NVIDIA_SETTINGS_LINTIAN_FILE:
+    NVIDIA_SETTINGS_LINTIAN_FILECONTENT = NVIDIA_SETTINGS_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SETTINGS_LINTIAN_FILE.write(NVIDIA_SETTINGS_LINTIAN_FILECONTENT)
+
+# end of nvidia-settings
