@@ -46,9 +46,6 @@ Build-Depends-Arch:
  quilt,
  xz-utils,
  zstd,
- linux-headers-amd64 [amd64] <!nocheck>,
- linux-headers-arm64 [arm64] <!nocheck>,
- linux-headers-powerpc64le [ppc64el] <!nocheck>,
  libglvnd-dev,
 Rules-Requires-Root: no
 Standards-Version: 4.6.2
