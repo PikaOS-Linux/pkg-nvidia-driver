@@ -2142,6 +2142,30 @@ fi
 
 # end of nvidia-kernel-support
 
+# nvidia-libopencl1
+
+NVIDIA_LIBOPENCL1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libOpenCL.so.1.0.0	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
+
+NVIDIA_LIBOPENCL1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+[i386]: specific-address-in-shared-library
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# There are multiple vendors providing this library.
+package-name-doesnt-match-sonames libOpenCL1
+
+# The free libOpenCL.so.1 library is preferred.
+symbols-declares-dependency-on-other-package ocl-icd-libopencl1 (libOpenCL.so.1) [symbols]
+symbols-declares-dependency-on-other-package ocl-icd-libopencl1 (>= *) (libOpenCL.so.1) [symbols]
+symbols-file-missing-build-depends-package-field"""
+
+NVIDIA_LIBOPENCL1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/libOpenCL.so.1.0.0	usr/lib/${{DEB_HOST_MULTIARCH}}/libOpenCL.so.1"""
+
+# end of nvidia-libopencl1
+
 ### End of Text Preq
 
 
@@ -3009,3 +3033,28 @@ with open(NVIDIA_KERNEL_SUPPORT_POSTINST_FILE_PATH, "w") as NVIDIA_KERNEL_SUPPOR
     NVIDIA_KERNEL_SUPPORT_POSTINST_FILE.write(NVIDIA_KERNEL_SUPPORT_POSTINST_FILECONTENT)
     
 # end of nvidia-kernel-support
+
+# nvidia-libopencl1
+
+NVIDIA_LIBOPENCL1_INSTALL_FILE_PATH = 'nvidia-libopencl1-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_LIBOPENCL1_INSTALL_FILE_PATH, "w") as NVIDIA_LIBOPENCL1_INSTALL_FILE:
+    NVIDIA_LIBOPENCL1_INSTALL_FILECONTENT = NVIDIA_LIBOPENCL1_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_LIBOPENCL1_INSTALL_FILE.write(NVIDIA_LIBOPENCL1_INSTALL_FILECONTENT)
+
+NVIDIA_LIBOPENCL1_LINTIAN_FILE_PATH = 'nvidia-libopencl1-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_LIBOPENCL1_LINTIAN_FILE_PATH, "w") as NVIDIA_LIBOPENCL1_LINTIAN_FILE:
+    NVIDIA_LIBOPENCL1_LINTIAN_FILECONTENT = NVIDIA_LIBOPENCL1_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_LIBOPENCL1_LINTIAN_FILE.write(NVIDIA_LIBOPENCL1_LINTIAN_FILECONTENT)
+
+NVIDIA_LIBOPENCL1_LINKS_FILE_PATH = 'nvidia-libopencl1-' + DRIVER_VERSION_MAJOR + '.links'
+with open(NVIDIA_LIBOPENCL1_LINKS_FILE_PATH, "w") as NVIDIA_LIBOPENCL1_LINKS_FILE:
+    NVIDIA_LIBOPENCL1_LINKS_FILECONTENT = NVIDIA_LIBOPENCL1_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_LIBOPENCL1_LINKS_FILE.write(NVIDIA_LIBOPENCL1_LINKS_FILECONTENT)
+    
+# end of nvidia-libopencl1
