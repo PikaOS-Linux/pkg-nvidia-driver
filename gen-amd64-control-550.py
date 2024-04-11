@@ -1929,6 +1929,15 @@ NVIDIA_CUDA_MPS_DIRS_FILE_PREQ = """var/log/nvidia-mps"""
 
 # end of nvidia-cuda-mps
 
+# nvidia-driver
+
+NVIDIA_DRIVER_DOCS_FILE_PREQ = """README.txt
+html/
+debian/README.alternatives
+supported-gpus/supported-gpus.json"""
+
+# end of nvidia-driver
+
 ### End of Text Preq
 
 
@@ -2611,3 +2620,14 @@ with open(NVIDIA_CUDA_MPS_DIRS_FILE_PATH, "w") as NVIDIA_CUDA_MPS_DIRS_FILE:
     NVIDIA_CUDA_MPS_DIRS_FILE.write(NVIDIA_CUDA_MPS_DIRS_FILECONTENT)
     
 # end of nvidia-cuda-mps
+
+# nvidia-driver
+
+NVIDIA_DRIVER_DOCS_FILE_PATH = 'nvidia-driver-' + DRIVER_VERSION_MAJOR + '.docs'
+with open(NVIDIA_DRIVER_DOCS_FILE_PATH, "w") as NVIDIA_DRIVER_DOCS_FILE:
+    NVIDIA_DRIVER_DOCS_FILECONTENT = NVIDIA_DRIVER_DOCS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_DRIVER_DOCS_FILE.write(NVIDIA_DRIVER_DOCS_FILECONTENT)
+    
+# end of nvidia-driver
