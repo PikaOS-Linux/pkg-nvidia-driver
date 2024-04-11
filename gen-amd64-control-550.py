@@ -881,7 +881,7 @@ Multi-Arch: foreign
 Depends:
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     ${{shlibs:Depends}}, ${{misc:Depends}}
-Provides: nvidia-modprobe = ${{binary:Version}})
+Provides: nvidia-modprobe (= ${{binary:Version}})
 Conflicts: nvidia-modprobe
 Description: utility to load NVIDIA kernel modules and create device nodes
      This setuid program is used to create NVIDIA Linux device files and load the
