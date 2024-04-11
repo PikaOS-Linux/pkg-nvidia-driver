@@ -11,7 +11,7 @@ override_dh_prep:
 	# Copy installer contents into debian temp dir
 	cp -rvf ./NVIDIA-Linux-*/* debian/tmp
 	# Extract all manpages
-	gunzip  debian/tmp/*.1.gz
+	gunzip debian/tmp/*.1.gz -k
 	
 %:
 	dh $@
