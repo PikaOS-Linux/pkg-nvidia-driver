@@ -40,3 +40,5 @@ nvidia-xconfig.1.gz
 nvidia_drv.so
 pkg-history.txt
 supported-gpus/LICENSE
+LICENSE
+NVIDIA_Changelog	
