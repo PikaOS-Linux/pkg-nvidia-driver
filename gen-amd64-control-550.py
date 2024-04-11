@@ -2001,6 +2001,34 @@ package-contains-no-arch-dependent-files"""
 
 # end of nvidia-egl-icd
 
+# nvidia-kernel-common
+
+NVIDIA_KERNEL_COMMON_INSTALL_FILE_PREQ  = """nvidia_helper.ck /usr/lib/ConsoleKit/run-seat.d/
+nvidia_helper /usr/lib/udev/
+"""
+
+NVIDIA_KERNEL_COMMON_LINTIAN_FILE_PREQ = """# Hook location.
+executable-in-usr-lib [usr/lib/ConsoleKit/run-seat.d/nvidia_helper.ck]
+
+# We do not build arch:all packages for the proprietary driver.
+package-contains-no-arch-dependent-files
+"""
+
+NVIDIA_KERNEL_COMMON_UDEV_FILE_PREQ = """# Set ACLs for console users on /dev/nvidia*
+# This is necessary until the driver uses some other form of auth
+ENV{{ACL_MANAGE}}=="0", GOTO="nvidia_end"
+DRIVER=="nvidia",ENV{{NVIDIA_DEVICE}}="1"
+ENV{{NVIDIA_DEVICE}}!="1", GOTO="nvidia_end"
+ENV{{ACL_MANAGE}}="1"
+TEST!="/lib/libglib-2.0.so.0", GOTO="nvidia_end"
+# apply ACL for all locally logged in users
+TEST=="/var/run/ConsoleKit/database", \
+  RUN+="nvidia_helper --action=$env{{ACTION}} --device=$env{{DEVNAME}}"
+LABEL="nvidia_end"
+"""
+
+# end of nvidia-kernel-common
+
 ### End of Text Preq
 
 
@@ -2754,3 +2782,28 @@ with open(NVIDIA_EGL_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_EGL_COMMON_LINTIAN
 # nvidia-egl-icd doesn't have any dh files
 
 # end of nvidia-egl-icd
+
+# nvidia-kernel-common
+
+NVIDIA_KERNEL_COMMON_INSTALL_FILE_PATH = 'nvidia-kernel-common-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_KERNEL_COMMON_INSTALL_FILE_PATH, "w") as NVIDIA_KERNEL_COMMON_INSTALL_FILE:
+    NVIDIA_KERNEL_COMMON_INSTALL_FILECONTENT = NVIDIA_KERNEL_COMMON_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_COMMON_INSTALL_FILE.write(NVIDIA_KERNEL_COMMON_INSTALL_FILECONTENT)
+
+NVIDIA_KERNEL_COMMON_LINTIAN_FILE_PATH = 'nvidia-kernel-common-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_KERNEL_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_KERNEL_COMMON_LINTIAN_FILE:
+    NVIDIA_KERNEL_COMMON_LINTIAN_FILECONTENT = NVIDIA_KERNEL_COMMON_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_COMMON_LINTIAN_FILE.write(NVIDIA_KERNEL_COMMON_LINTIAN_FILECONTENT)
+
+NVIDIA_KERNEL_COMMON_UDEV_FILE_PATH = 'nvidia-kernel-common-' + DRIVER_VERSION_MAJOR + '.udev'
+with open(NVIDIA_KERNEL_COMMON_UDEV_FILE_PATH, "w") as NVIDIA_KERNEL_COMMON_UDEV_FILE:
+    NVIDIA_KERNEL_COMMON_UDEV_FILECONTENT = NVIDIA_KERNEL_COMMON_UDEV_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_COMMON_UDEV_FILE.write(NVIDIA_KERNEL_COMMON_UDEV_FILECONTENT)
+    
+# end of nvidia-kernel-common
