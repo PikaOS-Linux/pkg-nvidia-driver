@@ -1993,8 +1993,13 @@ NVIDIA_EGL_COMMON_INSTALL_FILE_PREQ = """10_nvidia.json		/usr/share/glvnd/egl_ve
 NVIDIA_EGL_COMMON_LINTIAN_FILE_PREQ = """# We do not build arch:all packages from the proprietary driver.
 package-contains-no-arch-dependent-files"""
 
-
 # end of nvidia-egl-common
+
+# nvidia-egl-icd
+
+# nvidia-egl-icd doesn't have any dh files
+
+# end of nvidia-egl-icd
 
 ### End of Text Preq
 
@@ -2743,3 +2748,9 @@ with open(NVIDIA_EGL_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_EGL_COMMON_LINTIAN
     NVIDIA_EGL_COMMON_LINTIAN_FILE.write(NVIDIA_EGL_COMMON_LINTIAN_FILECONTENT)
     
 # end of nvidia-egl-common
+
+# nvidia-egl-icd
+
+# nvidia-egl-icd doesn't have any dh files
+
+# end of nvidia-egl-icd
