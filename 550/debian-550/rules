@@ -27,7 +27,7 @@ ifeq (i386,$(DEB_HOST_ARCH))
 endif
 
 override_dh_shlibdeps:
-	dh_shlibdeps -l/usr/lib/$(DEB_HOST_MULTIARCH)/nvidia/current/ -l/usr/lib/nvidia/current/
+	dh_shlibdeps -l/usr/lib/$(DEB_HOST_MULTIARCH)/nvidia/current/:/usr/lib/nvidia/current/
 	
 %:
 	dh $@
