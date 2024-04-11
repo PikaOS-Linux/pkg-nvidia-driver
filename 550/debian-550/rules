@@ -5,13 +5,25 @@
 export DH_VERBOSE = 1
 
 override_dh_prep:
+	# amd64 build prep
+	ifeq (amd64,$(DEB_HOST_ARCH))
 	# Extract nvidia files from run archive
 	./nvidia-installer.run  --extract-only
 	mkdir -p debian/tmp
 	# Copy installer contents into debian temp dir
-	cp -rvf ./NVIDIA-Linux-*/* debian/tmp
+	cp -rf ./NVIDIA-Linux-*/* debian/tmp
+	# Delete 32 libs on amd64 builds
+	rm -rf debian/tmp/32
 	# Extract all manpages
 	gunzip debian/tmp/*.1.gz -k
+	endif
 	
+	# i386 (x86) build prep
+	ifeq (i386,$(DEB_HOST_ARCH))
+	# Extract nvidia files from run archive
+	./nvidia-installer.run  --extract-only
+	mkdir -p debian/tmp
+	cp -rf ./NVIDIA-Linux-*/32/* debian/tmp
+	endif
 %:
 	dh $@
