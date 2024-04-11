@@ -1,4 +1,4 @@
-name: Build nvidia 550
+name: Build nvidia 550 amd64
 
 on:
   workflow_dispatch
@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: debian:sid
+      image: ghcr.io/pikaos-linux/pika-package-container:latest
       volumes:
         - /proc:/proc
       options: --privileged -it
