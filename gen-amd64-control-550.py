@@ -125,7 +125,7 @@ Provides:
     libcuda-12.2-1,
     libcuda-12.3-1,
     libcuda1 (= ${{binary:Version}})
-Confilicts:
+Conflicts:
     libcuda1
 Homepage: https://www.nvidia.com/CUDA
 Description: NVIDIA CUDA Driver Library
@@ -1139,7 +1139,7 @@ Suggests:
 Provides:
     xserver-xorg-video-nvidia-any,
     xserver-xorg-video-nvidia (= ${{binary:Version}}),
-Confilicts:
+Conflicts:
     xserver-xorg-video-nvidia
 Description: NVIDIA binary Xorg driver
 """
