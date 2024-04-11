@@ -5,11 +5,13 @@
 export DH_VERBOSE = 1
 
 override_dh_prep:
+	# Extract nvidia files from run archive
 	./nvidia-installer.run  --extract-only
 	mkdir -p debian/tmp
-	ls -l ./
+	# Copy installer contents into debian temp dir
 	cp -rvf ./NVIDIA-Linux-*/* debian/tmp
-	ls -l debian/tmp
+	# Extract all manpages
+	gunzip  debian/tmp/*.1.gz
 	
 %:
 	dh $@
