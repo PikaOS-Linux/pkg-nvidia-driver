@@ -1999,8 +1999,8 @@ package-contains-no-arch-dependent-files"""
 
 # nvidia-kernel-common
 
-NVIDIA_KERNEL_COMMON_INSTALL_FILE_PREQ  = """{DRIVER_VERSION_MAJOR}/extra_files/nvidia_helper.ck /usr/lib/ConsoleKit/run-seat.d/
-{DRIVER_VERSION_MAJOR}/extra_files/nvidia_helper /usr/lib/udev/
+NVIDIA_KERNEL_COMMON_INSTALL_FILE_PREQ  = """extra_files/nvidia_helper.ck /usr/lib/ConsoleKit/run-seat.d/
+extra_files/nvidia_helper /usr/lib/udev/
 """
 
 NVIDIA_KERNEL_COMMON_LINTIAN_FILE_PREQ = """# Hook location.
@@ -2080,23 +2080,23 @@ NVIDIA_KERNEL_DKMS_DOCS_FILE_PREQ = """README.txt"""
 # nvidia-kernel-source
 
 NVIDIA_KERNEL_SOURCE_INSTALL_FILE_PREQ = """kernel/*		usr/src/modules/nvidia-kernel/
-{DRIVER_VERSION_MAJOR}/extra_files/bug-script	usr/src/modules/nvidia-kernel/debian/
+extra_files/bug-script	usr/src/modules/nvidia-kernel/debian/
 debian/changelog	usr/src/modules/nvidia-kernel/debian/
-{DRIVER_VERSION_MAJOR}/extra_files/control.models	usr/src/modules/nvidia-kernel/debian/
+extra_files/control.models	usr/src/modules/nvidia-kernel/debian/
 debian/copyright	usr/src/modules/nvidia-kernel/debian/
 # debian/module/debian/*	usr/src/modules/nvidia-kernel/debian/"""
 
 NVIDIA_KERNEL_SOURCE_DOCS_FILE_PREQ = """README.txt
-debian/build-module-packages.sh"""
+extra_files/build-module-packages.sh"""
 
 # end of nvidia-kernel-source
 
 # nvidia-kernel-support
 
-NVIDIA_KERNEL_SUPPORT_INSTALL_FILE_PREQ = """{DRIVER_VERSION_MAJOR}/extra_files/nvidia-load.conf			etc/nvidia/current/
-{DRIVER_VERSION_MAJOR}/extra_files/nvidia-modprobe.conf		etc/nvidia/current/
-{DRIVER_VERSION_MAJOR}/extra_files/nvidia-options.conf		etc/nvidia/current/
-{DRIVER_VERSION_MAJOR}/extra_files/nvidia-blacklists-nouveau.conf	etc/nvidia/current/"""
+NVIDIA_KERNEL_SUPPORT_INSTALL_FILE_PREQ = """extra_files/nvidia-load.conf			etc/nvidia/current/
+extra_files/nvidia-modprobe.conf		etc/nvidia/current/
+extra_files/nvidia-options.conf		etc/nvidia/current/
+extra_files/nvidia-blacklists-nouveau.conf	etc/nvidia/current/"""
 
 NVIDIA_KERNEL_SUPPORT_LINTIAN_FILE_PREQ = """# We do not build arch:all packages from the proprietary driver.
 package-contains-no-arch-dependent-files"""
@@ -2204,8 +2204,8 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.{DRIVER_VERSI
 
 # nvidia-persistenced
 
-NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """{DRIVER_VERSION_MAJOR}/extra_files/nvidia-persistenced-init/sysv/nvidia-persistenced   /etc/init.d/
-{DRIVER_VERSION_MAJOR}/extra_files/nvidia-persistenced-init/systemd/nvidia-persistenced.service /usr/lib/systemd/system/
+NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """extra_files/nvidia-persistenced-init/sysv/nvidia-persistenced   /etc/init.d/
+extra_files/nvidia-persistenced-init/systemd/nvidia-persistenced.service /usr/lib/systemd/system/
 nvidia-persistenced     /usr/bin/"""
 
 NVIDIA_PERSISTENCED_LINTIAN_FILE_PREQ = """# Upstream uses /var/run/nvidia-persistenced in various locations.
@@ -2292,7 +2292,7 @@ package-contains-no-arch-dependent-files"""
 # nvidia-settings
 
 NVIDIA_SETTINGS_INSTALL_FILE_PREQ = """nvidia-settings				    usr/lib/nvidia/current/
-{DRIVER_VERSION_MAJOR}/extra_files/nvidia-settings.desktop			    usr/lib/nvidia/current/
+extra_files/nvidia-settings.desktop			    usr/lib/nvidia/current/
 nvidia-settings.1.gz		usr/lib/nvidia/current/
 libnvidia-gtk2.so.{DRIVER_VERSION_FULL}                 usr/lib/nvidia/current/
 libnvidia-gtk3.so.{DRIVER_VERSION_FULL}                 usr/lib/nvidia/current/
@@ -2313,10 +2313,10 @@ executable-in-usr-lib
 
 # nvidia-support
 
-NVIDIA_SUPPORT_INSTALL_FILE_PREQ = """{DRIVER_VERSION_MAJOR}/extra_files/check-for-mismatching-nvidia-module	usr/lib/nvidia/
-{DRIVER_VERSION_MAJOR}/extra_files/alternate-install-present		usr/lib/nvidia/
-{DRIVER_VERSION_MAJOR}/extra_files/pre-install				usr/lib/nvidia/
-{DRIVER_VERSION_MAJOR}/extra_files/check-for-conflicting-opengl-libraries	usr/lib/nvidia/
+NVIDIA_SUPPORT_INSTALL_FILE_PREQ = """extra_files/check-for-mismatching-nvidia-module	usr/lib/nvidia/
+extra_files/alternate-install-present		usr/lib/nvidia/
+extra_files/pre-install				usr/lib/nvidia/
+extra_files/check-for-conflicting-opengl-libraries	usr/lib/nvidia/
 """
 
 NVIDIA_SUPPORT_CONFIG_FILE_PREQ = """#!/bin/sh
@@ -2364,7 +2364,7 @@ package-contains-no-arch-dependent-files
 
 """
 
-NVIDIA_SUPPORT_MANPAGES_FILE_PREQ = """{DRIVER_VERSION_MAJOR}/extra_files/nvidia-bug-report.sh.1"""
+NVIDIA_SUPPORT_MANPAGES_FILE_PREQ = """extra_files/nvidia-bug-report.sh.1"""
 
 NVIDIA_SUPPORT_TEMPLATES_FILE_PREQ = """# These templates have been reviewed by the debian-l10n-english
 # team

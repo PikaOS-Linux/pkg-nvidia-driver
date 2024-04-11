@@ -5,8 +5,8 @@ DEBIAN_FRONTEND=noninteractive
 
 # Setup build dir
 mkdir -p ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR
-cp -rvf ./debian-$DRIVER_VERSION_MAJOR ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/debian
-cp -rvf ./$DRIVER_VERSION_MAJOR ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
+cp -rvf ./$DRIVER_VERSION_MAJOR/debian-$DRIVER_VERSION_MAJOR ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/debian
+cp -rvf ./$DRIVER_VERSION_MAJOR/extra_files ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
 cd ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
 cd ./debian
 ../../gen-amd64-control-550.py
