@@ -2080,9 +2080,9 @@ NVIDIA_KERNEL_DKMS_DOCS_FILE_PREQ = """README.txt"""
 # nvidia-kernel-source
 
 NVIDIA_KERNEL_SOURCE_INSTALL_FILE_PREQ = """kernel/*		usr/src/modules/nvidia-kernel/
-debian/bug-script	usr/src/modules/nvidia-kernel/debian/
+{DRIVER_VERSION_MAJOR}/extra_files/bug-script	usr/src/modules/nvidia-kernel/debian/
 debian/changelog	usr/src/modules/nvidia-kernel/debian/
-debian/control.models	usr/src/modules/nvidia-kernel/debian/
+{DRIVER_VERSION_MAJOR}/extra_files/control.models	usr/src/modules/nvidia-kernel/debian/
 debian/copyright	usr/src/modules/nvidia-kernel/debian/
 # debian/module/debian/*	usr/src/modules/nvidia-kernel/debian/"""
 
@@ -2093,10 +2093,10 @@ debian/build-module-packages.sh"""
 
 # nvidia-kernel-support
 
-NVIDIA_KERNEL_SUPPORT_INSTALL_FILE_PREQ = """debian/nvidia-load.conf			etc/nvidia/current/
-debian/nvidia-modprobe.conf		etc/nvidia/current/
-debian/nvidia-options.conf		etc/nvidia/current/
-debian/nvidia-blacklists-nouveau.conf	etc/nvidia/current/"""
+NVIDIA_KERNEL_SUPPORT_INSTALL_FILE_PREQ = """{DRIVER_VERSION_MAJOR}/extra_files/nvidia-load.conf			etc/nvidia/current/
+{DRIVER_VERSION_MAJOR}/extra_files/nvidia-modprobe.conf		etc/nvidia/current/
+{DRIVER_VERSION_MAJOR}/extra_files/nvidia-options.conf		etc/nvidia/current/
+{DRIVER_VERSION_MAJOR}/extra_files/nvidia-blacklists-nouveau.conf	etc/nvidia/current/"""
 
 NVIDIA_KERNEL_SUPPORT_LINTIAN_FILE_PREQ = """# We do not build arch:all packages from the proprietary driver.
 package-contains-no-arch-dependent-files"""
@@ -2204,7 +2204,7 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.{DRIVER_VERSI
 
 # nvidia-persistenced
 
-NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """{DRIVER_VERSION_MAJOR}/extra_files/nvidia-persistenced-init/sysv/nvidia-persistenced-init   /etc/init.d/
+NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """{DRIVER_VERSION_MAJOR}/extra_files/nvidia-persistenced-init/sysv/nvidia-persistenced   /etc/init.d/
 {DRIVER_VERSION_MAJOR}/extra_files/nvidia-persistenced-init/systemd/nvidia-persistenced.service /usr/lib/systemd/system/
 nvidia-persistenced     /usr/bin/"""
 
