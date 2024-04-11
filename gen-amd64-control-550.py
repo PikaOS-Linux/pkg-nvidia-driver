@@ -2183,6 +2183,30 @@ package-contains-no-arch-dependent-files"""
 
 # end of nvidia-opencl-common
 
+NVIDIA_OPENCL_ICD_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-opencl.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+
+NVIDIA_OPENCL_ICD_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+[i386]: specific-address-in-shared-library
+spelling-error-in-binary
+hardening-no-bindnow
+[!arm64]: hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger
+
+# There is no .so link.
+symbols-file-missing-build-depends-package-field"""
+
+NVIDIA_OPENCL_ICD_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.1"""
+
+# nvidia-opencl-icd
+
+# end of nvidia-opencl-icd
+
+
 ### End of Text Preq
 
 
@@ -3111,3 +3135,28 @@ with open(NVIDIA_OPENCL_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_OPENCL_COMMON_L
     NVIDIA_OPENCL_COMMON_LINTIAN_FILE.write(NVIDIA_OPENCL_COMMON_LINTIAN_FILECONTENT)
     
 # end of nvidia-opencl-common
+
+# nvidia-opencl-icd
+
+NVIDIA_OPENCL_ICD_INSTALL_FILE_PATH = 'nvidia-opencl-icd-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_OPENCL_ICD_INSTALL_FILE_PATH, "w") as NVIDIA_OPENCL_ICD_INSTALL_FILE:
+    NVIDIA_OPENCL_ICD_INSTALL_FILECONTENT = NVIDIA_OPENCL_ICD_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_OPENCL_ICD_INSTALL_FILE.write(NVIDIA_OPENCL_ICD_INSTALL_FILECONTENT)
+
+NVIDIA_OPENCL_ICD_LINTIAN_FILE_PATH = 'nvidia-opencl-icd-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_OPENCL_ICD_LINTIAN_FILE_PATH, "w") as NVIDIA_OPENCL_ICD_LINTIAN_FILE:
+    NVIDIA_OPENCL_ICD_LINTIAN_FILECONTENT = NVIDIA_OPENCL_ICD_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_OPENCL_ICD_LINTIAN_FILE.write(NVIDIA_OPENCL_ICD_LINTIAN_FILECONTENT)
+
+NVIDIA_OPENCL_ICD_LINKS_FILE_PATH = 'nvidia-opencl-icd-' + DRIVER_VERSION_MAJOR + '.links'
+with open(NVIDIA_OPENCL_ICD_LINKS_FILE_PATH, "w") as NVIDIA_OPENCL_ICD_LINKS_FILE:
+    NVIDIA_OPENCL_ICD_LINKS_FILECONTENT = NVIDIA_OPENCL_ICD_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_OPENCL_ICD_LINKS_FILE.write(NVIDIA_OPENCL_ICD_LINKS_FILECONTENT)
+    
+# end of nvidia-opencl-icd
