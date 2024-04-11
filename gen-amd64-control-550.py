@@ -2183,6 +2183,8 @@ package-contains-no-arch-dependent-files"""
 
 # end of nvidia-opencl-common
 
+# nvidia-opencl-icd
+
 NVIDIA_OPENCL_ICD_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
 libnvidia-opencl.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
 
@@ -2202,10 +2204,36 @@ symbols-file-missing-build-depends-package-field"""
 NVIDIA_OPENCL_ICD_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
 usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.1"""
 
-# nvidia-opencl-icd
-
 # end of nvidia-opencl-icd
 
+# nvidia-persistenced
+
+NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """nvidia-persistenced-init/sysv/nvidia-persistenced-init   /etc/init.d/
+nvidia-persistenced-init/systemd/nvidia-persistenced.service /usr/lib/systemd/system/
+nvidia-persistenced     /usr/bin/"""
+
+NVIDIA_PERSISTENCED_LINTIAN_FILE_PREQ = """# Upstream uses /var/run/nvidia-persistenced in various locations.
+adduser-with-home-var-run [postinst:*]
+"""
+
+NVIDIA_PERSISTENCED_POSTINST_FILE_PREQ = """#!/bin/sh
+set -e
+
+if [ "$1" = "configure" ]; then
+     if ! getent passwd nvpd >/dev/null; then
+       # Create ad-hoc system user/group
+       adduser --system --group \
+               --home /var/run/nvpd/ \
+               --gecos 'NVIDIA Persistence Daemon' \
+               --no-create-home \
+               nvpd
+     fi
+fi
+
+#DEBHELPER#
+"""
+
+# end of nvidia-persistenced
 
 ### End of Text Preq
 
@@ -3160,3 +3188,28 @@ with open(NVIDIA_OPENCL_ICD_LINKS_FILE_PATH, "w") as NVIDIA_OPENCL_ICD_LINKS_FIL
     NVIDIA_OPENCL_ICD_LINKS_FILE.write(NVIDIA_OPENCL_ICD_LINKS_FILECONTENT)
     
 # end of nvidia-opencl-icd
+
+# nvidia-persistenced
+
+NVIDIA_PERSISTENCED_INSTALL_FILE_PATH = 'nvidia-persistenced-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_PERSISTENCED_INSTALL_FILE_PATH, "w") as NVIDIA_PERSISTENCED_INSTALL_FILE:
+    NVIDIA_PERSISTENCED_INSTALL_FILECONTENT = NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_PERSISTENCED_INSTALL_FILE.write(NVIDIA_PERSISTENCED_INSTALL_FILECONTENT)
+
+NVIDIA_PERSISTENCED_LINTIAN_FILE_PATH = 'nvidia-persistenced-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_PERSISTENCED_LINTIAN_FILE_PATH, "w") as NVIDIA_PERSISTENCED_LINTIAN_FILE:
+    NVIDIA_PERSISTENCED_LINTIAN_FILECONTENT = NVIDIA_PERSISTENCED_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_PERSISTENCED_LINTIAN_FILE.write(NVIDIA_PERSISTENCED_LINTIAN_FILECONTENT)
+    
+NVIDIA_PERSISTENCED_POSTINST_FILE_PATH = 'nvidia-persistenced-' + DRIVER_VERSION_MAJOR + '.postinst'
+with open(NVIDIA_PERSISTENCED_POSTINST_FILE_PATH, "w") as NVIDIA_PERSISTENCED_POSTINST_FILE:
+    NVIDIA_PERSISTENCED_POSTINST_FILECONTENT = NVIDIA_PERSISTENCED_POSTINST_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_PERSISTENCED_POSTINST_FILE.write(NVIDIA_PERSISTENCED_POSTINST_FILECONTENT)
+    
+# end of nvidia-persistenced
