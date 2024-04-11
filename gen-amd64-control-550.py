@@ -1938,6 +1938,25 @@ supported-gpus/supported-gpus.json"""
 
 # end of nvidia-driver
 
+# nvidia-driver-bin
+
+NVIDIA_DRIVER_BIN_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+nvidia-bug-report.sh	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+nvidia-debugdump	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+nvidia-application-profiles-{DRIVER_VERSION_FULL}-rc	usr/share/nvidia/
+nvidia-application-profiles-{DRIVER_VERSION_FULL}-key-documentation	usr/share/nvidia/"""
+
+NVIDIA_DRIVER_BIN_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+hardening-no-bindnow
+hardening-no-fortify-functions
+hardening-no-pie
+
+# The current setup involving multiple chained alternatives would be very
+# hard to migrate to /usr/libexec.
+executable-in-usr-lib"""
+
+# end of nvidia-driver-bin
+
 ### End of Text Preq
 
 
@@ -2631,3 +2650,21 @@ with open(NVIDIA_DRIVER_DOCS_FILE_PATH, "w") as NVIDIA_DRIVER_DOCS_FILE:
     NVIDIA_DRIVER_DOCS_FILE.write(NVIDIA_DRIVER_DOCS_FILECONTENT)
     
 # end of nvidia-driver
+
+# nvidia-driver-bin
+
+NVIDIA_DRIVER_BIN_INSTALL_FILE_PATH = 'nvidia-driver-bin-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_DRIVER_BIN_INSTALL_FILE_PATH, "w") as NVIDIA_DRIVER_BIN_INSTALL_FILE:
+    NVIDIA_DRIVER_BIN_INSTALL_FILECONTENT = NVIDIA_DRIVER_BIN_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_DRIVER_BIN_INSTALL_FILE.write(NVIDIA_DRIVER_BIN_INSTALL_FILECONTENT)
+
+NVIDIA_DRIVER_BIN_LINTIAN_FILE_PATH = 'nvidia-driver-bin-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_DRIVER_BIN_LINTIAN_FILE_PATH, "w") as NVIDIA_DRIVER_BIN_LINTIAN_FILE:
+    NVIDIA_DRIVER_BIN_LINTIAN_FILECONTENT = NVIDIA_DRIVER_BIN_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_DRIVER_BIN_LINTIAN_FILE.write(NVIDIA_DRIVER_BIN_LINTIAN_FILECONTENT)
+    
+# end of nvidia-driver-bin
