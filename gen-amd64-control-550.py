@@ -2208,8 +2208,8 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.{DRIVER_VERSI
 
 # nvidia-persistenced
 
-NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """nvidia-persistenced-init/sysv/nvidia-persistenced-init   /etc/init.d/
-nvidia-persistenced-init/systemd/nvidia-persistenced.service /usr/lib/systemd/system/
+NVIDIA_PERSISTENCED_INSTALL_FILE_PREQ = """nvidia-persistenced-init-deb/sysv/nvidia-persistenced-init   /etc/init.d/
+nvidia-persistenced-init-deb/systemd/nvidia-persistenced.service /usr/lib/systemd/system/
 nvidia-persistenced     /usr/bin/"""
 
 NVIDIA_PERSISTENCED_LINTIAN_FILE_PREQ = """# Upstream uses /var/run/nvidia-persistenced in various locations.
@@ -2249,6 +2249,49 @@ NVIDIA_POWERD_EXAMPLES_FILE_PREQ = """nvidia-dbus.conf
 systemd/system/nvidia-powerd.service"""
 
 # end of nvidia-powerd
+
+# nvidia-smi
+
+NVIDIA_SMI_INSTALL_FILE_PREQ = """nvidia-smi	usr/lib/nvidia-current
+nvidia-smi.1.gz	usr/lib/nvidia-current"""
+
+NVIDIA_SMI_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+hardening-no-pie
+
+# The current setup involving multiple chained alternatives would be very
+# hard to migrate to /usr/libexec.
+executable-in-usr-lib"""
+
+# end of nvidia-smi
+
+# nvidia-suspend-common
+
+NVIDIA_SUSPEND_COMMON_INSTALL_FILE_PREQ = """systemd/system/nvidia-suspend.service	usr/lib/systemd/system/
+systemd/system/nvidia-hibernate.service	usr/lib/systemd/system/
+systemd/system/nvidia-resume.service	usr/lib/systemd/system/
+systemd/system-sleep/nvidia		usr/lib/systemd/system-sleep/
+systemd/nvidia-sleep.sh			usr/bin/"""
+
+NVIDIA_SUSPEND_COMMON_LINTIAN_FILE_PREQ = """# Names and locations required by the .service files.
+no-manual-page [usr/bin/nvidia-sleep.sh]
+script-with-language-extension [usr/bin/nvidia-sleep.sh]
+executable-in-usr-lib [usr/lib/systemd/system-sleep/nvidia]
+
+systemd-service-file-refers-to-unusual-wantedby-target systemd-hibernate.service [usr/lib/systemd/system/nvidia-hibernate.service]
+systemd-service-file-refers-to-unusual-wantedby-target systemd-hibernate.service [usr/lib/systemd/system/nvidia-resume.service]
+systemd-service-file-refers-to-unusual-wantedby-target systemd-suspend.service [usr/lib/systemd/system/nvidia-resume.service]
+systemd-service-file-refers-to-unusual-wantedby-target systemd-suspend.service [usr/lib/systemd/system/nvidia-suspend.service]
+systemd-service-file-missing-documentation-key [usr/lib/systemd/system/nvidia-hibernate.service]
+systemd-service-file-missing-documentation-key [usr/lib/systemd/system/nvidia-resume.service]
+systemd-service-file-missing-documentation-key [usr/lib/systemd/system/nvidia-suspend.service]
+
+# We do not build arch:all packages from the proprietary driver.
+package-contains-no-arch-dependent-files"""
+
+# end of nvidia-suspend-common
 
 ### End of Text Preq
 
@@ -3253,3 +3296,39 @@ with open(NVIDIA_POWERD_EXAMPLES_FILE_PATH, "w") as NVIDIA_POWERD_EXAMPLES_FILE:
     NVIDIA_POWERD_EXAMPLES_FILE.write(NVIDIA_POWERD_EXAMPLES_FILECONTENT)
     
 # end of nvidia-powerd
+
+# nvidia-smi
+
+NVIDIA_SMI_INSTALL_FILE_PATH = 'nvidia-smi-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_SMI_INSTALL_FILE_PATH, "w") as NVIDIA_SMI_INSTALL_FILE:
+    NVIDIA_SMI_INSTALL_FILECONTENT = NVIDIA_SMI_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SMI_INSTALL_FILE.write(NVIDIA_SMI_INSTALL_FILECONTENT)
+
+NVIDIA_SMI_LINTIAN_FILE_PATH = 'nvidia-smi-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_SMI_LINTIAN_FILE_PATH, "w") as NVIDIA_SMI_LINTIAN_FILE:
+    NVIDIA_SMI_LINTIAN_FILECONTENT = NVIDIA_SMI_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SMI_LINTIAN_FILE.write(NVIDIA_SMI_LINTIAN_FILECONTENT)
+    
+# end of nvidia-smi
+
+# nvidia-suspend-common
+
+NVIDIA_SUSPEND_COMMON_INSTALL_FILE_PATH = 'nvidia-suspend-common-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_SUSPEND_COMMON_INSTALL_FILE_PATH, "w") as NVIDIA_SUSPEND_COMMON_INSTALL_FILE:
+    NVIDIA_SUSPEND_COMMON_INSTALL_FILECONTENT = NVIDIA_SUSPEND_COMMON_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUSPEND_COMMON_INSTALL_FILE.write(NVIDIA_SUSPEND_COMMON_INSTALL_FILECONTENT)
+
+NVIDIA_SUSPEND_COMMON_LINTIAN_FILE_PATH = 'nvidia-suspend-common-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_SUSPEND_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_SUSPEND_COMMON_LINTIAN_FILE:
+    NVIDIA_SUSPEND_COMMON_LINTIAN_FILECONTENT = NVIDIA_SUSPEND_COMMON_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_SUSPEND_COMMON_LINTIAN_FILE.write(NVIDIA_SUSPEND_COMMON_LINTIAN_FILECONTENT)
+    
+# end of nvidia-suspend-common
