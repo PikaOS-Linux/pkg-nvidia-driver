@@ -550,6 +550,7 @@ Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: foreign
 Pre-Depends:
     dpkg (>= 1.17.21),
+    nvidia-support-{DRIVER_VERSION_MAJOR},
     ${{misc:Pre-Depends}}
 Depends:
     glx-alternative-nvidia (>= 1.2),
@@ -1039,7 +1040,6 @@ Package: nvidia-support-{DRIVER_VERSION_MAJOR}
 Architecture: amd64 i386 armhf arm64 ppc64el
 Multi-Arch: foreign
 Depends: 
-    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     ${{misc:Depends}}
 Provides: nvidia-support (= ${{binary:Version}}), nvidia-installer-cleanup (= ${{binary:Version}})
 Conflicts: nvidia-support, nvidia-installer-cleanup
@@ -2503,6 +2503,78 @@ package-contains-no-arch-dependent-files"""
 
 # end of nvidia-vulkan-icd
 
+# xserver-xorg-video-nvidia
+
+XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE_PREQ = """nvidia_drv.so		usr/lib/nvidia/current/
+libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/nvidia/current/
+nvidia.ids		usr/lib/nvidia/current/
+nvidia-drm-outputclass.conf	etc/nvidia/current/"""
+
+XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions"""
+
+XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libglxserver_nvidia.so"""
+
+XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILE_PREQ = """README.txt"""
+
+XSERVER_XORG_VIDEO_NVIDIA_POSTRM_FILE_PREQ = """#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+warn_about_remaining_xorg_configuration()
+{{
+	# allow to disable the check via preseeding
+	db_get nvidia-support/check-xorg-conf-on-removal || true
+	test "$RET" = "true" || return 0
+
+	XORG_CONF=$(grep -l '^[^#]*nvidia' /etc/X11/xorg.conf /etc/X11/xorg.conf.d/*.conf 2>/dev/null || true)
+
+	test -n "$XORG_CONF" || return 0
+
+	db_subst nvidia-support/removed-but-enabled-in-xorg-conf config-files "$XORG_CONF"
+	db_fset nvidia-support/removed-but-enabled-in-xorg-conf seen false
+	db_input high nvidia-support/removed-but-enabled-in-xorg-conf || true
+	db_go
+
+}}
+
+if [ "$1" = "remove" ]; then
+
+	warn_about_remaining_xorg_configuration
+
+fi
+
+#DEBHELPER#"""
+
+XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILE_PREQ = """#!/bin/sh
+set -e
+
+. /usr/share/debconf/confmodule
+
+if [ "$1" = "configure" ]
+then
+
+	if [ -x /usr/lib/nvidia/check-for-conflicting-opengl-libraries ]
+	then
+		/usr/lib/nvidia/check-for-conflicting-opengl-libraries
+	fi
+
+	if [ -x /usr/lib/nvidia/check-for-mismatching-nvidia-module ]
+	then
+		/usr/lib/nvidia/check-for-mismatching-nvidia-module {DRIVER_VERSION_FULL}
+	fi
+
+fi
+
+
+#DEBHELPER#"""
+
+# end of xserver-xorg-video-nvidia
+
 ### End of Text Preq
 
 
@@ -3796,3 +3868,55 @@ with open(NVIDIA_VULKAN_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_VULKAN_COMMON_L
     NVIDIA_VULKAN_COMMON_LINTIAN_FILE.write(NVIDIA_VULKAN_COMMON_LINTIAN_FILECONTENT)
     
 # end of nvidia-vulkan-common
+
+# xserver-xorg-video-nvidia
+
+XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE_PATH = 'xserver-xorg-video-nvidia-' + DRIVER_VERSION_MAJOR + '.install'
+with open(XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE_PATH, "w") as XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE:
+    XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILECONTENT = XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE.write(XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILECONTENT)
+
+XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE_PATH = 'xserver-xorg-video-nvidia-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE_PATH, "w") as XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE:
+    XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILECONTENT = XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE.write(XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILECONTENT)
+
+XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILE_PATH = 'xserver-xorg-video-nvidia-' + DRIVER_VERSION_MAJOR + '.links'
+with open(XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILE_PATH, "w") as XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILE:
+    XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILECONTENT = XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILE.write(XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILECONTENT)
+
+XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILE_PATH = 'xserver-xorg-video-nvidia-' + DRIVER_VERSION_MAJOR + '.docs'
+with open(XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILE_PATH, "w") as XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILE:
+    XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILECONTENT = XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILE.write(XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILECONTENT)
+    
+XSERVER_XORG_VIDEO_NVIDIA_POSTRM_FILE_PATH = 'xserver-xorg-video-nvidia-' + DRIVER_VERSION_MAJOR + '.postrm'
+with open(XSERVER_XORG_VIDEO_NVIDIA_POSTRM_FILE_PATH, "w") as XSERVER_XORG_VIDEO_NVIDIA_POSTRM_FILE:
+    XSERVER_XORG_VIDEO_NVIDIA_POSTRM_FILECONTENT = XSERVER_XORG_VIDEO_NVIDIA_POSTRM_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    XSERVER_XORG_VIDEO_NVIDIA_POSTRM_FILE.write(XSERVER_XORG_VIDEO_NVIDIA_POSTRM_FILECONTENT)
+    
+XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILE_PATH = 'xserver-xorg-video-nvidia-' + DRIVER_VERSION_MAJOR + '.postinst'
+with open(XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILE_PATH, "w") as XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILE:
+    XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILECONTENT = XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILE.write(XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILECONTENT)
+    
+# end of xserver-xorg-video-nvidia
