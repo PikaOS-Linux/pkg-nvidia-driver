@@ -47,6 +47,7 @@ Build-Depends-Arch:
  xz-utils,
  zstd,
  libglvnd-dev,
+ libgtk2.0-0,
 Rules-Requires-Root: no
 Standards-Version: 4.6.2
 Homepage: https://www.nvidia.com
