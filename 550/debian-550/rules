@@ -4,10 +4,9 @@
 ## Output every command that modifies files on the build system.
 export DH_VERBOSE = 1
 
-
-# amd64 build prep
-ifeq (amd64,$(DEB_HOST_ARCH))
-	override_dh_prep:
+override_dh_prep:
+	# amd64 build prep
+	ifeq (amd64,$(DEB_HOST_ARCH))
 		# Extract nvidia files from run archive
 		./nvidia-installer.run  --extract-only
 		mkdir -p debian/tmp
@@ -17,15 +16,14 @@ ifeq (amd64,$(DEB_HOST_ARCH))
 		rm -rf debian/tmp/32
 		# Extract all manpages
 		gunzip debian/tmp/*.1.gz -k
-endif
+	endif
 	
-# i386 (x86) build prep
-ifeq (i386,$(DEB_HOST_ARCH))
-	override_dh_prep:
+	# i386 (x86) build
+	ifeq (i386,$(DEB_HOST_ARCH))
 		# Extract nvidia files from run archive
 		./nvidia-installer.run  --extract-only
 		mkdir -p debian/tmp
 		cp -rf ./NVIDIA-Linux-*/32/* debian/tmp
-endif
+	endif
 %:
 	dh $@
