@@ -1041,8 +1041,8 @@ Multi-Arch: foreign
 Depends: 
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     ${{misc:Depends}}
-Provides: nvidia-support (= ${{binary:Version}}),
-Conflicts: nvidia-support
+Provides: nvidia-support (= ${{binary:Version}}), nvidia-installer-cleanup (= ${{binary:Version}})
+Conflicts: nvidia-support, nvidia-installer-cleanup
 Description: NVIDIA binary graphics driver support files
     This package contains support files needed for all current and legacy
     versions of the non-free NVIDIA graphics drivers. These include scripts
@@ -2003,8 +2003,8 @@ package-contains-no-arch-dependent-files"""
 
 # nvidia-kernel-common
 
-NVIDIA_KERNEL_COMMON_INSTALL_FILE_PREQ  = """nvidia_helper.ck /usr/lib/ConsoleKit/run-seat.d/
-nvidia_helper /usr/lib/udev/
+NVIDIA_KERNEL_COMMON_INSTALL_FILE_PREQ  = """{DRIVER_VERSION_FULL}/extra_files/nvidia_helper.ck /usr/lib/ConsoleKit/run-seat.d/
+{DRIVER_VERSION_FULL}/extra_files/nvidia_helper /usr/lib/udev/
 """
 
 NVIDIA_KERNEL_COMMON_LINTIAN_FILE_PREQ = """# Hook location.
@@ -2317,7 +2317,11 @@ executable-in-usr-lib
 
 # nvidia-support
 
-NVIDIA_SUPPORT_INSTALL_FILE_PREQ = """{DRIVER_VERSION_FULL}/extra_files/check-for-mismatching-nvidia-module	usr/lib/nvidia/"""
+NVIDIA_SUPPORT_INSTALL_FILE_PREQ = """{DRIVER_VERSION_FULL}/extra_files/check-for-mismatching-nvidia-module	usr/lib/nvidia/
+{DRIVER_VERSION_FULL}/extra_files/alternate-install-present		usr/lib/nvidia/
+{DRIVER_VERSION_FULL}/extra_files/pre-install				usr/lib/nvidia/
+{DRIVER_VERSION_FULL}/extra_files/check-for-conflicting-opengl-libraries	usr/lib/nvidia/
+"""
 
 NVIDIA_SUPPORT_CONFIG_FILE_PREQ = """#!/bin/sh
 set -e
