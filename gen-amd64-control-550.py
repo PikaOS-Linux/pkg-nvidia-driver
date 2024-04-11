@@ -2095,6 +2095,53 @@ debian/build-module-packages.sh"""
 
 # end of nvidia-kernel-source
 
+# nvidia-kernel-support
+
+NVIDIA_KERNEL_SUPPORT_INSTALL_FILE_PREQ = """debian/nvidia-load.conf			etc/nvidia/current/
+debian/nvidia-modprobe.conf		etc/nvidia/current/
+debian/nvidia-options.conf		etc/nvidia/current/
+debian/nvidia-blacklists-nouveau.conf	etc/nvidia/current/"""
+
+NVIDIA_KERNEL_SUPPORT_LINTIAN_FILE_PREQ = """# We do not build arch:all packages from the proprietary driver.
+package-contains-no-arch-dependent-files"""
+
+NVIDIA_KERNEL_SUPPORT_LINKS_FILE_PREQ = """etc/nvidia/current   etc/nvidia/nvidia-{DRIVER_VERSION_FULL}"""
+
+NVIDIA_KERNEL_SUPPORT_POSTRM_FILE_PREQ = """#!/bin/sh
+set -e
+
+
+if [ "$1" = "remove" ] || [ "$1" = "purge" ] ; then
+
+	# activate our trigger
+	dpkg-trigger register-nvidia-alternative
+
+fi
+
+#DEBHELPER#"""
+
+NVIDIA_KERNEL_SUPPORT_POSTINST_FILE_PREQ = """#!/bin/sh
+set -e
+
+if [ "$1" = "configure" ]
+then
+
+	if [ -f /etc/nvidia/current/nvidia-modprobe.conf.dpkg-old ] && [ ! -f /etc/nvidia/current/nvidia-modprobe.conf ]
+	then
+
+		# restore modprobe.conf erroneously obsoleted due to bugs in
+		# debhelper (#994919) and dpkg (#995387), causing #994971
+		mv -v /etc/nvidia/current/nvidia-modprobe.conf.dpkg-old /etc/nvidia/current/nvidia-modprobe.conf
+		dpkg-trigger --no-await register-nvidia-alternative
+
+	fi
+
+fi
+
+###DEBHELPER###"""
+
+# end of nvidia-kernel-support
+
 ### End of Text Preq
 
 
@@ -2923,3 +2970,42 @@ with open(NVIDIA_KERNEL_SOURCE_DOCS_FILE_PATH, "w") as NVIDIA_KERNEL_SOURCE_DOCS
     NVIDIA_KERNEL_SOURCE_DOCS_FILE.write(NVIDIA_KERNEL_SOURCE_DOCS_FILECONTENT)
     
 # end of nvidia-kernel-source
+
+# nvidia-kernel-support
+
+NVIDIA_KERNEL_SUPPORT_INSTALL_FILE_PATH = 'nvidia-kernel-support-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_KERNEL_SUPPORT_INSTALL_FILE_PATH, "w") as NVIDIA_KERNEL_SUPPORT_INSTALL_FILE:
+    NVIDIA_KERNEL_SUPPORT_INSTALL_FILECONTENT = NVIDIA_KERNEL_SUPPORT_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_SUPPORT_INSTALL_FILE.write(NVIDIA_KERNEL_SUPPORT_INSTALL_FILECONTENT)
+
+NVIDIA_KERNEL_SUPPORT_LINTIAN_FILE_PATH = 'nvidia-kernel-support-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_KERNEL_SUPPORT_LINTIAN_FILE_PATH, "w") as NVIDIA_KERNEL_SUPPORT_LINTIAN_FILE:
+    NVIDIA_KERNEL_SUPPORT_LINTIAN_FILECONTENT = NVIDIA_KERNEL_SUPPORT_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_SUPPORT_LINTIAN_FILE.write(NVIDIA_KERNEL_SUPPORT_LINTIAN_FILECONTENT)
+
+NVIDIA_KERNEL_SUPPORT_LINKS_FILE_PATH = 'nvidia-kernel-support-' + DRIVER_VERSION_MAJOR + '.links'
+with open(NVIDIA_KERNEL_SUPPORT_LINKS_FILE_PATH, "w") as NVIDIA_KERNEL_SUPPORT_LINKS_FILE:
+    NVIDIA_KERNEL_SUPPORT_LINKS_FILECONTENT = NVIDIA_KERNEL_SUPPORT_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_SUPPORT_LINKS_FILE.write(NVIDIA_KERNEL_SUPPORT_LINKS_FILECONTENT)
+    
+NVIDIA_KERNEL_SUPPORT_POSTRM_FILE_PATH = 'nvidia-kernel-support-' + DRIVER_VERSION_MAJOR + '.postrm'
+with open(NVIDIA_KERNEL_SUPPORT_POSTRM_FILE_PATH, "w") as NVIDIA_KERNEL_SUPPORT_POSTRM_FILE:
+    NVIDIA_KERNEL_SUPPORT_POSTRM_FILECONTENT = NVIDIA_KERNEL_SUPPORT_POSTRM_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_SUPPORT_POSTRM_FILE.write(NVIDIA_KERNEL_SUPPORT_POSTRM_FILECONTENT)
+    
+NVIDIA_KERNEL_SUPPORT_POSTINST_FILE_PATH = 'nvidia-kernel-support-' + DRIVER_VERSION_MAJOR + '.postinst'
+with open(NVIDIA_KERNEL_SUPPORT_POSTINST_FILE_PATH, "w") as NVIDIA_KERNEL_SUPPORT_POSTINST_FILE:
+    NVIDIA_KERNEL_SUPPORT_POSTINST_FILECONTENT = NVIDIA_KERNEL_SUPPORT_POSTINST_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_SUPPORT_POSTINST_FILE.write(NVIDIA_KERNEL_SUPPORT_POSTINST_FILECONTENT)
+    
+# end of nvidia-kernel-support
