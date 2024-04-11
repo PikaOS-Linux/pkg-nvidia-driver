@@ -3,7 +3,6 @@
 ### Basic configuration
 DRIVER_VERSION_MAJOR = "550"
 DRIVER_VERSION_FULL = "550.67"
-DRIVER_VERSION_DPKG = "550.67-101pika1"
 DEB_HOST_MULTIARCH = "x86_64-linux-gnu"
 ### End of Basic configuration
 

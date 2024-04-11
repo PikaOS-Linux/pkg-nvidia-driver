@@ -1,4 +1,4 @@
-name: PikaOS Package Release
+name: Build nvidia 550
 
 on:
   workflow_dispatch
@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: ghcr.io/pikaos-linux/pika-package-container:latest
+      image: debian:sid
       volumes:
         - /proc:/proc
       options: --privileged -it
@@ -34,7 +34,7 @@ jobs:
       run: apt-get update -y
     
     - name: Build Package
-      run: ./main.sh
+      run: ./amd64-550-main.sh
 
     - name: Release Package
       run: ./release.sh
