@@ -13,6 +13,7 @@ cd ../
 
 # Get nvidia run file
 wget https://us.download.nvidia.com/XFree86/Linux-x86_64/$DRIVER_VERSION_FULL/NVIDIA-Linux-x86_64-$DRIVER_VERSION_FULL.run -O nvidia-installer.run
+chmod +x nvidia-installer.run
 
 # Get build deps
 apt-get build-dep ./ -y
