@@ -1910,6 +1910,25 @@ interest-await /usr/include/nvml.h"""
 
 # end of nvidia-alternative
 
+# nvidia-cuda-mps
+
+NVIDIA_CUDA_MPS_INSTALL_FILE_PREQ =  """nvidia-cuda-mps-control	usr/bin/
+nvidia-cuda-mps-server	usr/sbin/"""
+
+NVIDIA_CUDA_MPS_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+spelling-error-in-binary
+hardening-no-bindnow
+hardening-no-fortify-functions
+hardening-no-pie"""
+
+NVIDIA_CUDA_MPS_LINKS_FILE_PREQ = """usr/share/man/man1/nvidia-cuda-mps-control.1 usr/share/man/man8/nvidia-cuda-mps-server.8"""
+
+NVIDIA_CUDA_MPS_MANPAGES_FILE_PREQ = """nvidia-cuda-mps-control.1"""
+
+NVIDIA_CUDA_MPS_DIRS_FILE_PREQ = """var/log/nvidia-mps"""
+
+# end of nvidia-cuda-mps
+
 ### End of Text Preq
 
 
@@ -2553,3 +2572,42 @@ with open(NVIDIA_ALTERNATIVE_TRIGGERS_FILE_PATH, "w") as NVIDIA_ALTERNATIVE_TRIG
     NVIDIA_ALTERNATIVE_TRIGGERS_FILE.write(NVIDIA_ALTERNATIVE_TRIGGERS_FILECONTENT)
 
 # end of nvidia-alternative
+
+# nvidia-cuda-mps
+
+NVIDIA_CUDA_MPS_INSTALL_FILE_PATH = 'nvidia-cuda-mps-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_CUDA_MPS_INSTALL_FILE_PATH, "w") as NVIDIA_CUDA_MPS_INSTALL_FILE:
+    NVIDIA_CUDA_MPS_INSTALL_FILECONTENT = NVIDIA_CUDA_MPS_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_CUDA_MPS_INSTALL_FILE.write(NVIDIA_CUDA_MPS_INSTALL_FILECONTENT)
+
+NVIDIA_CUDA_MPS_LINTIAN_FILE_PATH = 'nvidia-cuda-mps-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_CUDA_MPS_LINTIAN_FILE_PATH, "w") as NVIDIA_CUDA_MPS_LINTIAN_FILE:
+    NVIDIA_CUDA_MPS_LINTIAN_FILECONTENT = NVIDIA_CUDA_MPS_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_CUDA_MPS_LINTIAN_FILE.write(NVIDIA_CUDA_MPS_LINTIAN_FILECONTENT)
+
+NVIDIA_CUDA_MPS_LINKS_FILE_PATH = 'nvidia-cuda-mps-' + DRIVER_VERSION_MAJOR + '.links'
+with open(NVIDIA_CUDA_MPS_LINKS_FILE_PATH, "w") as NVIDIA_CUDA_MPS_LINKS_FILE:
+    NVIDIA_CUDA_MPS_LINKS_FILECONTENT = NVIDIA_CUDA_MPS_LINKS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_CUDA_MPS_LINKS_FILE.write(NVIDIA_CUDA_MPS_LINKS_FILECONTENT)
+
+NVIDIA_CUDA_MPS_MANPAGES_FILE_PATH = 'nvidia-cuda-mps-' + DRIVER_VERSION_MAJOR + '.manpages'
+with open(NVIDIA_CUDA_MPS_MANPAGES_FILE_PATH, "w") as NVIDIA_CUDA_MPS_MANPAGES_FILE:
+    NVIDIA_CUDA_MPS_MANPAGES_FILECONTENT = NVIDIA_CUDA_MPS_MANPAGES_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_CUDA_MPS_MANPAGES_FILE.write(NVIDIA_CUDA_MPS_MANPAGES_FILECONTENT)
+    
+NVIDIA_CUDA_MPS_DIRS_FILE_PATH = 'nvidia-cuda-mps-' + DRIVER_VERSION_MAJOR + '.dirs'
+with open(NVIDIA_CUDA_MPS_DIRS_FILE_PATH, "w") as NVIDIA_CUDA_MPS_DIRS_FILE:
+    NVIDIA_CUDA_MPS_DIRS_FILECONTENT = NVIDIA_CUDA_MPS_DIRS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_CUDA_MPS_DIRS_FILE.write(NVIDIA_CUDA_MPS_DIRS_FILECONTENT)
+    
+# end of nvidia-cuda-mps
