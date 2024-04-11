@@ -2084,7 +2084,7 @@ debian/bug-script	usr/src/modules/nvidia-kernel/debian/
 debian/changelog	usr/src/modules/nvidia-kernel/debian/
 debian/control.models	usr/src/modules/nvidia-kernel/debian/
 debian/copyright	usr/src/modules/nvidia-kernel/debian/
-debian/module/debian/*	usr/src/modules/nvidia-kernel/debian/"""
+# debian/module/debian/*	usr/src/modules/nvidia-kernel/debian/"""
 
 NVIDIA_KERNEL_SOURCE_DOCS_FILE_PREQ = """README.txt
 debian/build-module-packages.sh"""
