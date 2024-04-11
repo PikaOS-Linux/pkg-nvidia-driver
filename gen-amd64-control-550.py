@@ -2029,6 +2029,58 @@ LABEL="nvidia_end"
 
 # end of nvidia-kernel-common
 
+# nvidia-kernel-dkms
+
+NVIDIA_KERNEL_DKMS_INSTALL_FILE_PREQ  = """kernel/*				usr/src/nvidia-current-{DRIVER_VERSION_FULL}/"""
+
+NVIDIA_KERNEL_DKMS_LINTIAN_FILE_PREQ = """# These object files are linked into kernel modules.
+unstripped-binary-or-object
+
+# False positives in non-string parts.
+spelling-error-in-binary"""
+
+NVIDIA_KERNEL_DKMS_DKMS_FILE_PREQ = """# DKMS configuration for the NVIDIA kernel module.  -*- sh -*-
+
+PACKAGE_NAME="nvidia-current"
+PACKAGE_VERSION="{DRIVER_VERSION_FULL}"
+
+# Only kernels from 3.10 onwards are supported.
+BUILD_EXCLUSIVE_KERNEL="^(3\.[1-9][0-9]|[4-9]\.)"
+
+# The NVIDIA driver does not support real-time kernels.
+BUILD_EXCLUSIVE_CONFIG="!CONFIG_PREEMPT_RT !CONFIG_PREEMPT_RT_FULL"
+
+AUTOINSTALL=yes
+
+MAKE[0]="env NV_VERBOSE=1 \
+    make ${{parallel_jobs+-j$parallel_jobs}} modules KERNEL_UNAME=${{kernelver}}"
+CLEAN="make KERNEL_UNAME=${{kernelver}} clean"
+
+BUILT_MODULE_NAME[0]="nvidia"
+DEST_MODULE_NAME[0]="$PACKAGE_NAME"
+DEST_MODULE_LOCATION[0]="/updates/dkms"
+
+BUILT_MODULE_NAME[1]="nvidia-modeset"
+DEST_MODULE_NAME[1]="$PACKAGE_NAME-modeset"
+DEST_MODULE_LOCATION[1]="/updates/dkms"
+
+BUILT_MODULE_NAME[2]="nvidia-drm"
+DEST_MODULE_NAME[2]="$PACKAGE_NAME-drm"
+DEST_MODULE_LOCATION[2]="/updates/dkms"
+
+BUILT_MODULE_NAME[3]="nvidia-uvm"
+DEST_MODULE_NAME[3]="$PACKAGE_NAME-uvm"
+DEST_MODULE_LOCATION[3]="/updates/dkms"
+
+BUILT_MODULE_NAME[4]="nvidia-peermem"
+DEST_MODULE_NAME[4]="$PACKAGE_NAME-peermem"
+DEST_MODULE_LOCATION[4]="/updates/dkms"
+"""
+
+NVIDIA_KERNEL_DKMS_DOCS_FILE_PREQ = """README.txt"""
+
+# end of nvidia-kernel-dkms
+
 ### End of Text Preq
 
 
@@ -2807,3 +2859,35 @@ with open(NVIDIA_KERNEL_COMMON_UDEV_FILE_PATH, "w") as NVIDIA_KERNEL_COMMON_UDEV
     NVIDIA_KERNEL_COMMON_UDEV_FILE.write(NVIDIA_KERNEL_COMMON_UDEV_FILECONTENT)
     
 # end of nvidia-kernel-common
+
+# nvidia-kernel-dkms
+
+NVIDIA_KERNEL_DKMS_INSTALL_FILE_PATH = 'nvidia-kernel-dkms-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_KERNEL_DKMS_INSTALL_FILE_PATH, "w") as NVIDIA_KERNEL_DKMS_INSTALL_FILE:
+    NVIDIA_KERNEL_DKMS_INSTALL_FILECONTENT = NVIDIA_KERNEL_DKMS_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_DKMS_INSTALL_FILE.write(NVIDIA_KERNEL_DKMS_INSTALL_FILECONTENT)
+
+NVIDIA_KERNEL_DKMS_LINTIAN_FILE_PATH = 'nvidia-kernel-dkms-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_KERNEL_DKMS_LINTIAN_FILE_PATH, "w") as NVIDIA_KERNEL_DKMS_LINTIAN_FILE:
+    NVIDIA_KERNEL_DKMS_LINTIAN_FILECONTENT = NVIDIA_KERNEL_DKMS_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_DKMS_LINTIAN_FILE.write(NVIDIA_KERNEL_DKMS_LINTIAN_FILECONTENT)
+
+NVIDIA_KERNEL_DKMS_DKMS_FILE_PATH = 'nvidia-kernel-dkms-' + DRIVER_VERSION_MAJOR + '.dkms'
+with open(NVIDIA_KERNEL_DKMS_DKMS_FILE_PATH, "w") as NVIDIA_KERNEL_DKMS_DKMS_FILE:
+    NVIDIA_KERNEL_DKMS_DKMS_FILECONTENT = NVIDIA_KERNEL_DKMS_DKMS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_DKMS_DKMS_FILE.write(NVIDIA_KERNEL_DKMS_DKMS_FILECONTENT)
+
+NVIDIA_KERNEL_DKMS_DOCS_FILE_PATH = 'nvidia-kernel-dkms-' + DRIVER_VERSION_MAJOR + '.docs'
+with open(NVIDIA_KERNEL_DKMS_DOCS_FILE_PATH, "w") as NVIDIA_KERNEL_DKMS_DOCS_FILE:
+    NVIDIA_KERNEL_DKMS_DOCS_FILECONTENT = NVIDIA_KERNEL_DKMS_DOCS_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+    )
+    NVIDIA_KERNEL_DKMS_DOCS_FILE.write(NVIDIA_KERNEL_DKMS_DOCS_FILECONTENT)
+    
+# end of nvidia-kernel-dkms
