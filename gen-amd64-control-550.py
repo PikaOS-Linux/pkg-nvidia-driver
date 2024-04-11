@@ -2487,6 +2487,22 @@ NVIDIA_VDPAU_DRIVER_DOCS_FILE_PREQ = """README.txt"""
 
 # end of nvidia-vdpau-driver
 
+# nvidia-vulkan-common
+
+NVIDIA_VULKAN_COMMON_INSTALL_FILE_PREQ = """nvidia_icd.json	usr/share/vulkan/icd.d/
+nvidia_layers.json	usr/share/vulkan/implicit_layer.d/"""
+
+NVIDIA_VULKAN_COMMON_LINTIAN_FILE_PREQ = """# We do not build arch:all packages from the proprietary driver.
+package-contains-no-arch-dependent-files"""
+
+# end of nvidia-vulkan-common
+
+# nvidia-vulkan-icd
+
+# nvidia-vulkan-icd doesn't have any dh files
+
+# end of nvidia-vulkan-icd
+
 ### End of Text Preq
 
 
@@ -3760,3 +3776,23 @@ with open(NVIDIA_VDPAU_DRIVER_DOCS_FILE_PATH, "w") as NVIDIA_VDPAU_DRIVER_DOCS_F
     NVIDIA_VDPAU_DRIVER_DOCS_FILE.write(NVIDIA_VDPAU_DRIVER_DOCS_FILECONTENT)
     
 # end of nvidia-vdpau-driver
+
+# nvidia-vulkan-common
+
+NVIDIA_VULKAN_COMMON_INSTALL_FILE_PATH = 'nvidia-vulkan-common-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_VULKAN_COMMON_INSTALL_FILE_PATH, "w") as NVIDIA_VULKAN_COMMON_INSTALL_FILE:
+    NVIDIA_VULKAN_COMMON_INSTALL_FILECONTENT = NVIDIA_VULKAN_COMMON_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_VULKAN_COMMON_INSTALL_FILE.write(NVIDIA_VULKAN_COMMON_INSTALL_FILECONTENT)
+
+NVIDIA_VULKAN_COMMON_LINTIAN_FILE_PATH = 'nvidia-vulkan-common-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_VULKAN_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_VULKAN_COMMON_LINTIAN_FILE:
+    NVIDIA_VULKAN_COMMON_LINTIAN_FILECONTENT = NVIDIA_VULKAN_COMMON_LINTIAN_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_VULKAN_COMMON_LINTIAN_FILE.write(NVIDIA_VULKAN_COMMON_LINTIAN_FILECONTENT)
+    
+# end of nvidia-vulkan-common
