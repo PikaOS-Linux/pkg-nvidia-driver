@@ -2291,6 +2291,10 @@ hardening-no-pie
 # hard to migrate to /usr/libexec.
 executable-in-usr-lib"""
 
+NVIDIA_SMI_UDEV_FILE_PREQ = """# This will create the device nvidia device nodes
+ACTION=="add" DEVPATH=="/module/nvidia" SUBSYSTEM=="module" RUN+="/usr/bin/nvidia-smi"
+"""
+
 # end of nvidia-smi
 
 # nvidia-suspend-common
@@ -3740,6 +3744,13 @@ with open(NVIDIA_SMI_LINTIAN_FILE_PATH, "w") as NVIDIA_SMI_LINTIAN_FILE:
     )
     NVIDIA_SMI_LINTIAN_FILE.write(NVIDIA_SMI_LINTIAN_FILECONTENT)
     
+NVIDIA_SMI_UDEV_FILE_PATH = 'nvidia-smi-' + DRIVER_VERSION_MAJOR + '.udev'
+with open(NVIDIA_SMI_UDEV_FILE_PATH, "w") as NVIDIA_SMI_UDEV_FILE:
+    NVIDIA_SMI_UDEV_FILECONTENT = NVIDIA_SMI_UDEV_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_SMI_UDEV_FILE.write(NVIDIA_SMI_UDEV_FILECONTENT)
 # end of nvidia-smi
 
 # nvidia-suspend-common
