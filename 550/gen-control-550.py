@@ -1115,7 +1115,7 @@ Description: NVIDIA Vulkan installable client driver (ICD)
     This metapackage provides the NVIDIA installable client driver (ICD) for
     Vulkan (GLVND variant) which supports NVIDIA GPUs.
 
-Package: nvidia-xconfig
+Package: nvidia-xconfig-{DRIVER_VERSION_MAJOR}
 Architecture: amd64
 Pre-Depends: nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}})
 Depends:
