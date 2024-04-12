@@ -2190,12 +2190,13 @@ NVIDIA_MODPROBE_INSTALL_FILE_PREQ =  """nvidia-modprobe     /usr/bin/"""
 
 NVIDIA_MODPROBE_LINTIAN_FILE_PREQ = """elevated-privileges 4755 root/root [usr/bin/nvidia-modprobe]"""
 
-NVIDIA_MODPROBE_UDEV_FILE_PREQ = """# Device nodes are created by nvidia-modprobe, which is called by the nvidia DDX.
-# In case the DDX is not started, the device nodes are never created, so call
-# nvidia-modprobe in the udev rules to cover the Wayland/EGLStream and compute
-# case without a started display.
-ACTION=="add", KERNEL=="nvidia", DRIVER=="nvidia", RUN+="/usr/bin/nvidia-modprobe", \
-    RUN+="/usr/bin/nvidia-modprobe -c 0 -u"
+NVIDIA_MODPROBE_UDEV_FILE_PREQ = """# Make sure device nodes are present even when the DDX is not started for the Wayland/EGLStream case
+KERNEL=="nvidia", RUN+="/usr/bin/bash -c '/usr/bin/mknod -Z -m 666 /dev/nvidiactl c $$(grep nvidia$ /proc/devices | cut -d \  -f 1) 255'"
+KERNEL=="nvidia", RUN+="/usr/bin/bash -c 'for i in $$(cat /proc/driver/nvidia/gpus/*/information | grep Minor | cut -d \  -f 4); do /usr/bin/mknod -Z -m 666 /dev/nvidia$${i} c $$(grep nvidia$ /proc/devices | cut -d \  -f 1) $${i}; done'"
+KERNEL=="nvidia_modeset", RUN+="/usr/bin/bash -c '/usr/bin/mknod -Z -m 666 /dev/nvidia-modeset c $$(grep nvidia$ /proc/devices | cut -d \  -f 1) 254'"
+KERNEL=="nvidia_uvm", RUN+="/usr/bin/bash -c '/usr/bin/mknod -Z -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
+KERNEL=="nvidia_uvm", RUN+="/usr/bin/bash -c '/usr/bin/mknod -Z -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
+
 """
 
 # end of nvidia-modprobe
@@ -2290,10 +2291,6 @@ hardening-no-pie
 # The current setup involving multiple chained alternatives would be very
 # hard to migrate to /usr/libexec.
 executable-in-usr-lib"""
-
-NVIDIA_SMI_UDEV_FILE_PREQ = """# This will create the device nvidia device nodes
-ACTION=="add" DEVPATH=="/module/nvidia" SUBSYSTEM=="module" RUN+="/usr/bin/nvidia-smi"
-"""
 
 # end of nvidia-smi
 
@@ -3744,13 +3741,6 @@ with open(NVIDIA_SMI_LINTIAN_FILE_PATH, "w") as NVIDIA_SMI_LINTIAN_FILE:
     )
     NVIDIA_SMI_LINTIAN_FILE.write(NVIDIA_SMI_LINTIAN_FILECONTENT)
     
-NVIDIA_SMI_UDEV_FILE_PATH = 'nvidia-smi-' + DRIVER_VERSION_MAJOR + '.udev'
-with open(NVIDIA_SMI_UDEV_FILE_PATH, "w") as NVIDIA_SMI_UDEV_FILE:
-    NVIDIA_SMI_UDEV_FILECONTENT = NVIDIA_SMI_UDEV_FILE_PREQ.format(
-                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
-        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
-    )
-    NVIDIA_SMI_UDEV_FILE.write(NVIDIA_SMI_UDEV_FILECONTENT)
 # end of nvidia-smi
 
 # nvidia-suspend-common
