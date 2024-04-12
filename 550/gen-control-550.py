@@ -633,6 +633,8 @@ Depends:
     nvidia-modprobe-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-xconfig-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-egl-wayland1,
+    libnvidia-egl-gbm1,
     ${{misc:Depends}}
 Recommends:
     nvidia-vaapi-driver,
@@ -2528,9 +2530,10 @@ NVIDIA_XCONFIG_DIRS_FILE_PREQ = """etc/X11"""
 
 # xserver-xorg-video-nvidia
 
-XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE_PREQ = """nvidia_drv.so		usr/lib/nvidia/current/
-libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/nvidia/current/
-extra_files/nvidia.ids		usr/lib/nvidia/current/
+XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
+nvidia_drv.so		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+extra_files/nvidia.ids		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
 nvidia-drm-outputclass.conf	etc/nvidia/current/"""
 
 XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
@@ -2539,7 +2542,8 @@ hardening-no-bindnow
 hardening-no-fortify-functions"""
 
 XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libglxserver_nvidia.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libglxserver_nvidia.so
+usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia_drv.so    usr/lib/nvidia/current/nvidia_drv.so"""
 
 XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILE_PREQ = """README.txt"""
 

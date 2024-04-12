@@ -1,6 +1,6 @@
 # Don't work with open modules for now
 kernel-open
-# Debian left those unused gotta investigate
+# Non version dependent exist elsewhere in debian repos
 10_nvidia_wayland.json
 15_nvidia_gbm.json
 # Useless files or broken symlinks
@@ -34,7 +34,6 @@ nvidia-settings.1
 nvidia-settings.desktop
 nvidia-smi.1
 nvidia-xconfig.1
-nvidia_drv.so
 pkg-history.txt
 supported-gpus/LICENSE
 LICENSE
