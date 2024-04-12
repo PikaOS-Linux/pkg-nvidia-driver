@@ -11,7 +11,7 @@ cp -rvf ./$DRIVER_VERSION_MAJOR/debian-$DRIVER_VERSION_MAJOR ./nvidia-graphics-d
 cp -rvf ./$DRIVER_VERSION_MAJOR/extra_files ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
 cd ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
 cd ./debian
-../../$DRIVER_VERSION_MAJOR/extra_files gen-$DEBIAN_ARCH-control-$DRIVER_VERSION_MAJOR.py
+../../$DRIVER_VERSION_MAJOR/gen-$DEBIAN_ARCH-control-$DRIVER_VERSION_MAJOR.py
 cd ../
 
 # Get nvidia run file
