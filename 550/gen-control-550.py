@@ -2249,8 +2249,8 @@ systemd/system/nvidia-powerd.service"""
 
 # nvidia-smi
 
-NVIDIA_SMI_INSTALL_FILE_PREQ = """nvidia-smi	usr/lib/nvidia
-nvidia-smi.1.gz	usr/lib/nvidia"""
+NVIDIA_SMI_INSTALL_FILE_PREQ = """nvidia-smi	usr/lib/nvidia/current/
+nvidia-smi.1.gz	usr/lib/nvidia/current/"""
 
 NVIDIA_SMI_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 spelling-error-in-binary
