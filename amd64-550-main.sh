@@ -1,4 +1,6 @@
 #! /bin/bash
+set -e
+
 DRIVER_VERSION_MAJOR="550"
 DRIVER_VERSION_FULL="550.67"
 DRIVER_ARCH="Linux-x86_64"
