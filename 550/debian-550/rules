@@ -23,7 +23,12 @@ ifeq (i386,$(DEB_HOST_ARCH))
 	# Extract nvidia files from run archive
 	./nvidia-installer.run  --extract-only
 	mkdir -p debian/tmp
+	# Copy installer contents into debian temp dir
+	cp -rf ./NVIDIA-Linux-*/* debian/tmp
+	# Replace libs with 32 bit
+	rm -rf debian/tmp/*.so*
 	cp -rf ./NVIDIA-Linux-*/32/* debian/tmp
+	rm -rf debian/tmp/32
 endif
 
 override_dh_shlibdeps:
