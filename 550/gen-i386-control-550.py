@@ -1903,7 +1903,9 @@ interest-await /usr/lib/x86_64-linux-gnu/nvidia/current
 interest-await /usr/lib/aarch64-linux-gnu/nvidia/current
 interest-await /usr/lib/powerpc64le-linux-gnu/nvidia/current
 
-interest-await /usr/include/nvml.h"""
+interest-await /usr/include/nvml.h
+
+"""
 
 # end of nvidia-alternative
 
@@ -2367,16 +2369,7 @@ package-contains-no-arch-dependent-files
 
 NVIDIA_SUPPORT_MANPAGES_FILE_PREQ = """extra_files/nvidia-bug-report.sh.1"""
 
-NVIDIA_SUPPORT_TEMPLATES_FILE_PREQ = """# These templates have been reviewed by the debian-l10n-english
-# team
-#
-# If modifications/additions/rewording are needed, please ask
-# debian-l10n-english@lists.debian.org for advice.
-#
-# Even minor modifications require translation updates and such
-# changes should be coordinated with translators and reviewers.
-
-Template: nvidia-support/check-running-module-version
+NVIDIA_SUPPORT_TEMPLATES_FILE_PREQ = """Template: nvidia-support/check-running-module-version
 Type: boolean
 Default: true
 Description: for internal use
@@ -2392,7 +2385,7 @@ Description: for internal use
 
 Template: nvidia-support/warn-mismatching-module-version
 Type: error
-_Description: Mismatching nvidia kernel module loaded
+Description: Mismatching nvidia kernel module loaded
  The NVIDIA driver that is being installed (version ${{new-version}})
  does not match the nvidia kernel module currently loaded
  (version ${{running-version}}).
@@ -2406,7 +2399,7 @@ _Description: Mismatching nvidia kernel module loaded
 
 Template: nvidia-support/warn-nouveau-module-loaded
 Type: error
-_Description: Conflicting nouveau kernel module loaded
+Description: Conflicting nouveau kernel module loaded
  The free nouveau kernel module is currently loaded and conflicts with the
  non-free nvidia kernel module.
  .
@@ -2415,7 +2408,7 @@ _Description: Conflicting nouveau kernel module loaded
 
 Template: nvidia-support/needs-xorg-conf-to-enable
 Type: note
-_Description: Manual configuration required to enable NVIDIA driver
+Description: Manual configuration required to enable NVIDIA driver
  The NVIDIA driver is not yet configured; it needs to be enabled in
  xorg.conf before it can be used.
  .
@@ -2430,13 +2423,10 @@ Description: for internal use
 
 Template: nvidia-support/removed-but-enabled-in-xorg-conf
 Type: error
-#flag:translate!:3
-_Description: NVIDIA driver is still enabled in xorg.conf
+Description: NVIDIA driver is still enabled in xorg.conf
  The NVIDIA driver was just removed, but it is still enabled in the
  Xorg configuration. X cannot be (re-)started successfully until NVIDIA
- is disabled in the following config file(s):
- .
- ${{config-files}}
+ is disabled.
 """
 
 NVIDIA_SUPPORT_POSTRM_FILE_PREQ = """#!/bin/sh
