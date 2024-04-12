@@ -630,6 +630,8 @@ Depends:
     nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-settings-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-modprobe-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-xconfig-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     ${{misc:Depends}}
 Recommends:
@@ -2188,6 +2190,14 @@ NVIDIA_MODPROBE_INSTALL_FILE_PREQ =  """nvidia-modprobe     /usr/bin/"""
 
 NVIDIA_MODPROBE_LINTIAN_FILE_PREQ = """elevated-privileges 4755 root/root [usr/bin/nvidia-modprobe]"""
 
+NVIDIA_MODPROBE_UDEV_FILE_PREQ = """# Device nodes are created by nvidia-modprobe, which is called by the nvidia DDX.
+# In case the DDX is not started, the device nodes are never created, so call
+# nvidia-modprobe in the udev rules to cover the Wayland/EGLStream and compute
+# case without a started display.
+ACTION=="add", KERNEL=="nvidia", DRIVER=="nvidia", RUN+="/usr/bin/nvidia-modprobe", \
+    RUN+="/usr/bin/nvidia-modprobe -c 0 -u"
+"""
+
 # end of nvidia-modprobe
 
 # nvidia-opencl-common
@@ -3597,6 +3607,14 @@ with open(NVIDIA_MODPROBE_LINTIAN_FILE_PATH, "w") as NVIDIA_MODPROBE_LINTIAN_FIL
         DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
     )
     NVIDIA_MODPROBE_LINTIAN_FILE.write(NVIDIA_MODPROBE_LINTIAN_FILECONTENT)
+    
+NVIDIA_MODPROBE_UDEV_FILE_PATH = 'nvidia-modprobe-' + DRIVER_VERSION_MAJOR + '.udev'
+with open(NVIDIA_MODPROBE_UDEV_FILE_PATH, "w") as NVIDIA_MODPROBE_UDEV_FILE:
+    NVIDIA_MODPROBE_UDEV_FILECONTENT = NVIDIA_MODPROBE_UDEV_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_MODPROBE_UDEV_FILE.write(NVIDIA_MODPROBE_UDEV_FILECONTENT)  
     
 # end of nvidia-modprobe
 
