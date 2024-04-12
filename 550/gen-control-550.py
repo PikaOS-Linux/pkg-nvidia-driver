@@ -2534,7 +2534,8 @@ XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
 nvidia_drv.so		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
 libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
 extra_files/nvidia.ids		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
-nvidia-drm-outputclass.conf	etc/nvidia/current/"""
+nvidia-drm-outputclass.conf	etc/nvidia/current/
+extra_files/10-nvidia-amd64-module.conf     usr/share/X11/xorg.conf.d/"""
 
 XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 spelling-error-in-binary
