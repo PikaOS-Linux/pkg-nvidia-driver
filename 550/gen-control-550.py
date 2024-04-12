@@ -2196,6 +2196,7 @@ KERNEL=="nvidia", RUN+="/usr/bin/bash -c 'for i in $$(cat /proc/driver/nvidia/gp
 KERNEL=="nvidia_modeset", RUN+="/usr/bin/bash -c '/usr/bin/mknod -Z -m 666 /dev/nvidia-modeset c $$(grep nvidia$ /proc/devices | cut -d \  -f 1) 254'"
 KERNEL=="nvidia_uvm", RUN+="/usr/bin/bash -c '/usr/bin/mknod -Z -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
 KERNEL=="nvidia_uvm", RUN+="/usr/bin/bash -c '/usr/bin/mknod -Z -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
+ACTION=="add" DEVPATH=="/module/nvidia" SUBSYSTEM=="module" RUN+="/usr/bin/nvidia-smi"
 
 """
 
