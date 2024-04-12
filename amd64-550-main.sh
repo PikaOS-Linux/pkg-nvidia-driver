@@ -6,6 +6,7 @@ DEBIAN_ARCH="amd64"
 DEBIAN_FRONTEND=noninteractive
 
 # Setup build dir
+cp -rf ./$DRIVER_VERSION_MAJOR/config-amd64.py ./$DRIVER_VERSION_MAJOR/config.py
 mkdir -p ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR
 cp -rvf ./$DRIVER_VERSION_MAJOR/debian-$DRIVER_VERSION_MAJOR ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/debian
 cp -rvf ./$DRIVER_VERSION_MAJOR/extra_files ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/

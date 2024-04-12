@@ -1,9 +1,8 @@
 #! /usr/bin/python3
 
 ### Basic configuration
-DRIVER_VERSION_MAJOR = "550"
-DRIVER_VERSION_FULL = "550.67"
-DEB_HOST_MULTIARCH = "i386-linux-gnu"
+import config
+from config import *
 ### End of Basic configuration
 
 
@@ -1164,7 +1163,7 @@ unstripped-binary-or-object [lib/firmware/nvidia/{DRIVER_VERSION_FULL}/gsp*.bin]
 # libcuda1
 
 LIBCUDA1_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
-libcuda.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libcuda.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBCUDA1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1195,15 +1194,15 @@ fi
 #DEBHELPER#"""
 
 LIBCUDA1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so.1
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so.1		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcuda.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libcuda.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libcuda.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/libcuda.so.1		usr/lib/${{DEB_HOST_MULTIARCH}}/libcuda.so"""
 
 # end of libcuda1
 
 # libcudadebugger1
 
 LIBCUDADEBUGGER1_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
-libcudadebugger.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libcudadebugger.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBCUDADEBUGGER1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1217,14 +1216,14 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 LIBCUDADEBUGGER1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcudadebugger.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcudadebugger.so.1"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libcudadebugger.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libcudadebugger.so.1"""
 
 # end of libcudadebugger1
 
 # libegl-nvidia0
 
 LIBEGL_NVIDIA0_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
-libEGL_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libEGL_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBEGL_NVIDIA0_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1239,7 +1238,7 @@ package-has-unnecessary-activation-of-ldconfig-trigger
 symbols-file-missing-build-depends-package-field"""
 
 LIBEGL_NVIDIA0_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libEGL_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libEGL_nvidia.so.0"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libEGL_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libEGL_nvidia.so.0"""
 
 # end of libegl-nvidia0
 
@@ -1253,7 +1252,7 @@ README.txt"""
 # libgles-nvidia1
 
 LIBGLES_NVIDIA1_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
-libGLESv1_CM_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libGLESv1_CM_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBGLES_NVIDIA1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1267,14 +1266,14 @@ package-has-unnecessary-activation-of-ldconfig-trigger
 symbols-file-missing-build-depends-package-field"""
 
 LIBGLES_NVIDIA1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv1_CM_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv1_CM_nvidia.so.1"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libGLESv1_CM_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libGLESv1_CM_nvidia.so.1"""
 
 # end of libgles-nvidia1
 
 # libgles-nvidia2
 
 LIBGLES_NVIDIA2_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
-libGLESv2_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libGLESv2_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBGLES_NVIDIA2_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1288,14 +1287,14 @@ package-has-unnecessary-activation-of-ldconfig-trigger
 symbols-file-missing-build-depends-package-field"""
 
 LIBGLES_NVIDIA2_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv2_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLESv2_nvidia.so.2"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libGLESv2_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libGLESv2_nvidia.so.2"""
 
 # end of libgles-nvidia2
 
 # libglx-nvidia0
 
 LIBGLX_NVIDIA0_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libGLX_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libGLX_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBGLX_NVIDIA0_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1311,14 +1310,14 @@ package-has-unnecessary-activation-of-ldconfig-trigger
 symbols-file-missing-build-depends-package-field"""
 
 LIBGLX_NVIDIA0_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLX_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libGLX_nvidia.so.0"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libGLX_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libGLX_nvidia.so.0"""
 
 # end of libglx-nvidia0
 
 # libnvcuvid1
 
 LIBNVCUVID1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvcuvid.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvcuvid.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVCUVID1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1331,15 +1330,15 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 LIBNVCUVID1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvcuvid.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvcuvid.so.1
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvcuvid.so.1		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvcuvid.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvcuvid.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvcuvid.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvcuvid.so.1		usr/lib/${{DEB_HOST_MULTIARCH}}/libnvcuvid.so"""
 
 # end of libnvcuvid1
 
 # libnvidia-allocator1
 
 LIBNVIDIA_ALLOCATOR1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-allocator.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-allocator.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_ALLOCATOR1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1351,15 +1350,15 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 LIBNVIDIA_ALLOCATOR1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-allocator.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-allocator.so.1
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-allocator.so.{DRIVER_VERSION_FULL}		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia-drm_gbm.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-allocator.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-allocator.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-allocator.so.{DRIVER_VERSION_FULL}		usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia-drm_gbm.so"""
 
 # end of libnvidia-allocator1
 
 # libnvidia-api1
 
 LIBNVIDIA_API1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-api.so.1	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-api.so.1	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_API1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 hardening-no-bindnow
@@ -1376,7 +1375,7 @@ symbols-file-missing-build-depends-package-field"""
 # libnvidia-cfg1
 
 LIBNVIDIA_CFG1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-cfg.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-cfg.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_CFG1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [ppc64el]: specific-address-in-shared-library
@@ -1390,7 +1389,7 @@ package-has-unnecessary-activation-of-ldconfig-trigger
 symbols-file-missing-build-depends-package-field"""
 
 LIBNVIDIA_CFG1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-cfg.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-cfg.so.1"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-cfg.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-cfg.so.1"""
 
 # end of libnvidia-cfg1
 
@@ -1423,7 +1422,7 @@ symbols-file-missing-build-depends-package-field"""
 # libnvidia-encode1
 
 LIBNVIDIA_ENCODE1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-encode.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-encode.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_ENCODE1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1435,15 +1434,15 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 LIBNVIDIA_ENCODE1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-encode.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-encode.so.1
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-encode.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-encode.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-encode.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-encode.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-encode.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-encode.so"""
 
 # end of libnvidia-encode1
 
 # libnvidia-fbc1
 
 LIBNVIDIA_FBC1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-fbc.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-fbc.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_FBC1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1454,8 +1453,8 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 LIBNVIDIA_FBC1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so.1
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-fbc.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-fbc.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-fbc.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-fbc.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-fbc.so"""
 
 # end of libnvidia-fbc1
 
@@ -1535,7 +1534,7 @@ symbols-file-missing-build-depends-package-field"""
 # libnvidia-ml1
 
 LIBNVIDIA_ML1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-ml.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-ml.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_ML1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1547,17 +1546,17 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 LIBNVIDIA_ML1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so.1
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ml.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ml.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ml.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ml.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ml.so"""
 
 # end of libnvidia-ml1
 
 # libnvidia-ngx1
 
 LIBNVIDIA_NGX1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-ngx.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
-_nvngx.dll  usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia/wine
-nvngx.dll   usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia/wine"""
+libnvidia-ngx.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/
+_nvngx.dll  usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/wine
+nvngx.dll   usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/wine"""
 
 LIBNVIDIA_NGX1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 hardening-no-bindnow
@@ -1567,18 +1566,18 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger
 
 # Location expected by Proton.
-repeated-path-segment nvidia [usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/nvidia/]"""
+repeated-path-segment nvidia [usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/]"""
 
 LIBNVIDIA_NGX1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so.1
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ngx.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ngx.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ngx.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ngx.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ngx.so"""
 
 # end of libnvidia-ngx1
 
 # libnvidia-nvvm4
 
 LIBNVIDIA_NVVM4_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-nvvm.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-nvvm.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_NVVM4_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1589,15 +1588,15 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 LIBNVIDIA_NVVM4_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.4
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so.4    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-nvvm.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-nvvm.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-nvvm.so.4
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-nvvm.so.4    usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-nvvm.so"""
 
 # end of libnvidia-nvvm4
 
 # libnvidia-opticalflow1
 
 LIBNVIDIA_OPTICALFLOW1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-opticalflow.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-opticalflow.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_OPTICALFLOW1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386 ppc64el]: specific-address-in-shared-library
@@ -1608,8 +1607,8 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 LIBNVIDIA_OPTICALFLOW1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opticalflow.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opticalflow.so.1
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opticalflow.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opticalflow.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-opticalflow.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-opticalflow.so.1
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-opticalflow.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-opticalflow.so"""
 
 # end of libnvidia-opticalflow1
 
@@ -1639,7 +1638,7 @@ symbols-file-missing-build-depends-package-field"""
 # libnvidia-ptxjitcompiler1
 
 LIBNVIDIA_PTXJITCOMPILER1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-ptxjitcompiler.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-ptxjitcompiler.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVIDIA_PTXJITCOMPILER1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1658,7 +1657,7 @@ package-has-unnecessary-activation-of-ldconfig-trigger
 symbols-file-missing-build-depends-package-field"""
 
 LIBNVIDIA_PTXJITCOMPILER1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ptxjitcompiler.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-ptxjitcompiler.so.1"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ptxjitcompiler.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-ptxjitcompiler.so.1"""
 
 # end of libnvidia-ptxjitcompiler1
 
@@ -1687,8 +1686,8 @@ symbols-file-missing-build-depends-package-field"""
 # libnvoptix1
 
 LIBNVOPTIX1_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvoptix.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
-nvoptix.bin	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvoptix.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/
+nvoptix.bin	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 LIBNVOPTIX1_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 spelling-error-in-binary
@@ -1702,7 +1701,7 @@ package-has-unnecessary-activation-of-ldconfig-trigger
 symbols-file-missing-build-depends-package-field"""
 
 LIBNVOPTIX1_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvoptix.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvoptix.so.1"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvoptix.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvoptix.so.1"""
 
 # end of libnvoptix1
 
@@ -1815,7 +1814,7 @@ if [ "$1" = "triggered" ]; then
 		$(add_multiarch_slave /usr/lib "" libnvidia-opticalflow.so.1 /usr/lib nvidia/current/)
 		$(add_multiarch_slave /usr/lib "" libnvidia-ptxjitcompiler.so.1 /usr/lib nvidia/current/)
 		$(add_multiarch_slave /usr/lib "" libnvoptix.so.1 /usr/lib nvidia/current/)
-		$(add_slave /usr/share/nvidia/nvoptix.bin nvoptix.bin /usr/lib/{DEB_HOST_MULTIARCH}/nvidia/current/nvoptix.bin)
+		$(add_slave /usr/share/nvidia/nvoptix.bin nvoptix.bin /usr/lib/{DEB_HOST_MULTIARCH}/nvoptix.bin)
 		$(add_multiarch_slave /usr/lib gbm/ nvidia-drm_gbm.so /usr/lib nvidia/current/)
 		$(add_slave /usr/bin/nvidia-smi nvidia-smi /usr/lib/nvidia/current/nvidia-smi)
 		$(add_slave /usr/share/man/man1/nvidia-smi.1.gz nvidia-smi.1.gz /usr/lib/nvidia/current/nvidia-smi.1.gz)
@@ -1940,8 +1939,8 @@ supported-gpus/supported-gpus.json"""
 # nvidia-driver-bin
 
 NVIDIA_DRIVER_BIN_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-nvidia-bug-report.sh	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
-nvidia-debugdump	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+nvidia-bug-report.sh	usr/lib/${{DEB_HOST_MULTIARCH}}/
+nvidia-debugdump	usr/lib/${{DEB_HOST_MULTIARCH}}/
 nvidia-application-profiles-{DRIVER_VERSION_FULL}-rc	usr/share/nvidia/
 nvidia-application-profiles-{DRIVER_VERSION_FULL}-key-documentation	usr/share/nvidia/"""
 
@@ -2030,7 +2029,7 @@ LABEL="nvidia_end"
 
 # nvidia-kernel-dkms
 
-NVIDIA_KERNEL_DKMS_INSTALL_FILE_PREQ  = """kernel/*				usr/src/nvidia-current-{DRIVER_VERSION_FULL}/"""
+NVIDIA_KERNEL_DKMS_INSTALL_FILE_PREQ  = """kernel/*				usr/src/nvidia-{DRIVER_VERSION_FULL}/"""
 
 NVIDIA_KERNEL_DKMS_LINTIAN_FILE_PREQ = """# These object files are linked into kernel modules.
 unstripped-binary-or-object
@@ -2040,7 +2039,7 @@ spelling-error-in-binary"""
 
 NVIDIA_KERNEL_DKMS_DKMS_FILE_PREQ = """# DKMS configuration for the NVIDIA kernel module.  -*- sh -*-
 
-PACKAGE_NAME="nvidia-current"
+PACKAGE_NAME="nvidia"
 PACKAGE_VERSION="{DRIVER_VERSION_FULL}"
 
 # Only kernels from 3.10 onwards are supported.
@@ -2185,7 +2184,7 @@ package-contains-no-arch-dependent-files"""
 # nvidia-opencl-icd
 
 NVIDIA_OPENCL_ICD_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
-libnvidia-opencl.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libnvidia-opencl.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 NVIDIA_OPENCL_ICD_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -2201,7 +2200,7 @@ package-has-unnecessary-activation-of-ldconfig-trigger
 symbols-file-missing-build-depends-package-field"""
 
 NVIDIA_OPENCL_ICD_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-opencl.so.1"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-opencl.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libnvidia-opencl.so.1"""
 
 # end of nvidia-opencl-icd
 
@@ -2251,8 +2250,8 @@ systemd/system/nvidia-powerd.service"""
 
 # nvidia-smi
 
-NVIDIA_SMI_INSTALL_FILE_PREQ = """nvidia-smi	usr/lib/nvidia-current
-nvidia-smi.1.gz	usr/lib/nvidia-current"""
+NVIDIA_SMI_INSTALL_FILE_PREQ = """nvidia-smi	usr/lib/nvidia/current/
+nvidia-smi.1.gz	usr/lib/nvidia/current/"""
 
 NVIDIA_SMI_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 spelling-error-in-binary
@@ -2320,6 +2319,7 @@ NVIDIA_SUPPORT_INSTALL_FILE_PREQ = """extra_files/check-for-mismatching-nvidia-m
 extra_files/alternate-install-present		usr/lib/nvidia/
 extra_files/pre-install				usr/lib/nvidia/
 extra_files/check-for-conflicting-opengl-libraries	usr/lib/nvidia/
+extra_files/nvidia-libdir.conf etc/ld.so.conf.d/
 """
 
 NVIDIA_SUPPORT_CONFIG_FILE_PREQ = """#!/bin/sh
@@ -2456,7 +2456,7 @@ set -e
 # nvidia-vdpau-driver
 
 NVIDIA_VDPAU_DRIVER_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
-libvdpau_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libvdpau_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/"""
 
 NVIDIA_VDPAU_DRIVER_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -2468,7 +2468,7 @@ hardening-no-fortify-functions
 package-has-unnecessary-activation-of-ldconfig-trigger"""
 
 NVIDIA_VDPAU_DRIVER_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libvdpau_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libvdpau_nvidia.so.1"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libvdpau_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libvdpau_nvidia.so.1"""
 
 NVIDIA_VDPAU_DRIVER_DOCS_FILE_PREQ = """README.txt"""
 
@@ -2503,7 +2503,7 @@ hardening-no-bindnow
 hardening-no-fortify-functions"""
 
 XSERVER_XORG_VIDEO_NVIDIA_LINKS_FILE_PREQ = """#! /usr/bin/dh-exec
-usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libglxserver_nvidia.so"""
+usr/lib/${{DEB_HOST_MULTIARCH}}/libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/libglxserver_nvidia.so"""
 
 XSERVER_XORG_VIDEO_NVIDIA_DOCS_FILE_PREQ = """README.txt"""
 
