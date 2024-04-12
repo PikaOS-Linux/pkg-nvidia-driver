@@ -6,13 +6,13 @@ DEBIAN_ARCH="i386"
 DEBIAN_FRONTEND=noninteractive
 
 # Setup build dir
-cp -rf ./$DRIVER_VERSION_MAJOR/config-i386.py ./$DRIVER_VERSION_MAJOR/config.py
+cp -rf ./$DRIVER_VERSION_MAJOR/config-$DEBIAN_ARCH.py ./$DRIVER_VERSION_MAJOR/config.py
 mkdir -p ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR
 cp -rvf ./$DRIVER_VERSION_MAJOR/debian-$DRIVER_VERSION_MAJOR ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/debian
 cp -rvf ./$DRIVER_VERSION_MAJOR/extra_files ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
 cd ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
 cd ./debian
-../../$DRIVER_VERSION_MAJOR/gen-$DEBIAN_ARCH-control-$DRIVER_VERSION_MAJOR.py
+../../$DRIVER_VERSION_MAJOR/gen-control-$DRIVER_VERSION_MAJOR.py
 cd ../
 
 # Get nvidia run file
