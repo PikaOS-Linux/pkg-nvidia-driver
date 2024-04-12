@@ -1115,6 +1115,25 @@ Description: NVIDIA Vulkan installable client driver (ICD)
     This metapackage provides the NVIDIA installable client driver (ICD) for
     Vulkan (GLVND variant) which supports NVIDIA GPUs.
 
+Package: nvidia-xconfig
+Architecture: amd64
+Pre-Depends: nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}})
+Depends:
+     ${{shlibs:Depends}},
+     ${{misc:Depends}}
+Recommends: nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}})
+Provides: nvidia-xconfig (= ${{binary:Version}})
+Conflicts:  nvidia-xconfig
+Description: deprecated X configuration tool for non-free NVIDIA drivers
+     This tool is deprecated. The NVIDIA drivers now automatically integrate with
+     the Xorg Xserver configuration. Creating an xorg.conf is no longer needed for
+     normal setups.
+     .
+     The nvidia-xconfig program helps with manipulation of X configuration
+     files, primarily for systems that use the non-free drivers provided by
+     NVIDIA.  It automatically changes the configuration to use the NVIDIA
+     driver and can add additional options given on the command line.
+
 Package: xserver-xorg-video-nvidia-{DRIVER_VERSION_MAJOR}
 Section: non-free/x11
 Architecture: amd64 arm64 ppc64el
@@ -2487,6 +2506,13 @@ package-contains-no-arch-dependent-files"""
 # nvidia-vulkan-icd doesn't have any dh files
 
 # end of nvidia-vulkan-icd
+
+# nvidia-xconfig
+
+NVIDIA_XCONFIG_INSTALL_FILE_PREQ = """nvidia-xconfig	usr/bin/
+nvidia-xconfig.1.gz	usr/share/man/man1/"""
+
+NVIDIA_XCONFIG_DIRS_FILE_PREQ = """etc/X11"""
 
 # xserver-xorg-video-nvidia
 
@@ -3905,3 +3931,23 @@ with open(XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILE_PATH, "w") as XSERVER_XORG_VID
     XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILE.write(XSERVER_XORG_VIDEO_NVIDIA_POSTINST_FILECONTENT)
     
 # end of xserver-xorg-video-nvidia
+
+# nvidia-xconfig
+
+NVIDIA_XCONFIG_INSTALL_FILE_PATH = 'nvidia-xconfig-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_XCONFIG_INSTALL_FILE_PATH, "w") as NVIDIA_XCONFIG_INSTALL_FILE:
+    NVIDIA_XCONFIG_INSTALL_FILECONTENT = NVIDIA_XCONFIG_INSTALL_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_XCONFIG_INSTALL_FILE.write(NVIDIA_XCONFIG_INSTALL_FILECONTENT)
+
+NVIDIA_XCONFIG_DIRS_FILE_PATH = 'nvidia-xconfig-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_XCONFIG_DIRS_FILE_PATH, "w") as NVIDIA_XCONFIG_DIRS_FILE:
+    NVIDIA_XCONFIG_DIRS_FILECONTENT = NVIDIA_XCONFIG_DIRS_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_XCONFIG_DIRS_FILE.write(NVIDIA_XCONFIG_DIRS_FILECONTENT)
+    
+# end of nvidia-xconfig
