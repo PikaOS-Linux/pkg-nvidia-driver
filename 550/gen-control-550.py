@@ -2530,7 +2530,7 @@ NVIDIA_XCONFIG_DIRS_FILE_PREQ = """etc/X11"""
 
 XSERVER_XORG_VIDEO_NVIDIA_INSTALL_FILE_PREQ = """nvidia_drv.so		usr/lib/nvidia/current/
 libglxserver_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/nvidia/current/
-#nvidia.ids		usr/lib/nvidia/current/
+extra_files/nvidia.ids		usr/lib/nvidia/current/
 nvidia-drm-outputclass.conf	etc/nvidia/current/"""
 
 XSERVER_XORG_VIDEO_NVIDIA_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
