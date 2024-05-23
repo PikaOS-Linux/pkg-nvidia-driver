@@ -12,11 +12,11 @@ from config import *
 
 ### Important for future Updates (Make sure to update)
 # Incase debian adds or removes a packages to the nvidia-graphics-drivers dpkg source make sure to replicate with pika flavour and kernek module adaptations.
-# Debian nvidia comes with 49 Packages in 550.
+# Debian nvidia comes with 49 Packages in 555.
 # Pika takes out nvidia-driver-full, nvidia-detect, nvidia-legacy-check.
 # Pika add nvidia-kernel-common, nvidia-modprobe, nvidia-persistenced, nvidia-settings, nvidia-support
 # So...
-# Pika nvidia comes with 51 Packages in 550.
+# Pika nvidia comes with 51 Packages in 555.
 ### End of Important Notes
 
 ### Text Preq
@@ -31,7 +31,7 @@ Uploaders:
  Andreas Beckmann <anbe@debian.org>,
  Luca Boccassi <bluca@debian.org>,
 Vcs-Browser: https://salsa.debian.org/nvidia-team/nvidia-graphics-drivers
-Vcs-Git: https://salsa.debian.org/nvidia-team/nvidia-graphics-drivers.git -b 550
+Vcs-Git: https://salsa.debian.org/nvidia-team/nvidia-graphics-drivers.git -b 555
 Build-Depends:
  debhelper-compat (= 13),
 Build-Depends-Arch:

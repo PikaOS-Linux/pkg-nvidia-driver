@@ -1,0 +1,38 @@
+#! /usr/bin/make -f
+
+## See debhelper(7) (uncomment to enable).
+## Output every command that modifies files on the build system.
+export DH_VERBOSE = 1
+
+override_dh_prep:
+# amd64 build prep
+ifeq (amd64,$(DEB_HOST_ARCH))
+	# Extract nvidia files from run archive
+	./nvidia-installer.run  --extract-only
+	mkdir -p debian/tmp
+	# Copy installer contents into debian temp dir
+	cp -rf ./NVIDIA-Linux-*/* debian/tmp
+	# Delete 32 libs on amd64 builds
+	rm -rf debian/tmp/32
+	# Extract all manpages
+	gunzip debian/tmp/*.1.gz -k
+endif
+
+# i386 (x86) build
+ifeq (i386,$(DEB_HOST_ARCH))
+	# Extract nvidia files from run archive
+	./nvidia-installer.run  --extract-only
+	mkdir -p debian/tmp
+	# Copy installer contents into debian temp dir
+	cp -rf ./NVIDIA-Linux-*/* debian/tmp
+	# Replace libs with 32 bit
+	rm -rf debian/tmp/*.so*
+	cp -rf ./NVIDIA-Linux-*/32/* debian/tmp
+	rm -rf debian/tmp/32
+endif
+
+override_dh_shlibdeps:
+	dh_shlibdeps -l/usr/lib/$(DEB_HOST_MULTIARCH)/nvidia/current/:/usr/lib/nvidia/current/
+	
+%:
+	dh $@
