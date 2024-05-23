@@ -1,8 +1,7 @@
 name: Build nvidia 555 i386
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch
 
 jobs:
   build:
@@ -34,6 +33,9 @@ jobs:
     - name: Update apt cache
       run: apt-get update -y
     
+    - name: Add exec perms
+      run: chmod +x ./i386-555-main.sh
+
     - name: Build Package
       run: ./i386-555-main.sh
 
