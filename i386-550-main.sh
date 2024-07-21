@@ -25,7 +25,7 @@ chmod +x nvidia-installer.run
 apt-get build-dep ./ -y
 
 # Build package
-LOGNAME=root dh_make --createorig -y -l -p nvidia-graphics-drivers-550_550.100
+LOGNAME=root dh_make --createorig -y -l -p nvidia-graphics-drivers-550_550.100 || true
 dpkg-buildpackage --no-sign
 
 # Move the debs to output
