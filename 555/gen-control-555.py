@@ -578,6 +578,7 @@ Conflicts:
     nvidia-alternative-530,
     nvidia-alternative-535,
     nvidia-alternative-545,
+    nvidia-alternative-550,
 Description: allows the selection of NVIDIA as GLX provider
     In setups with several NVIDIA driver versions installed (e.g. current and legacy) this metapackage registers an alternative to allow easy switching between the different versions.
     Use 'update-glx --config nvidia' to select a version.
