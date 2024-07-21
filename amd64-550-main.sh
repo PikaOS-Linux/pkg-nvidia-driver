@@ -2,7 +2,7 @@
 set -e
 
 DRIVER_VERSION_MAJOR="550"
-DRIVER_VERSION_FULL="550.67"
+DRIVER_VERSION_FULL="550.100"
 DRIVER_ARCH="Linux-x86_64"
 DEBIAN_ARCH="amd64"
 DEBIAN_FRONTEND=noninteractive
@@ -25,6 +25,7 @@ chmod +x nvidia-installer.run
 apt-get build-dep ./ -y
 
 # Build package
+LOGNAME=root dh_make --createorig -y -l -p nvidia-graphics-drivers-550_550.100
 dpkg-buildpackage --no-sign
 
 # Move the debs to output
