@@ -1,4 +1,4 @@
-name: Build nvidia 550 i386
+name: Build & Release nvidia 550 i386
 
 on:
   workflow_dispatch

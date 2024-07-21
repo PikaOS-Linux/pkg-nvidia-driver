@@ -1,4 +1,4 @@
-name: Build nvidia 555 amd64
+name: Build & Release nvidia 555 amd64
 
 on:
   workflow_dispatch

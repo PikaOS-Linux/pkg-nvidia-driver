@@ -1,4 +1,4 @@
-name: Build nvidia 555 amd64 (Canary)
+name: Build & Release nvidia 555 amd64 (Canary)
 
 on:
   workflow_dispatch
