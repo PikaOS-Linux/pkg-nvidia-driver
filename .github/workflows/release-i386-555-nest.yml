@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: ghcr.io/pikaos-linux/pikaos-i386-builder:canary
+      image: ghcr.io/pikaos-linux/pikaos-i386-builder:nest
       volumes:
         - /proc:/proc
       options: --privileged -it

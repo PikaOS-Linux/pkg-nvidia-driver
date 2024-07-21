@@ -1,4 +1,4 @@
-name: Build nvidia 555 amd64
+name: Build nvidia 550 amd64
 
 on:
   workflow_dispatch
@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: ghcr.io/pikaos-linux/pikaos-builder:canary
+      image: ghcr.io/pikaos-linux/pikaos-builder:nest
       volumes:
         - /proc:/proc
       options: --privileged -it
@@ -34,13 +34,10 @@ jobs:
       run: apt-get update -y
     
     - name: Add exec perms
-      run: chmod +x ./amd64-555-main.sh
+      run: chmod +x ./amd64-550-main.sh
 
     - name: Build Package
-      run: ./amd64-555-main.sh
-
-    - name: Release Package
-      run: ./release.sh
+      run: ./amd64-550-main.sh
 
     - name: Purge cache
       uses: strrife/cloudflare-chunked-purge-action@master
