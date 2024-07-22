@@ -1730,7 +1730,7 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvoptix.so.{DRIVER_VERSION_FUL
 
 # nvidia-alternative
 
-NVIDIA_ALTERNATIVE_INSTALL_FILE_PREQ = """extra_files/nvidia_helper.ck"""
+NVIDIA_ALTERNATIVE_INSTALL_FILE_PREQ = """extra_files/nvidia-libdir.conf    etc/ld.so.conf.d/"""
 
 NVIDIA_ALTERNATIVE_DIRS_FILE_PREQ = """#! /usr/bin/dh-exec
 etc/modprobe.d
