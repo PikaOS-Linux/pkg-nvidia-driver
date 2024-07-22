@@ -1,4 +1,4 @@
-name: Build & Release nvidia 550 amd64 (Canary)
+name: Build nvidia 555 (Canary) (amd64-v3)
 
 on:
   workflow_dispatch
@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: ghcr.io/pikaos-linux/pikaos-builder:canary
+      image: ghcr.io/pikaos-linux/pikaos-builder:canaryv3
       volumes:
         - /proc:/proc
       options: --privileged -it
@@ -34,12 +34,9 @@ jobs:
       run: apt-get update -y
     
     - name: Add exec perms
-      run: chmod +x ./amd64-550-main.sh
+      run: chmod +x ./amd64-555-main.sh
 
     - name: Build Package
-      run: ./amd64-550-main.sh
-
-    - name: Release Package
-      run: ./release.sh
+      run: ./amd64-555-main.sh
 
         

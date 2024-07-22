@@ -1,4 +1,4 @@
-name: Build nvidia 550 amd64
+name: Build nvidia 550 (Canary) (amd64-v3)
 
 on:
   workflow_dispatch
@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: ghcr.io/pikaos-linux/pikaos-builder:nest
+      image: ghcr.io/pikaos-linux/pikaos-builder:canaryv3
       volumes:
         - /proc:/proc
       options: --privileged -it

@@ -1,4 +1,4 @@
-name: Build nvidia 555 i386
+name: Build nvidia 555 (i386)
 
 on:
   workflow_dispatch
@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-      image: ghcr.io/pikaos-linux/pikaos-i386-builder:nest
+      image: ghcr.io/pikaos-linux/pikaos-builder:nesti386
       volumes:
         - /proc:/proc
       options: --privileged -it
