@@ -895,6 +895,8 @@ Depends:
     nvidia-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${{binary:Version}}),
     nvidia-closed-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-closed-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     dkms,
     ${{misc:Depends}}
@@ -929,6 +931,8 @@ Depends:
     nvidia-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${{binary:Version}}),
     nvidia-open-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-open-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     dkms,
     ${{misc:Depends}}
