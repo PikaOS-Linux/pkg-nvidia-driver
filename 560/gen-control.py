@@ -610,6 +610,7 @@ Depends:
     xserver-xorg-video-nvidia-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-closed-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libgles-nvidia1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libgles-nvidia2-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
@@ -641,12 +642,80 @@ Recommends:
     nvidia-vaapi-driver,
 Suggests:
     nvidia-kernel-source-{DRIVER_VERSION_MAJOR},
+    nvidia-closed-kernel-source-{DRIVER_VERSION_MAJOR},
 Provides:
     nvidia-driver (= ${{binary:Version}}),
     nvidia-driver-full (= ${{binary:Version}}),
+    nvidia-closed-driver (= ${{binary:Version}}),
+    nvidia-closed-driver-full (= ${{binary:Version}}),
     nvidia-driver-any,
     nvidia-glx-any,
+Conflicts:
+    nvidia-driver,
+    nvidia-open-driver,
+    nvidia-open-driver-{DRIVER_VERSION_MAJOR},
 Description: NVIDIA {DRIVER_VERSION_FULL} metapackage
+    This metapackage depends on the NVIDIA binary driver and libraries
+    that provide optimized hardware acceleration of
+    OpenGL/GLX/EGL/GLES/Vulkan applications via a direct-rendering X Server.
+
+Package: nvidia-open-driver-{DRIVER_VERSION_MAJOR}
+Section: non-free/x11
+Architecture: amd64 arm64 ppc64el
+Pre-Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+Depends:
+    nvidia-driver-libs-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-driver-bin-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    xserver-xorg-video-nvidia-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-vdpau-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-open-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libgles-nvidia1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libgles-nvidia2-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-cfg1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-encode1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-vulkan-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-allocator1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-rtcore-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-smi-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libcudadebugger1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-fbc1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvoptix1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-opticalflow1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-ngx1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) [amd64],
+    libnvidia-api1-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-opencl-icd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-powerd-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}) [amd64],
+    nvidia-cuda-mps-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-suspend-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-persistenced-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-settings-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-modprobe-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-xconfig-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    libnvidia-egl-wayland1,
+    libnvidia-egl-gbm1,
+    ${{misc:Depends}}
+Recommends:
+    nvidia-vaapi-driver,
+Suggests:
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR},
+    nvidia-open-kernel-source-{DRIVER_VERSION_MAJOR},
+Provides:
+    nvidia-driver (= ${{binary:Version}}),
+    nvidia-driver-full (= ${{binary:Version}}),
+    nvidia-open-driver (= ${{binary:Version}}),
+    nvidia-open-driver-full (= ${{binary:Version}}),
+    nvidia-driver-any,
+    nvidia-glx-any,
+Conflicts:
+    nvidia-driver,
+    nvidia-driver-{DRIVER_VERSION_MAJOR},
+    nvidia-closed-driver,
+    nvidia-closed-driver-{DRIVER_VERSION_MAJOR},
+Description: NVIDIA {DRIVER_VERSION_FULL} metapackage (With open kernel modules)
     This metapackage depends on the NVIDIA binary driver and libraries
     that provide optimized hardware acceleration of
     OpenGL/GLX/EGL/GLES/Vulkan applications via a direct-rendering X Server.
@@ -772,7 +841,9 @@ Section: non-free/kernel
 Architecture: amd64 arm64 ppc64el
 Depends:
     firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-closed-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${{binary:Version}}),
     nvidia-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${{binary:Version}}),
+    nvidia-closed-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     dkms,
@@ -780,17 +851,56 @@ Depends:
 Recommends:
     nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
+    nvidia-closed-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-dkms (= ${{binary:Version}}),
+    nvidia-kernel-dkms-closed (= ${{binary:Version}}),
     nvidia-kernel-dkms-any (= ${{binary:Version}}),
 Conflicts:
     nvidia-kernel-dkms,
+    nvidia-open-kernel-dkms,
+    nvidia-open-kernel-dkms-{DRIVER_VERSION_MAJOR},
     nvidia-kernel-pikaos-module-{DRIVER_VERSION_MAJOR},
+    nvidia-open-kernel-pikaos-module-{DRIVER_VERSION_MAJOR},
     nvidia-kernel-pikaos-module,
+    nvidia-open-kernel-pikaos-module,
 Description: NVIDIA binary kernel DKMS module
     This package provides the DKMS build configuration for the source for the NVIDIA binary kernel modules
     needed by nvidia-driver.
 
+Package: nvidia-open-kernel-dkms-{DRIVER_VERSION_MAJOR}
+Section: non-free/kernel
+Architecture: amd64 arm64 ppc64el
+Depends:
+    firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-open-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${{binary:Version}}),
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR}  (= ${{binary:Version}}),
+    nvidia-open-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    dkms,
+    ${{misc:Depends}}
+Recommends:
+    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+Provides:
+    nvidia-open-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-kernel-dkms (= ${{binary:Version}}),
+    nvidia-kernel-dkms-open (= ${{binary:Version}}),
+    nvidia-kernel-dkms-any (= ${{binary:Version}}),
+Conflicts:
+    nvidia-kernel-dkms,
+    nvidia-kernel-dkms-{DRIVER_VERSION_MAJOR},
+    nvidia-closed-kernel-dkms,
+    nvidia-closed-kernel-dkms-{DRIVER_VERSION_MAJOR},
+    nvidia-kernel-pikaos-module-{DRIVER_VERSION_MAJOR},
+    nvidia-open-kernel-pikaos-module-{DRIVER_VERSION_MAJOR},
+    nvidia-kernel-pikaos-module,
+    nvidia-open-kernel-pikaos-module,
+Description: NVIDIA binary kernel DKMS module
+    This package provides the DKMS build configuration for the source for the NVIDIA binary kernel modules
+    needed by nvidia-driver.    
+    
 Package: nvidia-kernel-source-{DRIVER_VERSION_MAJOR}
 Section: non-free/kernel
 Architecture: amd64 arm64 ppc64el
