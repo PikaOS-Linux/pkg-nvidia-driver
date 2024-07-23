@@ -706,6 +706,7 @@ Suggests:
 Provides:
     nvidia-driver (= ${{binary:Version}}),
     nvidia-driver-full (= ${{binary:Version}}),
+    nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-open-driver (= ${{binary:Version}}),
     nvidia-open-driver-full (= ${{binary:Version}}),
     nvidia-driver-any,
@@ -897,7 +898,7 @@ Conflicts:
     nvidia-open-kernel-pikaos-module-{DRIVER_VERSION_MAJOR},
     nvidia-kernel-pikaos-module,
     nvidia-open-kernel-pikaos-module,
-Description: NVIDIA binary kernel DKMS module
+Description: NVIDIA binary kernel DKMS module (Open)
     This package provides the DKMS build configuration for the source for the NVIDIA binary kernel modules
     needed by nvidia-driver.    
     
@@ -915,8 +916,12 @@ Suggests:
     nvidia-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
     nvidia-kernel-source (= ${{binary:Version}}),
+    nvidia-closed-kernel-source (= ${{binary:Version}}),
+    nvidia-closed-kernel-source-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Conflicts:
-    nvidia-kernel-source
+    nvidia-kernel-source,
+    nvidia-open-kernel-source-{DRIVER_VERSION_MAJOR},
+    nvidia-open-kernel-source,
 Description: NVIDIA binary kernel module source
     This package provides the source for the NVIDIA binary kernel modules
     needed by nvidia-driver in a form suitable
@@ -929,6 +934,40 @@ Description: NVIDIA binary kernel module source
     PLEASE read /usr/share/doc/nvidia-kernel-source/README.Debian.gz
     for building information. If you want the kernel module to be automatically
     installed via DKMS, install nvidia-kernel-dkms-{DRIVER_VERSION_MAJOR} instead.
+
+Package: nvidia-open-kernel-source-{DRIVER_VERSION_MAJOR}
+Section: non-free/kernel
+Architecture: amd64 arm64 ppc64el
+Depends:
+    debhelper-compat (= 13),
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    module-assistant,
+    ${{misc:Depends}}
+Recommends:
+    firmware-nvidia-gsp-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+Suggests:
+    nvidia-open-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+Provides:
+    nvidia-open-kernel-source (= ${{binary:Version}}),
+    nvidia-kernel-source (= ${{binary:Version}}),
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+Conflicts:
+    nvidia-kernel-source,
+    nvidia-kernel-source-{DRIVER_VERSION_MAJOR},
+    nvidia-closed-kernel-source,
+    nvidia-closed-kernel-source-{DRIVER_VERSION_MAJOR},
+Description: NVIDIA binary kernel module source (Open)
+    This package provides the source for the NVIDIA binary kernel modules
+    needed by nvidia-driver in a form suitable
+    for use by module-assistant.
+    .
+    The NVIDIA binary driver provides optimized hardware acceleration of
+    OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server
+    for graphics cards using NVIDIA chip sets.
+    .
+    PLEASE read /usr/share/doc/nvidia-kernel-source/README.Debian.gz
+    for building information. If you want the kernel module to be automatically
+    installed via DKMS, install nvidia-open-kernel-dkms-{DRIVER_VERSION_MAJOR} instead.    
 
 Package: nvidia-kernel-support-{DRIVER_VERSION_MAJOR}
 Section: non-free/kernel
@@ -943,8 +982,14 @@ Provides:
     nvidia-kernel-support-any,
     nvidia-kernel-support--v1,
     nvidia-kernel-support (= ${{binary:Version}}),
+    nvidia-closed-kernel-support (= ${{binary:Version}}),
+    nvidia-closed-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-open-kernel-support (= ${{binary:Version}}),
+    nvidia-open-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Conflicts:
     nvidia-kernel-support
+    nvidia-open-kernel-support,
+    nvidia-open-kernel-support-{DRIVER_VERSION_MAJOR},
 Description: NVIDIA binary kernel module support files
     The NVIDIA binary driver provides optimized hardware acceleration of
     OpenGL/GLX/EGL/GLES applications via a direct-rendering X Server
