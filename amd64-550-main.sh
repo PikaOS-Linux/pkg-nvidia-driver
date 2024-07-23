@@ -10,11 +10,11 @@ DEBIAN_FRONTEND=noninteractive
 # Setup build dir
 cp -rf ./$DRIVER_VERSION_MAJOR/config-$DEBIAN_ARCH.py ./$DRIVER_VERSION_MAJOR/config.py
 mkdir -p ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR
-cp -rvf ./$DRIVER_VERSION_MAJOR/debian-$DRIVER_VERSION_MAJOR ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/debian
+cp -rvf ./$DRIVER_VERSION_MAJOR/debian ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/debian
 cp -rvf ./$DRIVER_VERSION_MAJOR/extra_files ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
 cd ./nvidia-graphics-drivers-$DRIVER_VERSION_MAJOR/
 cd ./debian
-../../$DRIVER_VERSION_MAJOR/gen-control-$DRIVER_VERSION_MAJOR.py
+../../$DRIVER_VERSION_MAJOR/gen-control.py
 cd ../
 
 # Get nvidia run file
@@ -25,7 +25,7 @@ chmod +x nvidia-installer.run
 apt-get build-dep ./ -y
 
 # Build package
-LOGNAME=root dh_make --createorig -y -l -p nvidia-graphics-drivers-550_550.100 || true
+LOGNAME=root dh_make --createorig -y -l -p nvidia-graphics-drivers-"$DRIVER_VERSION_MAJOR"_"$DRIVER_VERSION_FULL" || true
 dpkg-buildpackage --no-sign
 
 # Move the debs to output
