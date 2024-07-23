@@ -145,6 +145,21 @@ Description: NVIDIA CUDA Debugger Library
     The Compute Unified Device Architecture (CUDA) enables NVIDIA graphics processing units (GPUs) to be used for massively parallel general purpose computation.
     This package contains the CUDA Debugger library for Pascal and later GPUs.
 
+### Note Re-sync Upstream once nvidia or upstream package it
+
+Package: libnvidia-vksc-core-{DRIVER_VERSION_MAJOR}
+Architecture: amd64 arm64 ppc64el
+Multi-Arch: same
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-vulkan-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{shlibs:Depends}}, ${{misc:Depends}}
+Provides:
+    libnvidia-vksc-core (= ${{binary:Version}})
+Conflicts:
+    libnvidia-vksc-core
+Description: NVIDIA Vulkan SC Validation layers
+
 Package: libegl-nvidia0-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
@@ -161,7 +176,8 @@ Description: NVIDIA binary EGL library
     EGL provides a platform-agnostic mechanism for creating rendering surfaces for use with other graphics libraries, such as OpenGL|ES.
     See the description of the nvidia-driver package or /usr/share/doc/libgl1-nvidia-glx/README.txt.gz for a complete list of supported GPUs and PCI IDs.
     This package contains the driver specific binary EGL implementation provided by NVIDIA that is accessed via GLVND.
-
+### End of note
+    
 Package: libgl1-nvidia-glvnd-glx-{DRIVER_VERSION_MAJOR}
 Architecture: i386 amd64 arm64 ppc64el
 Multi-Arch: same
@@ -637,6 +653,9 @@ Depends:
     nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libnvidia-egl-wayland1,
     libnvidia-egl-gbm1,
+# Note: Not Upstream
+    libnvidia-vksc-core-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+# End of Note
     ${{misc:Depends}}
 Recommends:
     nvidia-vaapi-driver,
@@ -697,6 +716,9 @@ Depends:
     nvidia-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     libnvidia-egl-wayland1,
     libnvidia-egl-gbm1,
+# Note: Not Upstream
+    libnvidia-vksc-core-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+# End of Note
     ${{misc:Depends}}
 Recommends:
     nvidia-vaapi-driver,
@@ -1431,10 +1453,18 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libcudadebugger.so.{DRIVER_VERSIO
 
 # end of libcudadebugger1
 
+### Note: Not Upstream
+
 # libegl-nvidia0
 
 LIBEGL_NVIDIA0_INSTALL_FILE_PREQ = """#! /usr/bin/dh-exec
-libEGL_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/"""
+libEGL_nvidia.so.{DRIVER_VERSION_FULL}	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+libnvidia-egl-xcb.so.1  usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+libnvidia-egl-xlib.so.1	usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+20_nvidia_xcb.json  /usr/share/egl/egl_external_platform.d/
+20_nvidia_xlib.json /usr/share/egl/egl_external_platform.d/"""
+
+### End of Note
 
 LIBEGL_NVIDIA0_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
 [i386]: binary-file-built-without-LFS-support
@@ -1649,6 +1679,28 @@ usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-encode.so.{DRIVER_VERSI
 usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-encode.so.1    usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/libnvidia-encode.so"""
 
 # end of libnvidia-encode1
+
+### Note not upstream
+
+# libnvidia-vksc-core
+
+LIBNVIDIA_VKSC_CORE_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
+libnvidia-vksc-core.so.{DRIVER_VERSION_FULL}  usr/lib/${{DEB_HOST_MULTIARCH}}/nvidia/current/
+nvidia_icd_vksc.json usr/share/vulkan/icd.d/
+nvidia-pcc usr/bin/"""
+
+LIBNVIDIA_VKSC_CORE_LINTIAN_FILE_PREQ = """# The NVIDIA license does not allow any form of modification.
+[i386]: binary-file-built-without-LFS-support
+[i386 ppc64el]: specific-address-in-shared-library
+hardening-no-bindnow
+hardening-no-fortify-functions
+
+# Lintian and debhelper disagree w.r.t. a library in a private directory.
+package-has-unnecessary-activation-of-ldconfig-trigger"""
+
+# end of libnvidia-vksc-core
+
+### End of note
 
 # libnvidia-fbc1
 
@@ -2911,6 +2963,29 @@ with open(CONTROL_FILE_PATH, "w") as CONTROL_FILE:
     )
     CONTROL_FILE.write(CONTROL_FILECONTENT)
 # end of control
+
+# Note: Not Upstream
+# libnvidia-vksc-core
+
+LIBNVIDIA_VKSC_CORE_INSTALL_FILE_PATH = 'libnvidia-vksc-core-' + DRIVER_VERSION_MAJOR + '.install'
+with open(LIBNVIDIA_VKSC_CORE_INSTALL_FILE_PATH, "w") as LIBNVIDIA_VKSC_CORE_INSTALL_FILE:
+    LIBNVIDIA_VKSC_CORE_INSTALL_FILECONTENT = LIBNVIDIA_VKSC_CORE_INSTALL_FILE_PREQ.format(
+        DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    LIBNVIDIA_VKSC_CORE_INSTALL_FILE.write(LIBNVIDIA_VKSC_CORE_INSTALL_FILECONTENT)
+    
+LIBNVIDIA_VKSC_CORE_LINTIAN_FILE_PATH = 'libnvidia-vksc-core-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(LIBNVIDIA_VKSC_CORE_LINTIAN_FILE_PATH, "w") as LIBNVIDIA_VKSC_CORE_LINTIAN_FILE:
+    LIBNVIDIA_VKSC_CORE_LINTIAN_FILECONTENT = LIBNVIDIA_VKSC_CORE_LINTIAN_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    LIBNVIDIA_VKSC_CORE_LINTIAN_FILE.write(LIBNVIDIA_VKSC_CORE_LINTIAN_FILECONTENT)
+
+
+# end of libnvidia-vksc-core
+# End of note
 
 # firmware-nvidia-gsp
 FIRMWARE_NVIDIA_GSP_INSTALL_FILE_PATH = 'firmware-nvidia-gsp-' + DRIVER_VERSION_MAJOR + '.install'
