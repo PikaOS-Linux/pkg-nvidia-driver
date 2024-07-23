@@ -829,9 +829,36 @@ Depends:
     ${{misc:Depends}}
 Provides:
     nvidia-kernel-common (= ${{binary:Version}}),
+    nvidia-closed-kernel-common (= ${{binary:Version}}),
+    nvidia-closed-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Conflicts:
-    nvidia-kernel-common
+    nvidia-kernel-common,
+    nvidia-open-kernel-common,
+    nvidia-open-kernel-common-{DRIVER_VERSION_MAJOR},
 Description: NVIDIA binary kernel module support files
+    This package contains support files used for any version of the NVIDIA
+    kernel module. It sets up udev and ConsoleKit rules, ensures the NVIDIA
+    control device is created, and performs any other tasks required for the
+    module to work properly.
+
+Package: nvidia-open-kernel-common-{DRIVER_VERSION_MAJOR}
+Section: contrib/kernel
+Architecture: amd64 i386 armhf arm64 ppc64el
+Pre-Depends: ${{misc:Pre-Depends}}
+Depends:
+    nvidia-alternative-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    ${{misc:Depends}}
+Provides:
+    nvidia-kernel-common (= ${{binary:Version}}),
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-open-kernel-common (= ${{binary:Version}}),
+    nvidia-open-kernel-common-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+Conflicts:
+    nvidia-kernel-common,
+    nvidia-kernel-common-{DRIVER_VERSION_MAJOR},
+    nvidia-closed-kernel-common,
+    nvidia-closed-kernel-common-{DRIVER_VERSION_MAJOR},
+Description: NVIDIA binary kernel module support files (Open)
     This package contains support files used for any version of the NVIDIA
     kernel module. It sets up udev and ConsoleKit rules, ensures the NVIDIA
     control device is created, and performs any other tasks required for the
@@ -854,6 +881,8 @@ Recommends:
 Provides:
     nvidia-closed-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-closed-kernel-module (= ${{binary:Version}}),
+    nvidia-kernel-module (= ${{binary:Version}}),
     nvidia-kernel-dkms (= ${{binary:Version}}),
     nvidia-kernel-dkms-closed (= ${{binary:Version}}),
     nvidia-kernel-dkms-any (= ${{binary:Version}}),
@@ -886,7 +915,10 @@ Recommends:
 Provides:
     nvidia-open-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-module-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
+    nvidia-open-kernel-module (= ${{binary:Version}}),
+    nvidia-kernel-module (= ${{binary:Version}}),
     nvidia-kernel-dkms (= ${{binary:Version}}),
+    nvidia-kernel-dkms-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-dkms-open (= ${{binary:Version}}),
     nvidia-kernel-dkms-any (= ${{binary:Version}}),
 Conflicts:
@@ -949,6 +981,7 @@ Suggests:
     nvidia-open-driver-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Provides:
     nvidia-open-kernel-source (= ${{binary:Version}}),
+    nvidia-open-kernel-source-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
     nvidia-kernel-source (= ${{binary:Version}}),
     nvidia-kernel-source-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Conflicts:
@@ -2116,6 +2149,15 @@ supported-gpus/supported-gpus.json"""
 
 # end of nvidia-driver
 
+# nvidia-open-driver
+
+NVIDIA_OPEN_DRIVER_DOCS_FILE_PREQ = """README.txt
+html/
+debian/README.alternatives
+supported-gpus/supported-gpus.json"""
+
+# end of nvidia-open-driver
+
 # nvidia-driver-bin
 
 NVIDIA_DRIVER_BIN_INSTALL_FILE_PREQ =  """#! /usr/bin/dh-exec
@@ -2272,6 +2314,100 @@ NVIDIA_KERNEL_SOURCE_DOCS_FILE_PREQ = """README.txt
 extra_files/build-module-packages.sh"""
 
 # end of nvidia-kernel-source
+
+# nvidia-open-kernel-common
+
+NVIDIA_OPEN_KERNEL_COMMON_INSTALL_FILE_PREQ  = """extra_files/nvidia_helper.ck /usr/lib/ConsoleKit/run-seat.d/
+extra_files/nvidia_helper /usr/lib/udev/
+"""
+
+NVIDIA_OPEN_KERNEL_COMMON_LINTIAN_FILE_PREQ = """# Hook location.
+executable-in-usr-lib [usr/lib/ConsoleKit/run-seat.d/nvidia_helper.ck]
+
+# We do not build arch:all packages for the proprietary driver.
+package-contains-no-arch-dependent-files
+"""
+
+NVIDIA_OPEN_KERNEL_COMMON_UDEV_FILE_PREQ = """# Set ACLs for console users on /dev/nvidia*
+# This is necessary until the driver uses some other form of auth
+ENV{{ACL_MANAGE}}=="0", GOTO="nvidia_end"
+DRIVER=="nvidia",ENV{{NVIDIA_DEVICE}}="1"
+ENV{{NVIDIA_DEVICE}}!="1", GOTO="nvidia_end"
+ENV{{ACL_MANAGE}}="1"
+TEST!="/lib/libglib-2.0.so.0", GOTO="nvidia_end"
+# apply ACL for all locally logged in users
+TEST=="/var/run/ConsoleKit/database", \
+  RUN+="nvidia_helper --action=$env{{ACTION}} --device=$env{{DEVNAME}}"
+LABEL="nvidia_end"
+"""
+
+# end of nvidia-open-kernel-common
+
+# nvidia-open-kernel-dkms
+
+NVIDIA_OPEN_KERNEL_DKMS_INSTALL_FILE_PREQ  = """kernel-open/*				usr/src/nvidia-open-{DRIVER_VERSION_FULL}/"""
+
+NVIDIA_OPEN_KERNEL_DKMS_LINTIAN_FILE_PREQ = """# These object files are linked into kernel modules.
+unstripped-binary-or-object
+
+# False positives in non-string parts.
+spelling-error-in-binary"""
+
+NVIDIA_OPEN_KERNEL_DKMS_DKMS_FILE_PREQ = """# DKMS configuration for the NVIDIA Open kernel module.  -*- sh -*-
+
+PACKAGE_NAME="nvidia-open"
+PACKAGE_VERSION="{DRIVER_VERSION_FULL}"
+
+# Only kernels from 3.10 onwards are supported.
+BUILD_EXCLUSIVE_KERNEL="^(3\.[1-9][0-9]|[4-9]\.)"
+
+# The NVIDIA Open driver does not support real-time kernels.
+BUILD_EXCLUSIVE_CONFIG="!CONFIG_PREEMPT_RT !CONFIG_PREEMPT_RT_FULL"
+
+AUTOINSTALL=yes
+
+MAKE[0]="env NV_VERBOSE=1 \
+    make ${{parallel_jobs+-j$parallel_jobs}} modules KERNEL_UNAME=${{kernelver}}"
+CLEAN="make KERNEL_UNAME=${{kernelver}} clean"
+
+BUILT_MODULE_NAME[0]="nvidia"
+DEST_MODULE_NAME[0]="$PACKAGE_NAME"
+DEST_MODULE_LOCATION[0]="/updates/dkms"
+
+BUILT_MODULE_NAME[1]="nvidia-modeset"
+DEST_MODULE_NAME[1]="$PACKAGE_NAME-modeset"
+DEST_MODULE_LOCATION[1]="/updates/dkms"
+
+BUILT_MODULE_NAME[2]="nvidia-drm"
+DEST_MODULE_NAME[2]="$PACKAGE_NAME-drm"
+DEST_MODULE_LOCATION[2]="/updates/dkms"
+
+BUILT_MODULE_NAME[3]="nvidia-uvm"
+DEST_MODULE_NAME[3]="$PACKAGE_NAME-uvm"
+DEST_MODULE_LOCATION[3]="/updates/dkms"
+
+BUILT_MODULE_NAME[4]="nvidia-peermem"
+DEST_MODULE_NAME[4]="$PACKAGE_NAME-peermem"
+DEST_MODULE_LOCATION[4]="/updates/dkms"
+"""
+
+NVIDIA_OPEN_KERNEL_DKMS_DOCS_FILE_PREQ = """README.txt"""
+
+# end of nvidia-open-kernel-dkms
+
+# nvidia-open-kernel-source
+
+NVIDIA_OPEN_KERNEL_SOURCE_INSTALL_FILE_PREQ = """kernel-open/*		usr/src/modules/nvidia-open-kernel/
+extra_files/bug-script	usr/src/modules/nvidia-open-kernel/debian/
+debian/changelog	usr/src/modules/nvidia-open-kernel/debian/
+extra_files/control.models	usr/src/modules/nvidia-open-kernel/debian/
+debian/copyright	usr/src/modules/nvidia-open-kernel/debian/
+# debian/module/debian/*	usr/src/modules/nvidia-open-kernel/debian/"""
+
+NVIDIA_OPEN_KERNEL_SOURCE_DOCS_FILE_PREQ = """README.txt
+extra_files/build-open-module-packages.sh"""
+
+# end of nvidia-open-kernel-source
 
 # nvidia-kernel-support
 
@@ -3541,6 +3677,18 @@ with open(NVIDIA_DRIVER_DOCS_FILE_PATH, "w") as NVIDIA_DRIVER_DOCS_FILE:
     
 # end of nvidia-driver
 
+# nvidia-open-driver
+
+NVIDIA_OPEN_DRIVER_DOCS_FILE_PATH = 'nvidia-open-driver-' + DRIVER_VERSION_MAJOR + '.docs'
+with open(NVIDIA_OPEN_DRIVER_DOCS_FILE_PATH, "w") as NVIDIA_OPEN_DRIVER_DOCS_FILE:
+    NVIDIA_OPEN_DRIVER_DOCS_FILECONTENT = NVIDIA_OPEN_DRIVER_DOCS_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_DRIVER_DOCS_FILE.write(NVIDIA_OPEN_DRIVER_DOCS_FILECONTENT)
+    
+# end of nvidia-open-driver
+
 # nvidia-driver-bin
 
 NVIDIA_DRIVER_BIN_INSTALL_FILE_PATH = 'nvidia-driver-bin-' + DRIVER_VERSION_MAJOR + '.install'
@@ -3690,6 +3838,90 @@ with open(NVIDIA_KERNEL_SOURCE_DOCS_FILE_PATH, "w") as NVIDIA_KERNEL_SOURCE_DOCS
     NVIDIA_KERNEL_SOURCE_DOCS_FILE.write(NVIDIA_KERNEL_SOURCE_DOCS_FILECONTENT)
     
 # end of nvidia-kernel-source
+
+# nvidia-open-kernel-common
+
+NVIDIA_OPEN_KERNEL_COMMON_INSTALL_FILE_PATH = 'nvidia-open-kernel-common-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_OPEN_KERNEL_COMMON_INSTALL_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_COMMON_INSTALL_FILE:
+    NVIDIA_OPEN_KERNEL_COMMON_INSTALL_FILECONTENT = NVIDIA_OPEN_KERNEL_COMMON_INSTALL_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_COMMON_INSTALL_FILE.write(NVIDIA_OPEN_KERNEL_COMMON_INSTALL_FILECONTENT)
+
+NVIDIA_OPEN_KERNEL_COMMON_LINTIAN_FILE_PATH = 'nvidia-open-kernel-common-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_OPEN_KERNEL_COMMON_LINTIAN_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_COMMON_LINTIAN_FILE:
+    NVIDIA_OPEN_KERNEL_COMMON_LINTIAN_FILECONTENT = NVIDIA_OPEN_KERNEL_COMMON_LINTIAN_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_COMMON_LINTIAN_FILE.write(NVIDIA_OPEN_KERNEL_COMMON_LINTIAN_FILECONTENT)
+
+NVIDIA_OPEN_KERNEL_COMMON_UDEV_FILE_PATH = 'nvidia-open-kernel-common-' + DRIVER_VERSION_MAJOR + '.udev'
+with open(NVIDIA_OPEN_KERNEL_COMMON_UDEV_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_COMMON_UDEV_FILE:
+    NVIDIA_OPEN_KERNEL_COMMON_UDEV_FILECONTENT = NVIDIA_OPEN_KERNEL_COMMON_UDEV_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_COMMON_UDEV_FILE.write(NVIDIA_OPEN_KERNEL_COMMON_UDEV_FILECONTENT)
+    
+# end of nvidia-open-kernel-common
+
+# nvidia-open-kernel-dkms
+
+NVIDIA_OPEN_KERNEL_DKMS_INSTALL_FILE_PATH = 'nvidia-open-kernel-dkms-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_OPEN_KERNEL_DKMS_INSTALL_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_DKMS_INSTALL_FILE:
+    NVIDIA_OPEN_KERNEL_DKMS_INSTALL_FILECONTENT = NVIDIA_OPEN_KERNEL_DKMS_INSTALL_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_DKMS_INSTALL_FILE.write(NVIDIA_OPEN_KERNEL_DKMS_INSTALL_FILECONTENT)
+
+NVIDIA_OPEN_KERNEL_DKMS_LINTIAN_FILE_PATH = 'nvidia-open-kernel-dkms-' + DRIVER_VERSION_MAJOR + '.lintian-overrides'
+with open(NVIDIA_OPEN_KERNEL_DKMS_LINTIAN_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_DKMS_LINTIAN_FILE:
+    NVIDIA_OPEN_KERNEL_DKMS_LINTIAN_FILECONTENT = NVIDIA_OPEN_KERNEL_DKMS_LINTIAN_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_DKMS_LINTIAN_FILE.write(NVIDIA_OPEN_KERNEL_DKMS_LINTIAN_FILECONTENT)
+
+NVIDIA_OPEN_KERNEL_DKMS_DKMS_FILE_PATH = 'nvidia-open-kernel-dkms-' + DRIVER_VERSION_MAJOR + '.dkms'
+with open(NVIDIA_OPEN_KERNEL_DKMS_DKMS_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_DKMS_DKMS_FILE:
+    NVIDIA_OPEN_KERNEL_DKMS_DKMS_FILECONTENT = NVIDIA_OPEN_KERNEL_DKMS_DKMS_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_DKMS_DKMS_FILE.write(NVIDIA_OPEN_KERNEL_DKMS_DKMS_FILECONTENT)
+
+NVIDIA_OPEN_KERNEL_DKMS_DOCS_FILE_PATH = 'nvidia-open-kernel-dkms-' + DRIVER_VERSION_MAJOR + '.docs'
+with open(NVIDIA_OPEN_KERNEL_DKMS_DOCS_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_DKMS_DOCS_FILE:
+    NVIDIA_OPEN_KERNEL_DKMS_DOCS_FILECONTENT = NVIDIA_OPEN_KERNEL_DKMS_DOCS_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_DKMS_DOCS_FILE.write(NVIDIA_OPEN_KERNEL_DKMS_DOCS_FILECONTENT)
+    
+# end of nvidia-open-kernel-dkms
+
+# nvidia-open-kernel-source
+
+NVIDIA_OPEN_KERNEL_SOURCE_INSTALL_FILE_PATH = 'nvidia-open-kernel-source-' + DRIVER_VERSION_MAJOR + '.install'
+with open(NVIDIA_OPEN_KERNEL_SOURCE_INSTALL_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_SOURCE_INSTALL_FILE:
+    NVIDIA_OPEN_KERNEL_SOURCE_INSTALL_FILECONTENT = NVIDIA_OPEN_KERNEL_SOURCE_INSTALL_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_SOURCE_INSTALL_FILE.write(NVIDIA_OPEN_KERNEL_SOURCE_INSTALL_FILECONTENT)
+
+NVIDIA_OPEN_KERNEL_SOURCE_DOCS_FILE_PATH = 'nvidia-open-kernel-source-' + DRIVER_VERSION_MAJOR + '.docs'
+with open(NVIDIA_OPEN_KERNEL_SOURCE_DOCS_FILE_PATH, "w") as NVIDIA_OPEN_KERNEL_SOURCE_DOCS_FILE:
+    NVIDIA_OPEN_KERNEL_SOURCE_DOCS_FILECONTENT = NVIDIA_OPEN_KERNEL_SOURCE_DOCS_FILE_PREQ.format(
+                DRIVER_VERSION_FULL=DRIVER_VERSION_FULL,
+        DRIVER_VERSION_MAJOR=DRIVER_VERSION_MAJOR,
+    )
+    NVIDIA_OPEN_KERNEL_SOURCE_DOCS_FILE.write(NVIDIA_OPEN_KERNEL_SOURCE_DOCS_FILECONTENT)
+    
+# end of nvidia-open-kernel-source
 
 # nvidia-kernel-support
 
