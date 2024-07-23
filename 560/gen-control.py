@@ -1042,7 +1042,7 @@ Provides:
     nvidia-open-kernel-support (= ${{binary:Version}}),
     nvidia-open-kernel-support-{DRIVER_VERSION_MAJOR} (= ${{binary:Version}}),
 Conflicts:
-    nvidia-kernel-support
+    nvidia-kernel-support,
     nvidia-open-kernel-support,
     nvidia-open-kernel-support-{DRIVER_VERSION_MAJOR},
 Description: NVIDIA binary kernel module support files
